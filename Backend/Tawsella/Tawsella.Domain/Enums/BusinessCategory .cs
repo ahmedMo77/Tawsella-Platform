@@ -1,0 +1,16 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Tawsella.Domain.Enums
+{
+    public enum BusinessCategory
+    {
+        Restaurant,
+        Pharmacy,
+        Store,
+        Other
+    }
+}

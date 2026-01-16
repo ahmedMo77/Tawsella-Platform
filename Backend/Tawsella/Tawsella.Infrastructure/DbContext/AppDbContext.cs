@@ -14,14 +14,21 @@ namespace Tawsella.Infrastructure.DbContext
     { 
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options) { }
-
-
+        public DbSet<Admin> Admins { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Courier> Couriers { get; set; }
-        public DbSet<Admin> Admins { get; set; }
-        public DbSet<Merchant> Merchant { get; set; }
-        public DbSet<Order> orders { get; set; }
+        public DbSet<Merchant> Merchants { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderStatusHistory> OrderStatusHistories { get; set; }
+        public DbSet<Review> Reviews { get; set; }
+        public DbSet<Wallet> Wallets { get; set; }
+        public DbSet<WalletTransaction> WalletTransactions { get; set; }
+        public DbSet<WithdrawalRequest> WithdrawalRequests { get; set; }
+        public DbSet<SubscriptionPlan> SubscriptionPlans { get; set; }
+        public DbSet<Subscription> Subscriptions { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
 
+      
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -47,7 +54,7 @@ namespace Tawsella.Infrastructure.DbContext
             builder.Entity<AppUser>()
                 .HasOne<Merchant>()
                 .WithOne(m => m.User)
-                .HasForeignKey<Merchant>(m => m.Id)
+                .HasForeignKey<Merchant>(m => m.MerchantId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
 

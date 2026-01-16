@@ -6,12 +6,10 @@ using System.Threading.Tasks;
 
 namespace Tawsella.Domain.Enums
 {
-    public enum OrderStatus
+    public enum PaymentMethod
     {
-        Pending,
-        Accepted,
-        PickedUp,
-        Delivered,
-        Cancelled
+        Cash,
+        Online,
+        Wallet
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MailKit;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,6 @@ namespace Tawsella.Application.DTOs
     {
         public string BusinessName { get; set; }
         public string? BusinessAddress { get; set; }
-        public BusinessCategory BusinessCategory { get; set; }
+        public string BusinessCategory { get; set; }
     }
 }

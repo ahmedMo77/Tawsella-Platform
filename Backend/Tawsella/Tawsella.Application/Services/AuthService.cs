@@ -162,12 +162,12 @@ namespace Tawsella.Application.Services
 
             var courier = new Courier
             {
-                Id = user.Id,
+                CourierId = user.Id,
                 IsApproved = false,
                 User = user,
                 NationalId = dto.NationalId,
                 VehicleType = dto.VehicleType,
-                LicensePlate = dto.LicensePlate
+                VehiclePlateNumber = dto.VehiclePlateNumber
             };
 
             _context.Couriers.Add(courier);
@@ -203,7 +203,7 @@ namespace Tawsella.Application.Services
 
             var merchant = new Merchant
             {
-                Id = user.Id,
+                MerchantId = user.Id,
                 IsApproved = false,
                 User = user,
                 BusinessName = dto.BusinessName,
@@ -211,7 +211,7 @@ namespace Tawsella.Application.Services
                 BusinessCategory = dto.BusinessCategory
             };
 
-            _context.Merchant.Add(merchant);
+            _context.Merchants.Add(merchant);
             await _context.SaveChangesAsync();
 
             return new BaseToReturnDto { Success = true, Message = "Your request is under review" };
@@ -221,7 +221,7 @@ namespace Tawsella.Application.Services
         {
             var courier = await _context.Couriers
                 .Include(c => c.User)
-                .FirstOrDefaultAsync(c => c.Id == courierId);
+                .FirstOrDefaultAsync(c => c.CourierId == courierId);
 
             if (courier == null || courier.IsApproved)
                 return new BaseToReturnDto { Message = "This Courier is already approved or not found." };
@@ -236,9 +236,9 @@ namespace Tawsella.Application.Services
         }
         public async Task<BaseToReturnDto> ApproveMerchantAsync(string merchantId)
         {
-            var merchant = await _context.Merchant
+            var merchant = await _context.Merchants
                 .Include(m => m.User)
-                .FirstOrDefaultAsync(m => m.Id == merchantId);
+                .FirstOrDefaultAsync(m => m.MerchantId == merchantId);
 
             if (merchant == null || merchant.IsApproved)
                 return new BaseToReturnDto { Message = "This Merchant is already approved or not found." };
@@ -262,14 +262,14 @@ namespace Tawsella.Application.Services
 
             if (isCourier)
             {
-                var courier = await _context.Couriers.FirstOrDefaultAsync(c => c.Id == user.Id);
+                var courier = await _context.Couriers.FirstOrDefaultAsync(c => c.CourierId == user.Id);
                 if (courier != null && !courier.IsApproved)
                     return new AuthResultDto { Message = "Your account is still under review by the admin." };
             }
 
             if (isMerchant)
             {
-                var merchant = await _context.Merchant.FirstOrDefaultAsync(m => m.Id == user.Id);
+                var merchant = await _context.Merchants.FirstOrDefaultAsync(m => m.MerchantId == user.Id);
                 if (merchant != null && !merchant.IsApproved)
                     return new AuthResultDto { Message = "Your merchant account is still under review." };
             }

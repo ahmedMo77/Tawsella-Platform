@@ -13,5 +13,6 @@ namespace Tawsella.Application.DTOs
         public string BusinessName { get; set; }
         public string? BusinessAddress { get; set; }
         public string BusinessCategory { get; set; }
+        public string BusinessRegistrationNumber { get; set; }
     }
 }

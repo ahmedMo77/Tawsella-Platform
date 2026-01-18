@@ -9,27 +9,20 @@ using Tawsella.Domain.Enums;
 
 namespace Tawsella.Domain.Entities
 {
-    public class WalletTransaction
+    public class WalletTransaction : BaseEntity
     {
-        [Key]
-        public Guid Id { get; set; }
-
-        public Guid WalletId { get; set; }
-        public Wallet Wallet { get; set; }
-
-        public Guid? OrderId { get; set; }
-
-        public TransactionType Type { get; set; }
-
-        [Column(TypeName = "decimal(10,2)")]
+        public string Id { get; set; }
         public decimal Amount { get; set; }
-
-        [Column(TypeName = "decimal(10,2)")]
         public decimal BalanceAfter { get; set; }
-
-        [MaxLength(500)]
         public string Description { get; set; }
-
+        public TransactionType Type { get; set; }
         public DateTime CreatedAt { get; set; }
+
+
+        public string? OrderId { get; set; }
+        public Order Order { get; set; }
+
+        public string WalletId { get; set; }
+        public Wallet Wallet { get; set; }
     }
 }

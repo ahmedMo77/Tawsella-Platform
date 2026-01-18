@@ -11,27 +11,16 @@ namespace Tawsella.Domain.Entities
 {
     public class WithdrawalRequest
     {
-        [Key]
-        public Guid Id { get; set; }
-
-        public Guid WalletId { get; set; }
-        public Wallet Wallet { get; set; }
-
-        [Column(TypeName = "decimal(10,2)")]
+        public string Id { get; set; }
         public decimal Amount { get; set; }
-
-        public WithdrawalStatus Status { get; set; }
-
-        [MaxLength(500)]
         public string BankDetails { get; set; }
-
+        public string? ProcessedBy { get; set; }
+        public string Notes { get; set; }
+        public WithdrawalStatus Status { get; set; }
         public DateTime RequestedAt { get; set; }
-
         public DateTime? ProcessedAt { get; set; }
 
-        public Guid? ProcessedBy { get; set; }
-
-        [MaxLength(500)]
-        public string Notes { get; set; }
+        public string WalletId { get; set; }
+        public Wallet Wallet { get; set; }
     }
 }

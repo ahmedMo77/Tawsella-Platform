@@ -9,36 +9,23 @@ using Tawsella.Domain.Enums;
 
 namespace Tawsella.Domain.Entities
 {
-    public class Customer 
+    public class Customer : BaseEntity
     {
-        public string Id { get; set; }
-        public AppUser User { get; set; }
-
-        [MaxLength(200)]
         public string DefaultPickupAddress { get; set; }
-
-        [Column(TypeName = "decimal(10,8)")]
         public decimal? DefaultPickupLatitude { get; set; }
-
-        [Column(TypeName = "decimal(11,8)")]
         public decimal? DefaultPickupLongitude { get; set; }
+        public string DefaultPickupLabel { get; set; }  // Home, Work, Gym
 
-        [MaxLength(200)]
-        public string DefaultDropoffAddress { get; set; }
-
-        [Column(TypeName = "decimal(10,8)")]
-        public decimal? DefaultDropoffLatitude { get; set; }
-
-        [Column(TypeName = "decimal(11,8)")]
-        public decimal? DefaultDropoffLongitude { get; set; }
         public PaymentMethod PreferredPaymentMethod { get; set; }
-        public int TotalOrdersCount { get; set; }
 
-        public int CompletedOrdersCount { get; set; }
+        // Dropoff details maybe not relevant for a customer profile, as dropoff locations vary per order.
 
-        public int CancelledOrdersCount { get; set; }
+        //public string DefaultDropoffAddress { get; set; }
+        //public decimal? DefaultDropoffLatitude { get; set; }
+        //public decimal? DefaultDropoffLongitude { get; set; }
 
-        public ICollection<Order> Orders { get; set; } 
+        public AppUser User { get; set; }
+        public ICollection<Order> Orders { get; set; }
         public ICollection<Review> Reviews { get; set; }
     }
 }

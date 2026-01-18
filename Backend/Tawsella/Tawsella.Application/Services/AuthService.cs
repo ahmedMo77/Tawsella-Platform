@@ -42,8 +42,6 @@ namespace Tawsella.Application.Services
                 FullName = dto.FullName,
                 UserName = dto.Email.Substring(0, dto.Email.IndexOf('@')),
                 Email = dto.Email,
-                CreatedAt = DateTime.UtcNow,
-                LastUpdatedAt = DateTime.UtcNow,
                 EmailConfirmed = true
             };
             
@@ -54,10 +52,8 @@ namespace Tawsella.Application.Services
                 return new BaseToReturnDto { Message = string.Join(", ", result.Errors.Select(e => e.Description)) };
 
             if (!await _roleManager.RoleExistsAsync(role))
-            {
-                // إذا لم تكن موجودة، نقوم بإنشائها فوراً
                 await _roleManager.CreateAsync(new IdentityRole(role));
-            }
+
             await _userManager.AddToRoleAsync(user, role);
 
             var admin = new Admin
@@ -96,9 +92,7 @@ namespace Tawsella.Application.Services
             {
                 FullName = dto.FullName,
                 UserName = dto.Email.Substring(0, dto.Email.IndexOf('@')),
-                Email = dto.Email,
-                CreatedAt = DateTime.UtcNow,
-                LastUpdatedAt = DateTime.UtcNow
+                Email = dto.Email
             };
 
             var result = await _userManager.CreateAsync(user, dto.Password);
@@ -108,16 +102,17 @@ namespace Tawsella.Application.Services
 
             var roleName = Roles.Customer.ToString();
 
-            // التأكد من وجود الرول
             if (!await _roleManager.RoleExistsAsync(roleName))
-            {
-                // إذا لم تكن موجودة، نقوم بإنشائها فوراً
                 await _roleManager.CreateAsync(new IdentityRole(roleName));
-            }
 
             await _userManager.AddToRoleAsync(user, Roles.Customer.ToString());
 
-            var customer = new Customer { Id = user.Id, User = user };
+            var customer = new Customer 
+            { 
+                Id = user.Id,
+                User = user,
+                CreatedAt = DateTime.UtcNow
+            };
             _context.Customers.Add(customer);
             await _context.SaveChangesAsync();
 
@@ -144,9 +139,7 @@ namespace Tawsella.Application.Services
             {
                 FullName = dto.FullName,
                 UserName = dto.Email.Substring(0, dto.Email.IndexOf('@')),
-                Email = dto.Email,
-                CreatedAt = DateTime.UtcNow,
-                LastUpdatedAt = DateTime.UtcNow
+                Email = dto.Email
             };
 
             var result = await _userManager.CreateAsync(user, dto.Password);
@@ -162,12 +155,15 @@ namespace Tawsella.Application.Services
 
             var courier = new Courier
             {
-                CourierId = user.Id,
+                Id = user.Id,
                 IsApproved = false,
                 User = user,
                 NationalId = dto.NationalId,
                 VehicleType = dto.VehicleType,
-                VehiclePlateNumber = dto.VehiclePlateNumber
+                VehiclePlateNumber = dto.VehiclePlateNumber,
+                LicenseNumber = dto.LicenseNumber,
+                LicenseExpiryDate = dto.LicenseExpiryDate,
+                CreatedAt = DateTime.UtcNow
             };
 
             _context.Couriers.Add(courier);
@@ -184,9 +180,7 @@ namespace Tawsella.Application.Services
             {
                 FullName = dto.FullName,
                 UserName = dto.Email.Substring(0, dto.Email.IndexOf('@')),
-                Email = dto.Email,
-                CreatedAt = DateTime.UtcNow,
-                LastUpdatedAt = DateTime.UtcNow
+                Email = dto.Email
             };
 
             var result = await _userManager.CreateAsync(user, dto.Password);
@@ -203,12 +197,14 @@ namespace Tawsella.Application.Services
 
             var merchant = new Merchant
             {
-                MerchantId = user.Id,
+                Id = user.Id,
                 IsApproved = false,
                 User = user,
                 BusinessName = dto.BusinessName,
+                BusinessRegistrationNumber = dto.BusinessRegistrationNumber,
                 BusinessAddress = dto.BusinessAddress,
-                BusinessCategory = dto.BusinessCategory
+                BusinessCategory = dto.BusinessCategory,
+                CreatedAt = DateTime.UtcNow
             };
 
             _context.Merchants.Add(merchant);
@@ -221,7 +217,7 @@ namespace Tawsella.Application.Services
         {
             var courier = await _context.Couriers
                 .Include(c => c.User)
-                .FirstOrDefaultAsync(c => c.CourierId == courierId);
+                .FirstOrDefaultAsync(c => c.Id == courierId);
 
             if (courier == null || courier.IsApproved)
                 return new BaseToReturnDto { Message = "This Courier is already approved or not found." };
@@ -238,7 +234,7 @@ namespace Tawsella.Application.Services
         {
             var merchant = await _context.Merchants
                 .Include(m => m.User)
-                .FirstOrDefaultAsync(m => m.MerchantId == merchantId);
+                .FirstOrDefaultAsync(m => m.Id == merchantId);
 
             if (merchant == null || merchant.IsApproved)
                 return new BaseToReturnDto { Message = "This Merchant is already approved or not found." };
@@ -262,14 +258,14 @@ namespace Tawsella.Application.Services
 
             if (isCourier)
             {
-                var courier = await _context.Couriers.FirstOrDefaultAsync(c => c.CourierId == user.Id);
+                var courier = await _context.Couriers.FirstOrDefaultAsync(c => c.Id == user.Id);
                 if (courier != null && !courier.IsApproved)
                     return new AuthResultDto { Message = "Your account is still under review by the admin." };
             }
 
             if (isMerchant)
             {
-                var merchant = await _context.Merchants.FirstOrDefaultAsync(m => m.MerchantId == user.Id);
+                var merchant = await _context.Merchants.FirstOrDefaultAsync(m => m.Id == user.Id);
                 if (merchant != null && !merchant.IsApproved)
                     return new AuthResultDto { Message = "Your merchant account is still under review." };
             }

@@ -8,35 +8,24 @@ using Tawsella.Domain.Enums;
 
 namespace Tawsella.Domain.Entities
 {
-    public class Merchant 
+    public class Merchant : BaseEntity
     {
-
-        [Required]
-        [MaxLength(200)]
+        // Business Details
         public string BusinessName { get; set; }
-
-        [MaxLength(100)]
         public string BusinessRegistrationNumber { get; set; }
-
-        [MaxLength(500)]
         public string BusinessAddress { get; set; }
-
-        [MaxLength(500)]
         public string BusinessCategory { get; set; }
 
+        // Approval Status
         public bool IsApproved { get; set; }
+        public DateTime ApprovedAt { get; set; }
+        public string ApprovedBy { get; set; }
 
-        public DateTime? ApprovedAt { get; set; }
-
-        public Guid? ApprovedBy { get; set; }
-
-        public Guid? SubscriptionId { get; set; }
-        public Subscription Subscription { get; set; }
-
-        public string MerchantId { get; set; }
-        public AppUser User { get; set; }
+        public string? SubscriptionId { get; set; }
 
         // Navigation
+        public Subscription Subscription { get; set; }
+        public AppUser User { get; set; }
         public ICollection<Order> Orders { get; set; }
     }
 }

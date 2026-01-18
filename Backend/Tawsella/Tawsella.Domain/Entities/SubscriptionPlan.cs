@@ -11,28 +11,14 @@ namespace Tawsella.Domain.Entities
 {
     public class SubscriptionPlan
     {
-        [Key]
-        public Guid Id { get; set; }
-
-        [Required]
-        [MaxLength(100)]
+        public string Id { get; set; }
         public string Name { get; set; }
-
-        [MaxLength(500)]
         public string Description { get; set; }
-
         public SubscriptionType Type { get; set; }
-
-        [Column(TypeName = "decimal(10,2)")]
-        public decimal Price { get; set; }
-
         public BillingPeriod BillingPeriod { get; set; }
-
+        public decimal Price { get; set; }
         public bool IsActive { get; set; }
-
-        [MaxLength(1000)]
         public string Features { get; set; }
-
         public DateTime CreatedAt { get; set; }
 
         // Navigation

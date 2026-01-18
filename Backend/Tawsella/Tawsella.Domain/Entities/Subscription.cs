@@ -8,26 +8,17 @@ using Tawsella.Domain.Enums;
 
 namespace Tawsella.Domain.Entities
 {
-    public class Subscription
+    public class Subscription : BaseEntity
     {
-        [Key]
-        public Guid Id { get; set; }
-
-        public Guid SubscriptionPlanId { get; set; }
-        public SubscriptionPlan SubscriptionPlan { get; set; }
-
-        public Guid? MerchantId { get; set; }
-        public Guid? CourierId { get; set; }
         public DateTime StartDate { get; set; }
-
         public DateTime EndDate { get; set; }
-
         public SubscriptionStatus Status { get; set; }
-
         public bool AutoRenew { get; set; }
 
-        public DateTime CreatedAt { get; set; }
+        public string UserId { get; set; }
+        public AppUser User { get; set; }
 
-        public DateTime? UpdatedAt { get; set; }
+        public string SubscriptionPlanId { get; set; }
+        public SubscriptionPlan SubscriptionPlan { get; set; }
     }
 }

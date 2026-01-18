@@ -16,7 +16,7 @@ namespace Tawsella.Infrastructure.Configurations
           
                 entity.ToTable("Merchants");
 
-                entity.HasKey(x => x.MerchantId);
+                entity.HasKey(x => x.Id);
 
                 entity.Property(m => m.BusinessName)
                     .IsRequired()
@@ -34,7 +34,7 @@ namespace Tawsella.Infrastructure.Configurations
             // Relationships
 
             entity.HasOne(c => c.User).WithOne()
-           .HasForeignKey<Merchant>(m=>m.MerchantId)
+           .HasForeignKey<Merchant>(m=>m.Id)
            .OnDelete(DeleteBehavior.Cascade);
 
 
@@ -42,11 +42,6 @@ namespace Tawsella.Infrastructure.Configurations
                     .WithOne()
                     .HasForeignKey<Merchant>(m => m.SubscriptionId)
                     .OnDelete(DeleteBehavior.SetNull);
-
-                entity.HasMany(m => m.Orders)
-                    .WithOne(o => o.Merchant)
-                    .HasForeignKey(o => o.MerchantId)
-                    .OnDelete(DeleteBehavior.Restrict);
 
                 entity.HasIndex(m => m.BusinessRegistrationNumber);
            

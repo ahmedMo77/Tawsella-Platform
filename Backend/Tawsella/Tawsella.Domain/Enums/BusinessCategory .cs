@@ -10,6 +10,7 @@ namespace Tawsella.Domain.Enums
     {
         Restaurant,
         Pharmacy,
+        Supermarket,
         Store,
         Other
     }

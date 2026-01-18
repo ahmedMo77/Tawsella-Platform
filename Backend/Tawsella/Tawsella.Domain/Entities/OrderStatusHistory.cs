@@ -10,19 +10,15 @@ namespace Tawsella.Domain.Entities
 {
     public class OrderStatusHistory
     {
-        [Key]
-        public Guid Id { get; set; }
+        public string Id { get; set; }
 
-        public Guid OrderId { get; set; }
+        public string OrderId { get; set; }
         public Order Order { get; set; }
 
         public OrderStatus Status { get; set; }
-
-        [MaxLength(500)]
         public string Notes { get; set; }
-
         public DateTime CreatedAt { get; set; }
 
-        public Guid? CreatedBy { get; set; }
+        public string? CreatedBy { get; set; }
     }
 }

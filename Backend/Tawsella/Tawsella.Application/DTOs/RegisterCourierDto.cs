@@ -10,7 +10,9 @@ namespace Tawsella.Application.DTOs
     public class RegisterCourierDto : RegisterUserDto
     {
         public string NationalId { get; set; }
-        public string VehicleType { get; set; }
+        public VehicleType VehicleType { get; set; }
         public string? VehiclePlateNumber { get; set; }
+        public string? LicenseNumber { get; set; }
+        public DateTime? LicenseExpiryDate { get; set; }
     }
 }

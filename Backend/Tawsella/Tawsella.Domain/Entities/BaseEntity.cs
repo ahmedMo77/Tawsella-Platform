@@ -8,14 +8,23 @@ namespace Tawsella.Domain.Entities
 {
     public class BaseEntity
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         // Auditing fields
-        public DateTime CreatedAt { get; init; } = DateTime.UtcNow;
+        public DateTime CreatedAt { get; init; }
         public DateTime? UpdatedAt { get; set; }
 
         // Soft delete
-        public bool IsDeleted { get; set; } = false;
+        public bool IsDeleted { get; set; }
         public DateTime? DeletedAt { get; set; }
+
+        public void MarkUpdated() 
+            => UpdatedAt = DateTime.UtcNow;
+
+        public void SoftDelete()
+        {
+            IsDeleted = true;
+            DeletedAt = DateTime.UtcNow;
+        }
     }
 }

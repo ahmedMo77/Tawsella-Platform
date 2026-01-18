@@ -17,7 +17,11 @@ namespace Tawsella.Infrastructure.Configurations
 
            builder.HasKey(x => x.Id);
 
-            builder.HasOne(a=>a.User).WithOne()
+            builder.Property(a => a.IsSuperAdmin)
+                .IsRequired();
+
+            builder.HasOne(a=>a.User)
+                .WithOne()
                 .HasForeignKey<Admin>(a=>a.Id)
                 .OnDelete(DeleteBehavior.Cascade);
         }

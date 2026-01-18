@@ -17,48 +17,28 @@ namespace Tawsella.Infrastructure.Configurations
 
             entity.HasKey(c => c.Id);
 
-            entity.Property(c => c.NationalId)
-                .IsRequired()
-                .HasMaxLength(50);
+            entity.Property(c => c.NationalId).HasMaxLength(16);
+            entity.Property(c => c.VehiclePlateNumber).HasMaxLength(20);
+            entity.Property(c => c.LicenseNumber).HasMaxLength(20);
+            entity.Property(c => c.CurrentLatitude).HasColumnType("decimal(10,8)");
+            entity.Property(c => c.CurrentLongitude).HasColumnType("decimal(11,8)");
 
-            entity.Property(c => c.VehicleType)
-                        .HasMaxLength(50);
-
-            entity.Property(c => c.VehiclePlateNumber)
-                        .HasMaxLength(50);
-
-            entity.Property(c => c.LicenseNumber)
-                        .HasMaxLength(50);
-
-            entity.Property(c => c.IsApproved)
-                        .HasDefaultValue(false);
-
-            entity.Property(c => c.IsOnline)
-                        .HasDefaultValue(false);
-
-            entity.Property(c => c.IsAvailable)
-                        .HasDefaultValue(false);
-
-            entity.Property(c => c.CurrentLatitude)
-                        .HasColumnType("decimal(10,8)");
-
-            entity.Property(c => c.CurrentLongitude)
-                        .HasColumnType("decimal(11,8)");
 
             // Relationships
-            entity.HasOne(c => c.User).WithOne()
-              .HasForeignKey<Courier>(c => c.CourierId)
-              .OnDelete(DeleteBehavior.Cascade);
+            entity.HasOne(c => c.User)
+                .WithOne()
+                .HasForeignKey<Courier>(c => c.Id)
+                .OnDelete(DeleteBehavior.Cascade);
 
             entity.HasOne(c => c.Wallet)
-                        .WithOne(w => w.Courier)
-                        .HasForeignKey<Wallet>(w => w.CourierId)
-                        .OnDelete(DeleteBehavior.Cascade);
+                .WithOne(w => w.Courier)
+                .HasForeignKey<Wallet>(w => w.CourierId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             entity.HasOne(c => c.Subscription)
-                        .WithOne()
-                        .HasForeignKey<Courier>(c => c.SubscriptionId)
-                        .OnDelete(DeleteBehavior.SetNull);
+                .WithOne()
+                .HasForeignKey<Courier>(c => c.SubscriptionId)
+                .OnDelete(DeleteBehavior.SetNull);
 
             entity.HasMany(c => c.Orders)
                         .WithOne(o => o.Courier)
@@ -79,10 +59,5 @@ namespace Tawsella.Infrastructure.Configurations
                 c.CurrentLongitude
             });
         }
-
-           
-
-
     }
-    
 }

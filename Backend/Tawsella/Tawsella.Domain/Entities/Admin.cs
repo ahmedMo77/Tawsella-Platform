@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace Tawsella.Domain.Entities
 {
-    public class Admin 
+    public class Admin : BaseEntity
     {
-        public string Id { get; set; }
         public bool IsSuperAdmin { get; set; }
         public AppUser User { get; set; }
     }

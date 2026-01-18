@@ -8,28 +8,15 @@ using System.Threading.Tasks;
 
 namespace Tawsella.Domain.Entities
 {
-    public class Wallet
+    public class Wallet : BaseEntity
     {
-        [Key]
-        public Guid Id { get; set; }
-
-        public Guid CourierId { get; set; }
-        public Courier Courier { get; set; }
-
-        [Column(TypeName = "decimal(10,2)")]
         public decimal Balance { get; set; }
-
-        [Column(TypeName = "decimal(10,2)")]
         public decimal PendingBalance { get; set; }
-
-        [Column(TypeName = "decimal(10,2)")]
         public decimal TotalEarnings { get; set; }
-
-        public DateTime CreatedAt { get; set; }
-
-        public DateTime? UpdatedAt { get; set; }
+        public string CourierId { get; set; }
 
         // Navigation
+        public Courier Courier { get; set; }
         public ICollection<WalletTransaction> Transactions { get; set; }
         public ICollection<WithdrawalRequest> WithdrawalRequests { get; set; }
     }

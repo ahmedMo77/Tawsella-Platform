@@ -54,7 +54,7 @@ namespace Tawsella.Infrastructure.DbContext
             builder.Entity<AppUser>()
                 .HasOne<Merchant>()
                 .WithOne(m => m.User)
-                .HasForeignKey<Merchant>(m => m.MerchantId)
+                .HasForeignKey<Merchant>(m => m.Id)
                 .OnDelete(DeleteBehavior.Cascade);
         }
 

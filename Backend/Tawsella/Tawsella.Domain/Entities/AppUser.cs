@@ -10,9 +10,6 @@ namespace Tawsella.Domain.Entities
     public class AppUser : IdentityUser
     {
         public string FullName { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime LastUpdatedAt { get; set; }
-
         public List<RefreshToken> RefreshTokens { get; set; } = new();
     }
 }

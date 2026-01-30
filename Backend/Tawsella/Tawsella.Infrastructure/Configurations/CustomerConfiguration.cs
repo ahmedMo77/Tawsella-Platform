@@ -38,13 +38,13 @@ namespace Tawsella.Infrastructure.Configurations
                 .HasForeignKey<Customer>(c => c.Id)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            //entity.HasMany(c => c.Orders)
-            //    .WithOne(o => o.User)
-            //    .HasForeignKey(o => o.UserId);
+            entity.HasMany(c => c.Orders)
+                .WithOne()
+                .HasForeignKey(o => o.UserId);
 
-            //entity.HasMany(c => c.Reviews)
-            //    .WithOne(r => r.User)
-            //    .HasForeignKey(r => r.UserId);
+            entity.HasMany(c => c.Reviews)
+                .WithOne()
+                .HasForeignKey(r => r.UserId);
         }
     }
 }

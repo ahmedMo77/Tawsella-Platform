@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics.Metrics;
 using Tawsella.Application.DTOs;
+using Tawsella.Application.DTOs.AuthDTOS;
 using Tawsella.Application.Interfaces;
 using Tawsella.Domain.Entities;
 using Tawsella.Domain.Enums;

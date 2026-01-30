@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tawsella.Application.DTOs
+namespace Tawsella.Application.DTOs.AuthDTOS
 {
-    public class LoginDto
+    public class CreateAdminDto
     {
+        public string FullName { get; set; }
         public string Email { get; set; }
-        public string Password { get; set; }
+        public bool IsSuperAdmin { get; set; } = false;
     }
 }

@@ -28,35 +28,6 @@ namespace Tawsella.Infrastructure.DbContext
         public DbSet<Subscription> Subscriptions { get; set; }
         public DbSet<Notification> Notifications { get; set; }
 
-      
-        protected override void OnModelCreating(ModelBuilder builder)
-        {
-            base.OnModelCreating(builder);
-
-            builder.Entity<AppUser>()
-                .HasOne<Admin>()
-                .WithOne(a => a.User)
-                .HasForeignKey<Admin>(a => a.Id)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            builder.Entity<AppUser>()
-                .HasOne<Customer>()
-                .WithOne(c => c.User)
-                .HasForeignKey<Customer>(c => c.Id)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            builder.Entity<AppUser>()
-                .HasOne<Courier>()
-                .WithOne(c => c.User)
-                .HasForeignKey<Courier>(c => c.Id)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            builder.Entity<AppUser>()
-                .HasOne<Merchant>()
-                .WithOne(m => m.User)
-                .HasForeignKey<Merchant>(m => m.Id)
-                .OnDelete(DeleteBehavior.Cascade);
-        }
 
     }
 }

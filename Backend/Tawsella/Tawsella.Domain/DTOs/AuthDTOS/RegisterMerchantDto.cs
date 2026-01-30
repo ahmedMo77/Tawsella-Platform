@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Tawsella.Domain.Enums;
 
-namespace Tawsella.Application.DTOs
+namespace Tawsella.Application.DTOs.AuthDTOS
 {
     public class RegisterMerchantDto : RegisterUserDto
     {

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Tawsella.Application.DTOs;
+using Tawsella.Application.DTOs.AuthDTOS;
 
 namespace Tawsella.Application.Interfaces
 {

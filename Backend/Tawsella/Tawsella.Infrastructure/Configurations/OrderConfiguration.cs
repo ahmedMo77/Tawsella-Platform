@@ -115,6 +115,7 @@ namespace Tawsella.Infrastructure.Configurations
             entity.HasIndex(o => o.OrderNumber).IsUnique();
             entity.HasIndex(o => o.Status);
             entity.HasIndex(o => o.CreatedAt);
+            entity.HasIndex(o => new { o.UserId });
             entity.HasIndex(o => new { o.UserId, o.Status });
             entity.HasIndex(o => new { o.CourierId, o.Status });
         }

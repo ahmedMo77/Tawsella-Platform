@@ -16,6 +16,7 @@ namespace Tawsella.Domain.Entities
         public decimal? DefaultPickupLongitude { get; set; }
         public string DefaultPickupLabel { get; set; }  // Home, Work, Gym
 
+        public int CompletedOrders { get; set; }
         public PaymentMethod PreferredPaymentMethod { get; set; }
 
         // Dropoff details maybe not relevant for a customer profile, as dropoff locations vary per order.

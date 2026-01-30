@@ -34,6 +34,25 @@ namespace Tawsella.Infrastructure.Configurations
 
             builder.Property(u => u.SecurityStamp)
                 .HasMaxLength(256);
+            builder.HasOne<Admin>()
+                .WithOne(a => a.User)
+                .HasForeignKey<Admin>(a => a.Id)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasOne<Customer>()
+                .WithOne(c => c.User)
+                .HasForeignKey<Customer>(c => c.Id)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasOne<Courier>()
+                .WithOne(c => c.User)
+                .HasForeignKey<Courier>(c => c.Id)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasOne<Merchant>()
+                .WithOne(m => m.User)
+                .HasForeignKey<Merchant>(m => m.Id)
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasIndex(u => u.Email).IsUnique();
 

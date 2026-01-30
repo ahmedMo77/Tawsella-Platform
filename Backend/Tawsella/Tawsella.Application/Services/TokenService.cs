@@ -11,7 +11,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using Tawsella.Application.DTOs;
+using Tawsella.Application.DTOs.AuthDTOS;
 using Tawsella.Application.Interfaces;
 using Tawsella.Application.Settings;
 using Tawsella.Domain.Entities;

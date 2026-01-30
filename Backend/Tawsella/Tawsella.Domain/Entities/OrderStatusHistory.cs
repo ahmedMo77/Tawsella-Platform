@@ -8,17 +8,14 @@ using Tawsella.Domain.Enums;
 
 namespace Tawsella.Domain.Entities
 {
-    public class OrderStatusHistory
+    public class OrderStatusHistory:BaseEntity
     {
-        public string Id { get; set; }
 
         public string OrderId { get; set; }
         public Order Order { get; set; }
 
         public OrderStatus Status { get; set; }
         public string Notes { get; set; }
-        public DateTime CreatedAt { get; set; }
-
         public string? CreatedBy { get; set; }
     }
 }

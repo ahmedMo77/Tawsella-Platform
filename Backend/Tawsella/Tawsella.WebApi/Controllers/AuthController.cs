@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Org.BouncyCastle.Tls;
 using System.Security.Claims;
-using Tawsella.Application.DTOs;
+using Tawsella.Application.DTOs.AuthDTOS;
 using Tawsella.Application.Interfaces;
 
 namespace Tawsella.WebApi.Controllers

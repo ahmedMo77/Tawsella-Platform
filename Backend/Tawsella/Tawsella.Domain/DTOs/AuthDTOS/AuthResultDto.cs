@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +10,7 @@ namespace Tawsella.Application.DTOs.AuthDTOS
     public class AuthResultDto
     {
         public string Message { get; set; }
-        public bool Successed { get; set; }
+        public bool Success { get; set; }
         public bool IsAuth { get; set; }
         public string UserName { get; set; }
         public string Email { get; set; }

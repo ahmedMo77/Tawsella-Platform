@@ -13,8 +13,7 @@ namespace Tawsella.Domain.Entities
     {
         public string OrderNumber { get; set; }
 
-        public string UserId { get; set; }  // The person who created the order, Could be Customer or Merchant
-        public Roles UserRole { get; set; } // To distinguish between Customer and Merchant
+        public string UserId { get; set; }
         public AppUser User { get; set; }
 
         // Courier
@@ -46,7 +45,6 @@ namespace Tawsella.Domain.Entities
 
         // Status & Timing
         public OrderStatus Status { get; set; }
-        public DateTime CreatedAt { get; set; }
         public DateTime? AcceptedAt { get; set; }
         public DateTime? PickedUpAt { get; set; }
         public DateTime? DeliveredAt { get; set; }

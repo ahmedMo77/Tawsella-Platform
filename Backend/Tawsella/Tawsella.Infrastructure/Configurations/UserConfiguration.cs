@@ -49,11 +49,6 @@ namespace Tawsella.Infrastructure.Configurations
                 .HasForeignKey<Courier>(c => c.Id)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasOne<Merchant>()
-                .WithOne(m => m.User)
-                .HasForeignKey<Merchant>(m => m.Id)
-                .OnDelete(DeleteBehavior.Cascade);
-
             builder.HasIndex(u => u.Email).IsUnique();
 
             builder.HasIndex(u => u.PhoneNumber).IsUnique();

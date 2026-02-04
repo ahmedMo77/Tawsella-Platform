@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Tawsella.Domain.Enums;
 
-namespace Tawsella.Application.DTOs.CustomerDTOs
+namespace Tawsella.Domain.DTOs.OrderDTOs
 {
     public class CreateOrderDto
     {

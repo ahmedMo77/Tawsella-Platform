@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Tawsella.Domain.Enums;
 
-namespace Tawsella.Domain.DTOs.CustomerDTOs
+namespace Tawsella.Domain.DTOs.OrderDTOs
 {
     public class OrderListDTO
     {

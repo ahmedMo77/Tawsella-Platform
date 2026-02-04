@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using System;
@@ -14,10 +14,15 @@ namespace Tawsella.Infrastructure.DbContext
     { 
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options) { }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+        }
         public DbSet<Admin> Admins { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Courier> Couriers { get; set; }
-        public DbSet<Merchant> Merchants { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderStatusHistory> OrderStatusHistories { get; set; }
         public DbSet<Review> Reviews { get; set; }
@@ -27,7 +32,6 @@ namespace Tawsella.Infrastructure.DbContext
         public DbSet<SubscriptionPlan> SubscriptionPlans { get; set; }
         public DbSet<Subscription> Subscriptions { get; set; }
         public DbSet<Notification> Notifications { get; set; }
-
-
+        public DbSet<OrderApplication> OrderApplications { get; set; }
     }
 }

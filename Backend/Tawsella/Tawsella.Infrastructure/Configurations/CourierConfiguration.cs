@@ -35,11 +35,6 @@ namespace Tawsella.Infrastructure.Configurations
                 .HasForeignKey<Wallet>(w => w.CourierId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            entity.HasOne(c => c.Subscription)
-                .WithOne()
-                .HasForeignKey<Courier>(c => c.SubscriptionId)
-                .OnDelete(DeleteBehavior.SetNull);
-
             entity.HasMany(c => c.Orders)
                         .WithOne(o => o.Courier)
                         .HasForeignKey(o => o.CourierId)

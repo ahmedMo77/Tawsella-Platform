@@ -1,19 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Tawsella.Domain.Interfaces
 {
-    public interface IBaseRepository <T> where T : class
+    public interface IBaseRepository<T> where T : class
     {
-        Task<T> AddAsync(T entity);
-        Task AddRangeAsync(IEnumerable<T> entities);
-        Task<T> GetByIdAsync(string id);
-        Task<IEnumerable<T>> GetAllAsync();
-        Task UpdateAsync(T entity);
-        Task DeleteAsync(T entity);
+        /// <summary>
+        /// Queryable set for complex queries (Include, Where, ProjectTo, etc.).
+        /// </summary>
+        IQueryable<T> Query { get; }
 
+        System.Threading.Tasks.Task<T> AddAsync(T entity, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task AddRangeAsync(System.Collections.Generic.IEnumerable<T> entities, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<T?> GetByIdAsync(string id, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<T>> GetAllAsync(System.Threading.CancellationToken cancellationToken = default);
+        void Update(T entity);
+        void Delete(T entity);
     }
 }

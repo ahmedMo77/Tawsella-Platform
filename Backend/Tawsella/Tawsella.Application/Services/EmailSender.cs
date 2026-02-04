@@ -1,4 +1,4 @@
-﻿using MailKit.Security;
+using MailKit.Security;
 using Microsoft.Extensions.Options;
 using MimeKit;
 using System;
@@ -7,7 +7,6 @@ using System.Linq;
 using MailKit.Net.Smtp;
 using System.Text;
 using System.Threading.Tasks;
-using Tawsella.Application.DTOs;
 using Tawsella.Application.Interfaces;
 using Microsoft.Extensions.Logging;
 using Tawsella.Application.Settings;
@@ -27,15 +26,16 @@ namespace Tawsella.Application.Services
 
         public async Task SendEmailAsync(string email, string subject, string htmlContent)
         {
-            var emailMessage = new MimeMessage();
-            emailMessage.From.Add(new MailboxAddress(_emailSettings.SenderName, _emailSettings.SenderEmail));
-            emailMessage.To.Add(new MailboxAddress("", email));
-            emailMessage.Subject = subject;
-
-            var bodyBuilder = new BodyBuilder
+            try
             {
-                // هذا القالب هو "البرواز" العام لكل إيميلات المشروع
-                HtmlBody = $@"
+                var emailMessage = new MimeMessage();
+                emailMessage.From.Add(new MailboxAddress(_emailSettings.SenderName, _emailSettings.SenderEmail));
+                emailMessage.To.Add(new MailboxAddress("", email));
+                emailMessage.Subject = subject;
+
+                var bodyBuilder = new BodyBuilder
+                {
+                    HtmlBody = $@"
                 <div style='font-family: sans-serif; max-width: 600px; margin: 20px auto; border: 1px solid #eee; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.1);'>
                     <div style='background: #2c3e50; color: #ffffff; padding: 20px; text-align: center;'>
                         <h1 style='margin: 0; font-size: 24px;'>Tawsella</h1>
@@ -47,15 +47,21 @@ namespace Tawsella.Application.Services
                         This is an automated message from Tawsella System.
                     </div>
                 </div>"
-            };
+                };
 
-            emailMessage.Body = bodyBuilder.ToMessageBody();
+                emailMessage.Body = bodyBuilder.ToMessageBody();
 
-            using var client = new SmtpClient();
-            await client.ConnectAsync(_emailSettings.SmtpServer, _emailSettings.Port, SecureSocketOptions.StartTls);
-            await client.AuthenticateAsync(_emailSettings.SenderEmail, _emailSettings.Password);
-            await client.SendAsync(emailMessage);
-            await client.DisconnectAsync(true);
+                using var client = new SmtpClient();
+                await client.ConnectAsync(_emailSettings.SmtpServer, _emailSettings.Port, SecureSocketOptions.StartTls);
+                await client.AuthenticateAsync(_emailSettings.SenderEmail, _emailSettings.Password);
+                await client.SendAsync(emailMessage);
+                await client.DisconnectAsync(true);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to send email to {Email}, Subject: {Subject}", email, subject);
+                throw;
+            }
         }
     }
 }

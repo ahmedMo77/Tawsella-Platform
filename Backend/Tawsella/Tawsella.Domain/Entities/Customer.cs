@@ -19,12 +19,6 @@ namespace Tawsella.Domain.Entities
         public int CompletedOrders { get; set; }
         public PaymentMethod PreferredPaymentMethod { get; set; }
 
-        // Dropoff details maybe not relevant for a customer profile, as dropoff locations vary per order.
-
-        //public string DefaultDropoffAddress { get; set; }
-        //public decimal? DefaultDropoffLatitude { get; set; }
-        //public decimal? DefaultDropoffLongitude { get; set; }
-
         public AppUser User { get; set; }
         public ICollection<Order> Orders { get; set; }
         public ICollection<Review> Reviews { get; set; }

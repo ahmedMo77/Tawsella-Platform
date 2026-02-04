@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
@@ -29,14 +29,6 @@ namespace Tawsella.Infrastructure.Configurations
 
             entity.Property(s => s.AutoRenew)
                 .HasDefaultValue(true);
-
-            // Ensure only one of these can be set
-            entity.HasCheckConstraint(
-                "CK_Subscription_OnlyOneSubscriber",
-                "([MerchantId] IS NOT NULL AND [CourierId] IS NULL) OR " +
-                "([MerchantId] IS NULL AND [CourierId] IS NOT NULL) OR " +
-                "([MerchantId] IS NULL AND [CourierId] IS NULL)"
-            );
 
             entity.HasIndex(s => new { s.Status, s.EndDate });
         }

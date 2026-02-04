@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Org.BouncyCastle.Tls;
 using System.Security.Claims;
 using Tawsella.Application.DTOs.AuthDTOS;
 using Tawsella.Application.Interfaces;
@@ -57,19 +55,6 @@ namespace Tawsella.WebApi.Controllers
             return Ok(result);
         }
 
-        [HttpPost("merchant")]
-        public async Task<IActionResult> RegisterMerchant(RegisterMerchantDto dto)
-        {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
-
-            var result = await _authService.RegisterMerchantAsync(dto);
-
-            if (!result.Success)
-                return BadRequest(result.Message);
-
-            return Ok(result);
-        }
-
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDto dto)
         {
@@ -77,7 +62,7 @@ namespace Tawsella.WebApi.Controllers
 
             var result = await _authService.LoginAsync(dto);
 
-            if(!result.Successed) 
+            if(!result.Success) 
                 return BadRequest(result.Message);
 
             return Ok(result);
@@ -91,21 +76,10 @@ namespace Tawsella.WebApi.Controllers
         }
 
 
-        [HttpPost("aprove-courier")]
-        public async Task<IActionResult> AproveCourier(string courierId)
+        [HttpPost("approve-courier")]
+        public async Task<IActionResult> ApproveCourier(string courierId)
         {
             var result = await _authService.ApproveCourierAsync(courierId);
-
-            if (!result.Success)
-                return BadRequest(result.Message);
-
-            return Ok(result);
-        }
-
-        [HttpPost("aprove-merchant")]
-        public async Task<IActionResult> AproveMerchant(string merchantId)
-        {
-            var result = await _authService.ApproveMerchantAsync(merchantId);
 
             if (!result.Success)
                 return BadRequest(result.Message);
@@ -167,7 +141,6 @@ namespace Tawsella.WebApi.Controllers
                 return BadRequest(result);
 
             return Ok(result);
-            
         }
     }
 }

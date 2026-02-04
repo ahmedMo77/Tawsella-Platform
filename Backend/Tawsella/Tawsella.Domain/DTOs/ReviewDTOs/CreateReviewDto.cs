@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Tawsella.Application.DTOs.CustomerDTOs
+namespace Tawsella.Domain.DTOs.ReviewDTOs
 {
     public class CreateReviewDto
     {

@@ -1,29 +1,28 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics.Metrics;
-using Tawsella.Application.DTOs;
 using Tawsella.Application.DTOs.AuthDTOS;
 using Tawsella.Application.Interfaces;
+using Tawsella.Domain.DTOs;
 using Tawsella.Domain.Entities;
 using Tawsella.Domain.Enums;
-using Tawsella.Infrastructure.DbContext;
+using Tawsella.Domain.Interfaces;
 
 namespace Tawsella.Application.Services
 {
     public class AuthService : IAuthService
     {
-        private readonly AppDbContext _context;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ITokenService _tokenService;
-        private readonly IEmailSender _emailService; 
+        private readonly IEmailSender _emailService;
 
-        public AuthService(AppDbContext context, UserManager<AppUser> userManager,
-            ITokenService tokenService, SignInManager<AppUser> signInManager, 
+        public AuthService(IUnitOfWork unitOfWork, UserManager<AppUser> userManager,
+            ITokenService tokenService, SignInManager<AppUser> signInManager,
             RoleManager<IdentityRole> roleManger, IEmailSender emailService)
         {
-            _context = context;
+            _unitOfWork = unitOfWork;
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManger;
@@ -64,8 +63,8 @@ namespace Tawsella.Application.Services
                 IsSuperAdmin = dto.IsSuperAdmin
             };
 
-            _context.Admins.Add(admin);
-            await _context.SaveChangesAsync();
+            await _unitOfWork.Admins.AddAsync(admin);
+            await _unitOfWork.SaveChangesAsync();
 
             string body = $@"
                 <h2 style='color: #2c3e50;'>Welcome to Tawsella Team!</h2>
@@ -114,8 +113,8 @@ namespace Tawsella.Application.Services
                 User = user,
                 CreatedAt = DateTime.UtcNow
             };
-            _context.Customers.Add(customer);
-            await _context.SaveChangesAsync();
+            await _unitOfWork.Customers.AddAsync(customer);
+            await _unitOfWork.SaveChangesAsync();
 
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
@@ -133,7 +132,7 @@ namespace Tawsella.Application.Services
         } 
         public async Task<BaseToReturnDto> RegisterCourierAsync(RegisterCourierDto dto)
         {
-            if (await _userManager.FindByEmailAsync(dto.Email) != null || await _context.Couriers.FirstOrDefaultAsync(c => c.NationalId == dto.NationalId) != null)
+            if (await _userManager.FindByEmailAsync(dto.Email) != null || await _unitOfWork.Couriers.Query.FirstOrDefaultAsync(c => c.NationalId == dto.NationalId) != null)
                 return new BaseToReturnDto { Message = "Email or Id already in use" };
 
             var user = new AppUser
@@ -167,56 +166,15 @@ namespace Tawsella.Application.Services
                 CreatedAt = DateTime.UtcNow
             };
 
-            _context.Couriers.Add(courier);
-            await _context.SaveChangesAsync();
-
-            return new BaseToReturnDto { Success = true, Message = "Your request is under review" };
-        }
-        public async Task<BaseToReturnDto> RegisterMerchantAsync(RegisterMerchantDto dto)
-        {
-            if (await _userManager.FindByEmailAsync(dto.Email) != null)
-                return new BaseToReturnDto { Message = "Email already in use" };
-
-            var user = new AppUser
-            {
-                FullName = dto.FullName,
-                UserName = dto.Email.Substring(0, dto.Email.IndexOf('@')),
-                Email = dto.Email
-            };
-
-            var result = await _userManager.CreateAsync(user, dto.Password);
-            if (!result.Succeeded)
-                return new BaseToReturnDto { Message = string.Join(", ", result.Errors.Select(e => e.Description)) };
-
-
-            var roleName = Roles.Merchant.ToString();
-
-            if (!await _roleManager.RoleExistsAsync(roleName))
-                await _roleManager.CreateAsync(new IdentityRole(roleName));
-
-            await _userManager.AddToRoleAsync(user, Roles.Merchant.ToString());
-
-            var merchant = new Merchant
-            {
-                Id = user.Id,
-                IsApproved = false,
-                User = user,
-                BusinessName = dto.BusinessName,
-                BusinessRegistrationNumber = dto.BusinessRegistrationNumber,
-                BusinessAddress = dto.BusinessAddress,
-                BusinessCategory = dto.BusinessCategory,
-                CreatedAt = DateTime.UtcNow
-            };
-
-            _context.Merchants.Add(merchant);
-            await _context.SaveChangesAsync();
+            await _unitOfWork.Couriers.AddAsync(courier);
+            await _unitOfWork.SaveChangesAsync();
 
             return new BaseToReturnDto { Success = true, Message = "Your request is under review" };
         }
 
         public async Task<BaseToReturnDto> ApproveCourierAsync(string courierId)
         {
-            var courier = await _context.Couriers
+            var courier = await _unitOfWork.Couriers.Query
                 .Include(c => c.User)
                 .FirstOrDefaultAsync(c => c.Id == courierId);
 
@@ -225,26 +183,26 @@ namespace Tawsella.Application.Services
 
             courier.IsApproved = true;
             courier.User.EmailConfirmed = true;
-            await _context.SaveChangesAsync();
+            _unitOfWork.Couriers.Update(courier);
+
+            var wallet = await _unitOfWork.Wallets.Query.FirstOrDefaultAsync(w => w.CourierId == courierId);
+            if (wallet == null)
+            {
+                wallet = new Wallet
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    CourierId = courierId,
+                    Balance = 0,
+                    PendingBalance = 0,
+                    TotalEarnings = 0,
+                    CreatedAt = DateTime.UtcNow
+                };
+                await _unitOfWork.Wallets.AddAsync(wallet);
+            }
+
+            await _unitOfWork.SaveChangesAsync();
 
             await _emailService.SendEmailAsync(courier.User.Email, "Account Approved", "Congratulations! Your account is now active. You can login now.");
-
-            return new BaseToReturnDto { Success = true, Message = "Approved Successfully." };
-        }
-        public async Task<BaseToReturnDto> ApproveMerchantAsync(string merchantId)
-        {
-            var merchant = await _context.Merchants
-                .Include(m => m.User)
-                .FirstOrDefaultAsync(m => m.Id == merchantId);
-
-            if (merchant == null || merchant.IsApproved)
-                return new BaseToReturnDto { Message = "This Merchant is already approved or not found." };
-
-            merchant.IsApproved = true;
-            merchant.User.EmailConfirmed = true;
-            await _context.SaveChangesAsync();
-
-            await _emailService.SendEmailAsync(merchant.User.Email, "Account Approved", "Congratulations! Your account is now active. You can login now.");
 
             return new BaseToReturnDto { Success = true, Message = "Approved Successfully." };
         }
@@ -259,16 +217,9 @@ namespace Tawsella.Application.Services
 
             if (isCourier)
             {
-                var courier = await _context.Couriers.FirstOrDefaultAsync(c => c.Id == user.Id);
+                var courier = await _unitOfWork.Couriers.Query.FirstOrDefaultAsync(c => c.Id == user.Id);
                 if (courier != null && !courier.IsApproved)
                     return new AuthResultDto { Message = "Your account is still under review by the admin." };
-            }
-
-            if (isMerchant)
-            {
-                var merchant = await _context.Merchants.FirstOrDefaultAsync(m => m.Id == user.Id);
-                if (merchant != null && !merchant.IsApproved)
-                    return new AuthResultDto { Message = "Your merchant account is still under review." };
             }
 
             if (!await _userManager.IsEmailConfirmedAsync(user))

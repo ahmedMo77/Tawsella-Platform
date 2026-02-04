@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Builder;
+using AutoMapper; 
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,11 +7,15 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using Tawsella.Application;
+using Tawsella.Application.AutoMapper;
 using Tawsella.Application.Interfaces;
 using Tawsella.Application.Services;
 using Tawsella.Application.Settings;
 using Tawsella.Domain.Entities;
+using Tawsella.Domain.Interfaces;
 using Tawsella.Infrastructure.DbContext;
+using Tawsella.Infrastructure.Repositories;
 
 namespace Tawsella.WebApi
 {
@@ -108,10 +112,20 @@ namespace Tawsella.WebApi
                 options.TokenLifespan = TimeSpan.FromMinutes(15)); // صالح لـ 15 دقيقة فقط
 
 
+            // Unit of Work & Repositories
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
             // Dependency Injection for Application Services
             builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<ICustomerService, CustomerService>();
+            builder.Services.AddScoped<ICourierService, CourierService>();
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddTransient<IEmailSender, EmailSender>();
+            builder.Services.AddScoped<IPricingService, PricingService>();
+            builder.Services.AddScoped<INotificationService, NotificationService>();
+            builder.Services.AddScoped<IOrderService, OrderService>();
+            // AutoMapper Configuration
+            builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 
 
             builder.Services.AddSwaggerGen(c =>
@@ -145,9 +159,6 @@ namespace Tawsella.WebApi
                 });
             });
 
-
-            // Add services to the container.
-
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -160,14 +171,12 @@ namespace Tawsella.WebApi
                 app.UseSwaggerUI();
             }
 
-
             app.UseHttpsRedirection();
-
-            app.UseAuthentication();
-            app.UseAuthorization();
 
             app.UseCors("OpenCors");
 
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.MapControllers();
 

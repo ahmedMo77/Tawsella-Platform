@@ -78,7 +78,6 @@ namespace Tawsella.Application.Services
         }
         public async Task<AuthResultDto> GenerateTokensPairAsync(AppUser user)
         {
-            // تنظيف التوكنز منتهية الصلاحية (اختياري لكن يفضل عمله في Background Task)
             user.RefreshTokens.RemoveAll(t => !t.IsActive && t.CreatedAt.AddDays(30) < DateTime.UtcNow);
 
             var roles = await _userManager.GetRolesAsync(user);
@@ -91,7 +90,7 @@ namespace Tawsella.Application.Services
             return new AuthResultDto
             {
                 IsAuth = true,
-                Successed = true,
+                Success = true,
                 Message = "Login successful",
                 UserName = user.UserName,
                 Email = user.Email,
@@ -109,34 +108,35 @@ namespace Tawsella.Application.Services
                 .FirstOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == refreshToken));
 
             if (user == null) 
-                return new AuthResultDto { Message = "Invalid refresh token" };
+                return new AuthResultDto { Message = "Invalid token" };
 
-            var rt = user.RefreshTokens.First(t => t.Token == refreshToken);
+            var activeToken = user.RefreshTokens.First(t => t.Token == refreshToken);
 
-            if (!rt.IsActive )
-                return new AuthResultDto { Message = "Invalid refresh token" };
+            if (!activeToken.IsActive )
+                return new AuthResultDto { Message = "Token is not active" };
 
 
-            rt.RevokedAt = DateTime.UtcNow;
+            activeToken.RevokedAt = DateTime.UtcNow;
+
+            // تنظيف الـ Tokens القديمة جداً (مثلاً اللي مر عليها أكتر من 30 يوم)
+            user.RefreshTokens.RemoveAll(t => !t.IsActive && t.CreatedAt.AddDays(30) < DateTime.UtcNow);
 
             var newRt = CreateRefreshToken();
             user.RefreshTokens.Add(newRt);
-            await _userManager.UpdateAsync(user);
 
+            await _userManager.UpdateAsync(user);
             var jwt = await GenerateTokenAsync(user);
 
             return new AuthResultDto
             {
                 IsAuth = true,
+                Success = true,
                 Message = "Token refreshed successfully",
-
                 UserName = user.UserName,
                 Email = user.Email,
                 Roles = (await _userManager.GetRolesAsync(user)).ToList(),
-
                 Token = jwt.Token,
                 ExpireOn = jwt.ExpireAt,
-
                 RefreshToken = newRt.Token,
                 RefreshTokenExpireOn = newRt.ExpiresAt
             };

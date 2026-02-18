@@ -482,3 +482,8 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+# ASP.NET App Settings (contains secrets - do NOT commit)
+**/appsettings.json
+**/appsettings.*.json
+!**/appsettings.example.json

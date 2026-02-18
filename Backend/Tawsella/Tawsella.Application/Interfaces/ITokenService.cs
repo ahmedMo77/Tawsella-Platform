@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Tawsella.Application.DTOs.AuthDTOS;
+﻿using Tawsella.Application.DTOs.AuthDTOS;
 using Tawsella.Domain.Entities;
 
 namespace Tawsella.Application.Interfaces

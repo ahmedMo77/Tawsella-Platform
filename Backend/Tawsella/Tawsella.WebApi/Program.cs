@@ -9,6 +9,7 @@ using Microsoft.OpenApi.Models;
 using System.Text;
 using Tawsella.Application;
 using Tawsella.Application.AutoMapper;
+using Tawsella.Application.Contracts;
 using Tawsella.Application.Interfaces;
 using Tawsella.Application.Services;
 using Tawsella.Application.Settings;
@@ -16,6 +17,7 @@ using Tawsella.Domain.Entities;
 using Tawsella.Domain.Interfaces;
 using Tawsella.Infrastructure.DbContext;
 using Tawsella.Infrastructure.Repositories;
+using Tawsella.Infrastructure.Services;
 
 namespace Tawsella.WebApi
 {
@@ -112,17 +114,23 @@ namespace Tawsella.WebApi
                 options.TokenLifespan = TimeSpan.FromMinutes(15)); // صالح لـ 15 دقيقة فقط
 
 
-            // Unit of Work & Repositories
-            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            // Feature-Specific Repositories
+            builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+            builder.Services.AddScoped<ICourierRepository, CourierRepository>();
+            builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+            builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+            builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
+
+            // HTTP Context Accessor for Claims
+            builder.Services.AddHttpContextAccessor();
 
             // Dependency Injection for Application Services
+            builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
             builder.Services.AddScoped<IAuthService, AuthService>();
-            builder.Services.AddScoped<ICustomerService, CustomerService>();
-            builder.Services.AddScoped<ICourierService, CourierService>();
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddTransient<IEmailSender, EmailSender>();
             builder.Services.AddScoped<IPricingService, PricingService>();
-            builder.Services.AddScoped<INotificationService, NotificationService>();
             builder.Services.AddScoped<IOrderService, OrderService>();
             // AutoMapper Configuration
             builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);

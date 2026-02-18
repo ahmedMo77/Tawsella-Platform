@@ -16,7 +16,7 @@ using Tawsella.Application.Interfaces;
 using Tawsella.Application.Settings;
 using Tawsella.Domain.Entities;
 
-namespace Tawsella.Application.Services
+namespace Tawsella.Application.services
 {
     public class TokenService : ITokenService
     {

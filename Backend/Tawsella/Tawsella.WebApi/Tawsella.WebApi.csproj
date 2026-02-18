@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Tawsella.Application\Tawsella.Application.csproj" />
+    <ProjectReference Include="..\Tawsella.Domain\Tawsella.Domain.csproj" />
     <ProjectReference Include="..\Tawsella.Infrastructure\Tawsella.Infrastructure.csproj" />
   </ItemGroup>
 

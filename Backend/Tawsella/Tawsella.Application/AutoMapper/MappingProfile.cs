@@ -6,6 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Tawsella.Application.DTOs.CourierDTOs;
 using Tawsella.Application.DTOs.CustomerDTOs;
+using Tawsella.Application.Features.Orders.Commands;
+using Tawsella.Application.Features.Orders.Commands.CreateOrder;
+using Tawsella.Application.Features.Orders.Queries.GetOrderApplications;
+using Tawsella.Application.Features.Orders.Queries.GetOrderDetails;
 using Tawsella.Domain.DTOs.CourierDTOs;
 using Tawsella.Domain.DTOs.NotificationDTOs;
 using Tawsella.Domain.DTOs.OrderDTOs;
@@ -20,7 +24,7 @@ namespace Tawsella.Application.AutoMapper
         public MappingProfile()
         {
             // 1. Order Mappings
-            CreateMap<Order, OrderResponseDto>()
+            CreateMap<Order, GetOrderDetailsQueryResponse>()
                 // الوصول لبيانات المندوب من خلال علاقة Courier -> User
                 .ForMember(dest => dest.CourierName, opt => opt.MapFrom(src => src.Courier != null ? src.Courier.User.FullName : null))
                 .ForMember(dest => dest.CourierPhone, opt => opt.MapFrom(src => src.Courier != null ? src.Courier.User.PhoneNumber : null));
@@ -41,7 +45,7 @@ namespace Tawsella.Application.AutoMapper
             CreateMap<Review, CourierReviewItemDto>();
 
             // 3. Order Application Mappings
-            CreateMap<OrderApplication, OrderApplicationWithCourierDto>()
+            CreateMap<OrderApplication, GetOrderApplicationsResponse>()
                 .ForMember(dest => dest.ApplicationId, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.AppliedAt, opt => opt.MapFrom(src => src.CreatedAt))
                 // هنا بنعمل Map للـ Courier Entity كاملة لـ CourierPublicProfileDto
@@ -58,6 +62,9 @@ namespace Tawsella.Application.AutoMapper
                 .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.User.FullName))
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.User.Email))
                 .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.User.PhoneNumber));
+
+            CreateMap<CreateOrderCommand, CalculatePriceDto>();
+            CreateMap<Order, CreateOrderCommand>().ReverseMap();
         }
     }
 }

@@ -1,7 +1,6 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.14.36623.8
+# Visual Studio Version 18
+VisualStudioVersion = 18.0.11222.15 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tawsella.WebApi", "Tawsella.WebApi\Tawsella.WebApi.csproj", "{8F9FD986-826D-4F28-B043-6FA237963969}"
 EndProject
@@ -10,6 +9,14 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tawsella.Application", "Tawsella.Application\Tawsella.Application.csproj", "{BA396468-A9A7-436A-BFB8-71E80B043579}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tawsella.Domain", "Tawsella.Domain\Tawsella.Domain.csproj", "{80FEB02C-B781-4717-9593-79680A6C0655}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{5FC8689A-67C7-4453-947C-C37BD340E8C8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2EBA20E1-94C6-4216-B74E-F96ECC5F4238}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{C2E62351-49CE-47C4-A346-80F42821042D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{07CA163D-C491-49ED-8277-AAF456C62A9B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,6 +43,15 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8F9FD986-826D-4F28-B043-6FA237963969} = {C2E62351-49CE-47C4-A346-80F42821042D}
+		{3222D1AF-53B6-4D2D-905A-919A2F129404} = {07CA163D-C491-49ED-8277-AAF456C62A9B}
+		{BA396468-A9A7-436A-BFB8-71E80B043579} = {5FC8689A-67C7-4453-947C-C37BD340E8C8}
+		{80FEB02C-B781-4717-9593-79680A6C0655} = {5FC8689A-67C7-4453-947C-C37BD340E8C8}
+		{5FC8689A-67C7-4453-947C-C37BD340E8C8} = {2EBA20E1-94C6-4216-B74E-F96ECC5F4238}
+		{C2E62351-49CE-47C4-A346-80F42821042D} = {2EBA20E1-94C6-4216-B74E-F96ECC5F4238}
+		{07CA163D-C491-49ED-8277-AAF456C62A9B} = {2EBA20E1-94C6-4216-B74E-F96ECC5F4238}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8037FCF6-FB51-4A32-9A09-9EB989B5A585}

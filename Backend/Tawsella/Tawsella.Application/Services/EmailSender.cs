@@ -11,7 +11,7 @@ using Tawsella.Application.Interfaces;
 using Microsoft.Extensions.Logging;
 using Tawsella.Application.Settings;
 
-namespace Tawsella.Application.Services
+namespace Tawsella.Application.services
 {
     public class EmailSender : IEmailSender
     {

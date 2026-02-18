@@ -5,9 +5,8 @@ using Tawsella.Application.Interfaces;
 using Tawsella.Domain.DTOs;
 using Tawsella.Domain.Entities;
 using Tawsella.Domain.Enums;
-using Tawsella.Domain.Interfaces;
 
-namespace Tawsella.Application.Services
+namespace Tawsella.Application.services
 {
     public class AuthService : IAuthService
     {

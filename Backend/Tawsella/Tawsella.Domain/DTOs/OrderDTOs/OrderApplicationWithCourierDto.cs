@@ -3,9 +3,6 @@ using Tawsella.Application.DTOs.CourierDTOs;
 
 namespace Tawsella.Domain.DTOs.OrderDTOs
 {
-    /// <summary>
-    /// Application for an order including courier public profile (for customer to choose).
-    /// </summary>
     public class OrderApplicationWithCourierDto
     {
         public string ApplicationId { get; set; }

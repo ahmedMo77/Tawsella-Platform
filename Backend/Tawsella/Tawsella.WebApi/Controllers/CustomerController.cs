@@ -1,84 +1,54 @@
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Tawsella.Application.DTOs.CustomerDTOs;
-using Tawsella.Application.Interfaces;
-using Tawsella.Domain.Enums;
+using Tawsella.Application.Features.Customers.Commands.UpdateCustomerProfile;
+using Tawsella.Application.Features.Customers.Queries.GetCourierPublicProfile;
+using Tawsella.Application.Features.Customers.Queries.GetCustomerProfile;
+using Tawsella.Application.Features.Customers.Queries.GetCustomerStatistics;
 
 namespace Tawsella.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = "Customer")]
     public class CustomerController : ControllerBase
     {
-        private readonly ICustomerService _customerService;
-        private readonly INotificationService _notificationService;
+        private readonly IMediator _mediator;
 
-        public CustomerController(ICustomerService customerService, INotificationService notificationService)
+        public CustomerController(IMediator mediator)
         {
-            _customerService = customerService;
-            _notificationService = notificationService;
+            _mediator = mediator;
         }
-
-        private string CurrentCustomerId => User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
-
 
         [HttpGet("profile")]
         public async Task<IActionResult> GetProfile()
         {
-            try
-            {
-                var profile = await _customerService.GetProfile(CurrentCustomerId);
-                return Ok(profile);
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(new { Message = ex.Message });
-            }
+            var result = await _mediator.Send(new GetCustomerProfileQuery());
+            if (result == null) return NotFound(new { Message = "Customer not found." });
+            return Ok(result);
         }
 
         [HttpPut("profile")]
-        public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileDto dto)
+        public async Task<IActionResult> UpdateProfile([FromBody] UpdateCustomerProfileCommand command)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
-
-            var result = await _customerService.UpdateCustomerProfile(CurrentCustomerId, dto);
-            if (!result.Success)
-                return BadRequest(result.Message);
-
-            return Ok(result);
+            var result = await _mediator.Send(command);
+            return result.Success ? Ok(result) : BadRequest(result);
         }
 
         [HttpGet("statistics")]
         public async Task<IActionResult> GetStats()
         {
-            try
-            {
-                var stats = await _customerService.GetCustomerStatistics(CurrentCustomerId);
-                return Ok(stats);
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(new { Message = ex.Message });
-            }
+            var result = await _mediator.Send(new GetCustomerStatisticsQuery());
+            if (result == null) return NotFound(new { Message = "Customer not found." });
+            return Ok(result);
         }
 
-        // Get courier public profile (rating, reviews, etc) when viewing an applicant.   // maybe move to CourierController later
         [HttpGet("courier-profile/{courierId}")]
         public async Task<IActionResult> GetCourierProfile(string courierId)
         {
-            try
-            {
-                var profile = await _customerService.GetCourierPublicProfileAsync(courierId);
-                return Ok(profile);
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(new { Message = ex.Message });
-            }
+            var result = await _mediator.Send(new GetCourierPublicProfileQuery { CourierId = courierId });
+            if (result == null) return NotFound(new { Message = "Courier not found." });
+            return Ok(result);
         }
     }
 }

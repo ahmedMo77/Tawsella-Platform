@@ -1,9 +1,14 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
-using Tawsella.Application.Interfaces;
-using Tawsella.Domain.DTOs.OrderDTOs;
+using Tawsella.Application.Features.Orders.Commands.ApproveOrderApplication;
+using Tawsella.Application.Features.Orders.Commands.CancelOrder;
+using Tawsella.Application.Features.Orders.Commands.CreateOrder;
+using Tawsella.Application.Features.Orders.Commands.UpdateOrderStatus;
+using Tawsella.Application.Features.Orders.Queries.GetOrderApplications;
+using Tawsella.Application.Features.Orders.Queries.GetOrderDetails;
+using Tawsella.Application.Features.Orders.Queries.GetOrdersHistory;
+using Tawsella.Application.Features.Reviews.Commands.SubmitReview;
 using Tawsella.Domain.DTOs.ReviewDTOs;
 using Tawsella.Domain.Enums;
 
@@ -11,84 +16,78 @@ namespace Tawsella.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Customer")]
     public class OrdersController : ControllerBase
     {
-        private readonly IOrderService _orderService;
+        private readonly IMediator _mediator;
 
-        public OrdersController(IOrderService orderService)
+        public OrdersController(IMediator mediator)
         {
-            _orderService = orderService;
+            _mediator = mediator;
         }
 
-        private string CurrentUserId => User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
-
         [HttpPost("create")]
-        public async Task<IActionResult> CreateOrder([FromBody] CreateOrderDto dto)
+        public async Task<IActionResult> CreateOrder([FromBody] CreateOrderCommand command)
         {
-            try
-            {
-                var result = await _orderService.CreateOrderAsync(CurrentUserId, dto);
-                return result.Success ? Ok(result) : BadRequest(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { Message = ex.Message });
-            }
+            var result = await _mediator.Send(command);
+            return result.Success ? Ok(result) : BadRequest(result);
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "Customer,Courier")]
         public async Task<IActionResult> GetOrderDetails(string id)
         {
-            try
-            {
-                var order = await _orderService.GetOrderDetailsAsync(id, CurrentUserId);
-                return Ok(order);
-            }
-            catch (KeyNotFoundException)
-            {
-                return NotFound(new { Message = "Order not found or you don't have permission." });
-            }
+            var result = await _mediator.Send(new GetOrderDetailsQuery { orderId = id });
+            if (result == null) return NotFound(new { Message = "Order not found or you don't have permission." });
+            return Ok(result);
         }
 
         [HttpGet("history")]
-        public async Task<IActionResult> GetHistory([FromQuery] OrderStatus? status, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+        [Authorize(Roles = "Customer,Courier")]
+        public async Task<IActionResult> GetHistory(
+            [FromQuery] OrderStatus? status,
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 10)
         {
-            var result = await _orderService.GetOrdersHistoryAsync(CurrentUserId, status, page, pageSize);
+            var result = await _mediator.Send(new GetOrdersHistoryQuery
+            {
+                status = status,
+                page = page,
+                pageSize = pageSize
+            });
             return Ok(result);
         }
 
         [HttpPost("{id}/cancel")]
         public async Task<IActionResult> CancelOrder(string id, [FromBody] string reason)
         {
-            var result = await _orderService.CancelOrderAsync(CurrentUserId, id, reason);
+            var result = await _mediator.Send(new CancelOrderCommand { orderId = id, reason = reason });
             return result.Success ? Ok(result) : BadRequest(result);
         }
 
         [HttpGet("{id}/applications")]
         public async Task<IActionResult> GetApplications(string id)
         {
-            try
-            {
-                var apps = await _orderService.GetOrderApplicationsAsync(CurrentUserId, id);
-                return Ok(apps);
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(new { Message = ex.Message });
-            }
+            var result = await _mediator.Send(new GetOrderApplicationsQuery { orderId = id });
+            if (result == null) return NotFound(new { Message = "Order not found." });
+            return Ok(result);
         }
 
         [HttpPost("{id}/approve/{applicationId}")]
         public async Task<IActionResult> ApproveApplication(string id, string applicationId)
         {
-            var result = await _orderService.ApproveOrderApplicationAsync(CurrentUserId, id, applicationId);
+            var result = await _mediator.Send(new ApproveOrderApplicationCommand
+            {
+                orderId = id,
+                applicationId = applicationId
+            });
             return result.Success ? Ok(result) : BadRequest(result);
         }
 
         [HttpPost("{id}/review")]
         public async Task<IActionResult> SubmitReview(string id, [FromBody] CreateReviewDto dto)
         {
-            var result = await _orderService.SubmitReviewAsync(CurrentUserId, id, dto);
+            var result = await _mediator.Send(new SubmitReviewCommand { orderId = id, dto = dto });
             return result.Success ? Ok(result) : BadRequest(result);
         }
 
@@ -96,7 +95,12 @@ namespace Tawsella.WebApi.Controllers
         [Authorize(Roles = "Courier")]
         public async Task<IActionResult> UpdateStatus(string id, [FromQuery] OrderStatus status, [FromQuery] string? notes)
         {
-            var result = await _orderService.UpdateOrderStatusAsync(id, CurrentUserId, status, notes);
+            var result = await _mediator.Send(new UpdateOrderStatusCommand
+            {
+                OrderId = id,
+                NewStatus = status,
+                Notes = notes
+            });
             return result.Success ? Ok(result) : BadRequest(result);
         }
     }

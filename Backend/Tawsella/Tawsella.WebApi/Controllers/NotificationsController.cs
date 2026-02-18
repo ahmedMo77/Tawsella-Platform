@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
-using Tawsella.Application.Interfaces;
+using Tawsella.Application.Features.Notifications.Commands.MarkAllAsRead;
+using Tawsella.Application.Features.Notifications.Commands.MarkNotificationAsRead;
+using Tawsella.Application.Features.Notifications.Queries.GetUserNotifications;
 
 namespace Tawsella.WebApi.Controllers
 {
@@ -10,33 +12,39 @@ namespace Tawsella.WebApi.Controllers
     [Route("api/[controller]")]
     public class NotificationsController : ControllerBase
     {
-        private readonly INotificationService _notificationService;
+        private readonly IMediator _mediator;
 
-        public NotificationsController(INotificationService notificationService)
+        public NotificationsController(IMediator mediator)
         {
-            _notificationService = notificationService;
+            _mediator = mediator;
         }
 
-        private string CurrentUserId => User.FindFirstValue(ClaimTypes.NameIdentifier) ?? "";
-
         [HttpGet]
-        public async Task<IActionResult> GetMyNotifications([FromQuery] bool unreadOnly = false, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+        public async Task<IActionResult> GetMyNotifications(
+            [FromQuery] bool unreadOnly = false,
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 10)
         {
-            var result = await _notificationService.GetUserNotificationsAsync(CurrentUserId, unreadOnly, page, pageSize);
+            var result = await _mediator.Send(new GetUserNotificationsQuery
+            {
+                UnreadOnly = unreadOnly,
+                Page = page,
+                PageSize = pageSize
+            });
             return Ok(result);
         }
 
         [HttpPatch("{id}/read")]
         public async Task<IActionResult> MarkAsRead(string id)
         {
-            var success = await _notificationService.MarkAsReadAsync(CurrentUserId, id);
-            return success ? Ok() : NotFound();
+            var result = await _mediator.Send(new MarkNotificationAsReadCommand { NotificationId = id });
+            return result.Success ? Ok(result) : NotFound(result);
         }
 
         [HttpPost("mark-all-read")]
         public async Task<IActionResult> MarkAllAsRead()
         {
-            await _notificationService.MarkAllAsReadAsync(CurrentUserId);
+            await _mediator.Send(new MarkAllAsReadCommand());
             return Ok(new { Message = "All notifications marked as read" });
         }
     }

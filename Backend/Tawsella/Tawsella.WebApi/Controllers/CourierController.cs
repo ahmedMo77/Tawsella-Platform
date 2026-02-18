@@ -1,10 +1,15 @@
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
-using Tawsella.Application.DTOs.CourierDTOs;
-using Tawsella.Application.Interfaces;
-using Tawsella.Domain.DTOs.CourierDTOs;
-using Tawsella.Domain.Enums;
+using Tawsella.Application.Features.Couriers.Commands.ApplyForOrder;
+using Tawsella.Application.Features.Couriers.Commands.DeliverOrder;
+using Tawsella.Application.Features.Couriers.Commands.PickupOrder;
+using Tawsella.Application.Features.Couriers.Commands.UpdateCourierProfile;
+using Tawsella.Application.Features.Couriers.Commands.UpdateLocation;
+using Tawsella.Application.Features.Couriers.Commands.UpdateOnlineStatus;
+using Tawsella.Application.Features.Couriers.Queries.GetActiveOrder;
+using Tawsella.Application.Features.Couriers.Queries.GetAvailableOrders;
+using Tawsella.Application.Features.Couriers.Queries.GetCourierProfile;
 
 namespace Tawsella.WebApi.Controllers
 {
@@ -13,76 +18,76 @@ namespace Tawsella.WebApi.Controllers
     [Route("api/[controller]")]
     public class CourierController : ControllerBase
     {
-        private readonly ICourierService _courierService;
+        private readonly IMediator _mediator;
 
-        public CourierController(ICourierService courierService)
+        public CourierController(IMediator mediator)
         {
-            _courierService = courierService;
+            _mediator = mediator;
         }
 
-        [HttpGet("profile/{id}")]
-        public async Task<IActionResult> GetProfile(string id)
+        [HttpGet("profile")]
+        public async Task<IActionResult> GetProfile()
         {
-            var profile = await _courierService.GetProfileAsync(id);
-            if (profile == null) return NotFound("Courier not found.");
-            return Ok(profile);
+            var result = await _mediator.Send(new GetCourierProfileQuery());
+            if (result == null) return NotFound("Courier not found.");
+            return Ok(result);
         }
 
-        [HttpPut("update-profile/{id}")]
-        public async Task<IActionResult> UpdateProfile(string id, UpdateCourierProfileDto model)
+        [HttpPut("update-profile")]
+        public async Task<IActionResult> UpdateProfile([FromBody] UpdateCourierProfileCommand command)
         {
-            var result = await _courierService.UpdateProfileAsync(id, model);
+            var result = await _mediator.Send(command);
             return result.Success ? Ok(result) : BadRequest(result);
         }
 
-        [HttpPatch("status/{id}")]
-        public async Task<IActionResult> UpdateStatus(string id, [FromBody] bool isOnline)
+        [HttpPatch("status")]
+        public async Task<IActionResult> UpdateStatus([FromBody] bool isOnline)
         {
-            var result = await _courierService.UpdateOnlineStatusAsync(id, isOnline);
+            var result = await _mediator.Send(new UpdateOnlineStatusCommand { IsOnline = isOnline });
             return result.Success ? Ok(result) : BadRequest(result);
         }
 
-        [HttpPost("update-location/{id}")]
-        public async Task<IActionResult> UpdateLocation(string id, UpdateLocationDto location)
+        [HttpPost("update-location")]
+        public async Task<IActionResult> UpdateLocation([FromBody] UpdateLocationCommand command)
         {
-            await _courierService.UpdateLocationAsync(id, location);
-            return Ok(new { message = "Location updated" });
+            await _mediator.Send(command);
+            return Ok(new { Message = "Location updated" });
         }
 
-        [HttpGet("available-orders/{id}")]
-        public async Task<IActionResult> GetAvailableOrders(string id, [FromQuery] double radius = 10)
+        [HttpGet("available-orders")]
+        public async Task<IActionResult> GetAvailableOrders([FromQuery] double radius = 10)
         {
-            var orders = await _courierService.GetAvailableOrdersAsync(id, radius);
-            return Ok(orders);
+            var result = await _mediator.Send(new GetAvailableOrdersQuery { RadiusInKm = radius });
+            return Ok(result);
         }
 
         [HttpPost("apply-order")]
-        public async Task<IActionResult> ApplyForOrder(string courierId, string orderId)
+        public async Task<IActionResult> ApplyForOrder([FromBody] ApplyForOrderCommand command)
         {
-            var result = await _courierService.ApplyForOrderAsync(courierId, orderId);
+            var result = await _mediator.Send(command);
             return result.Success ? Ok(result) : BadRequest(result);
         }
 
         [HttpPatch("pickup-order")]
-        public async Task<IActionResult> PickupOrder(string courierId, string orderId)
+        public async Task<IActionResult> PickupOrder([FromBody] PickupOrderCommand command)
         {
-            var result = await _courierService.PickupOrderAsync(courierId, orderId);
+            var result = await _mediator.Send(command);
             return result.Success ? Ok(result) : BadRequest(result);
         }
 
         [HttpPatch("deliver-order")]
-        public async Task<IActionResult> DeliverOrder(string courierId, string orderId)
+        public async Task<IActionResult> DeliverOrder([FromBody] DeliverOrderCommand command)
         {
-            var result = await _courierService.DeliverOrderAsync(courierId, orderId);
+            var result = await _mediator.Send(command);
             return result.Success ? Ok(result) : BadRequest(result);
         }
 
-        [HttpGet("active-order/{id}")]
-        public async Task<IActionResult> GetActiveOrder(string id)
+        [HttpGet("active-order")]
+        public async Task<IActionResult> GetActiveOrder()
         {
-            var order = await _courierService.GetActiveOrderAsync(id);
-            if (order == null) return NotFound("No active orders found for this courier.");
-            return Ok(order);
+            var result = await _mediator.Send(new GetActiveOrderQuery());
+            if (result == null) return NotFound("No active orders found.");
+            return Ok(result);
         }
     }
 }

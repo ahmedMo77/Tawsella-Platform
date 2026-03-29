@@ -13,7 +13,7 @@ using Tawsella.Domain.Enums;
 
 namespace Tawsella.WebApi.Controllers
 {
-    [Route("api/orders")]
+    [Route("api/[controller]")]
     [ApiController]
     [Authorize(Roles = "Customer")]
     public class OrdersController : ControllerBase

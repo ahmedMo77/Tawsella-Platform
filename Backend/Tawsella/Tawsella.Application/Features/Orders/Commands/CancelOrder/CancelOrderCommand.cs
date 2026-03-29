@@ -8,9 +8,8 @@ using Tawsella.Application.DTOs;
 
 namespace Tawsella.Application.Features.Orders.Commands.CancelOrder
 {
-    public class CancelOrderCommand:IRequest<BaseToReturnDto>
-    {
-      public string OrderId {  get; set; }
-      public string Reason { get; set; }
-    }
+    public record CancelOrderCommand(
+        string OrderId,
+        string Reason
+    ) : IRequest<BaseToReturnDto>;
 }

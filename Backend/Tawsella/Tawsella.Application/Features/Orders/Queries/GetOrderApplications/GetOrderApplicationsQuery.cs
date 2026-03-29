@@ -8,8 +8,6 @@ using Tawsella.Application.Features.Couriers.Queries.GetActiveOrder;
 
 namespace Tawsella.Application.Features.Orders.Queries.GetOrderApplications
 {
-    public class GetOrderApplicationsQuery:IRequest<List<GetOrderApplicationsResponse>>
-    {
-        public string orderId { get; set; }
-    }
+    public record GetOrderApplicationsQuery(string OrderId)
+        : IRequest<List<GetOrderApplicationsResponse>>;
 }

@@ -8,8 +8,8 @@ using Tawsella.Application.DTOs.OrderDTOs;
 
 namespace Tawsella.Application.Features.Orders.Queries.GetOrdersHistory
 {
-    public class GetOrdersHistoryQueryResponse
+    public class GetOrdersHistoryQueryResponse : PaginatedResponseDto<OrderResponseDto>
     {
-        public PaginatedResponseDto<OrderResponseDto> paginatedResponse {  get; set; } = default!;
+
     }
 }

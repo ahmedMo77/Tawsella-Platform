@@ -1,146 +1,93 @@
-//using Microsoft.AspNetCore.Authorization;
-//using Microsoft.AspNetCore.Mvc;
-//using System.Security.Claims;
-//using Tawsella.Application.DTOs.AuthDTOS;
-//using Tawsella.Application.;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+using Tawsella.Application.DTOs.AuthDTOS;
+using Tawsella.Application.Features.Auth.ConfirmEmail;
+using Tawsella.Application.Features.Auth.Login;
+using Tawsella.Application.Features.Auth.Logout;
+using Tawsella.Application.Features.Auth.Password.ChangePassword;
+using Tawsella.Application.Features.Auth.Password.ForgotPassword;
+using Tawsella.Application.Features.Auth.Password.ResetPassword;
+using Tawsella.Application.Features.Auth.RefreshToken;
+using Tawsella.Application.Features.Auth.Register.RegisterCourier;
+using Tawsella.Application.Features.Auth.Register.RegisterCustomer;
 
-//namespace Tawsella.WebApi.Controllers
-//{
-//    [Route("api/[controller]")]
-//    [ApiController]
-//    public class AuthController : ControllerBase
-//    {
-//        private readonly IAuthService _authService;
-//        public AuthController(IAuthService authService)
-//        {
-//            _authService = authService;
-//        }
+namespace Tawsella.WebApi.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class AuthController : ControllerBase
+    {
+        private readonly IMediator _mediator;
 
-//        [HttpPost("admin")]
-//        public async Task<IActionResult> CreateAdmin(CreateAdminDto dto)
-//        {
-//            if(!ModelState.IsValid) return BadRequest(ModelState);
+        public AuthController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
 
-//            var result = await _authService.CreateAdminAsync(dto);
+        [HttpPost("register/customer")]
+        public async Task<IActionResult> RegisterCustomer([FromBody] RegisterCustomerCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return result.Success ? Ok(result) : BadRequest(result);
+        }
 
-//            if(!result.Success)
-//                return BadRequest(result.Message);
+        [HttpPost("register/courier")]
+        public async Task<IActionResult> RegisterCourier([FromBody] RegisterCourierCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return result.Success ? Ok(result) : BadRequest(result);
+        }
 
-//            return Ok(result);
-//        }
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return result.IsAuth ? Ok(result) : Unauthorized(result);
+        }
 
-//        [HttpPost("customer")]
-//        public async Task<IActionResult> RegisterCustomer(RegisterUserDto dto)
-//        {
-//            if (!ModelState.IsValid) return BadRequest(dto);
+        [HttpPost("refresh-token")]
+        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenDto dto)
+        {
+            var result = await _mediator.Send(new RefreshTokenCommand(dto.RefreshToken));
+            return result.IsAuth ? Ok(result) : Unauthorized(result);
+        }
 
-//            var result = await _authService.RegisterCustomerAsync(dto);
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout([FromBody] RefreshTokenDto dto)
+        {
+            await _mediator.Send(new LogoutCommand(dto.RefreshToken));
+            return NoContent();
+        }
 
-//            if (!result.Success)
-//                return BadRequest(result.Message);
+        [HttpPost("confirm-email")]
+        public async Task<IActionResult> ConfirmEmail([FromBody] ConfirmEmailCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return result.Success ? Ok(result) : BadRequest(result);
+        }
 
-//            return Ok(result);
-//        }
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return Ok(result); // always 200 to prevent email enumeration
+        }
 
-//        [HttpPost("courier")]
-//        public async Task<IActionResult> RegisterCourier(RegisterCourierDto dto)
-//        {
-//            if (!ModelState.IsValid) return BadRequest(dto);
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return result.Success ? Ok(result) : BadRequest(result);
+        }
 
-//            var result = await _authService.RegisterCourierAsync(dto);
-
-//            if (!result.Success)
-//                return BadRequest(result.Message);
-
-//            return Ok(result);
-//        }
-
-//        [HttpPost("login")]
-//        public async Task<IActionResult> Login(LoginDto dto)
-//        {
-//            if (!ModelState.IsValid) return BadRequest(ModelState);
-
-//            var result = await _authService.LoginAsync(dto);
-
-//            if(!result.Success) 
-//                return BadRequest(result.Message);
-
-//            return Ok(result);
-//        }
-
-//        [HttpPost("logout")]
-//        public async Task<IActionResult> Logout(string token)
-//        {
-//            await _authService.LogoutAsync(token);
-//            return NoContent();
-//        }
-
-
-//        [HttpPost("approve-courier")]
-//        public async Task<IActionResult> ApproveCourier(string courierId)
-//        {
-//            var result = await _authService.ApproveCourierAsync(courierId);
-
-//            if (!result.Success)
-//                return BadRequest(result.Message);
-
-//            return Ok(result);
-//        }
-
-//        [HttpPost("confirm-email")]
-//        public async Task<IActionResult> ConfirmEmail(string email, string code)
-//        {
-//            var dto = new ConfirmEmailDto
-//            {
-//                email = email,
-//                code = code
-//            };
-
-//            var result = await _authService.ConfirmEmailAsync(dto);
-//            if (result.Success) return Ok(result);
-//            return BadRequest(result);
-//        }
-
-//        [HttpPost("forgot-password")]
-//        public async Task<IActionResult> ForgotPassword(string email)
-//        {
-//            var result = await _authService.ForgotPasswordAsync(email);
-
-//            return Ok(result);
-//        }
-
-//        [HttpPost("reset-password")]
-//        public async Task<IActionResult> ResetPassword(ResetPasswordDto dto)
-//        {
-//            if (!ModelState.IsValid) return BadRequest(ModelState);
-
-//            var result = await _authService.ResetPasswordAsync(dto);
-
-//            if (!result.Success) 
-//                return BadRequest(result);
-
-//            return Ok(result);
-//        }
-
-//        [Authorize]
-//        [HttpPost("change-password")]
-//        public async Task<IActionResult> ChangePassword(string oldPassword, string newPassword)
-//        {
-//            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-//            var dto = new ChangePasswordDto
-//            {
-//                userId = userId,
-//                oldPassword = oldPassword,
-//                newPassword = newPassword
-//            };
-
-//            var result = await _authService.ChangePasswordAsync(dto);
-
-//            if (!result.Success) 
-//                return BadRequest(result);
-
-//            return Ok(result);
-//        }
-//    }
-//}
+        [Authorize]
+        [HttpPost("change-password")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return result.Success ? Ok(result) : BadRequest(result);
+        }
+    }
+}

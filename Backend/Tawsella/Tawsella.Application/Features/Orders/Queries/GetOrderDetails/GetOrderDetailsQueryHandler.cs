@@ -26,10 +26,10 @@ namespace Tawsella.Application.Features.Orders.Queries.GetOrderDetails
         {
             var userId = _currentUserService.GetUserId();
             
-            if(string.IsNullOrEmpty(request.orderId))
+            if(string.IsNullOrEmpty(request.OrderId))
                 throw new ValidationException("Invalid order ID");
 
-            var order = await _orderRepository.GetOrderWithDetailsAsync(request.orderId, userId, cancellationToken);
+            var order = await _orderRepository.GetOrderWithDetailsAsync(request.OrderId, userId, cancellationToken);
 
             if (order == null)
                 throw new KeyNotFoundException("Order not found.");

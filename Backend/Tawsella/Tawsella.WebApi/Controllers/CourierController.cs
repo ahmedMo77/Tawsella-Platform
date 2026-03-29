@@ -57,7 +57,7 @@ namespace Tawsella.WebApi.Controllers
         [HttpGet("available-orders")]
         public async Task<IActionResult> GetAvailableOrders([FromQuery] double radius = 10)
         {
-            var result = await _mediator.Send(new GetAvailableOrdersQuery { RadiusInKm = radius });
+            var result = await _mediator.Send(new GetAvailableOrdersQuery(radius));
             return Ok(result);
         }
 

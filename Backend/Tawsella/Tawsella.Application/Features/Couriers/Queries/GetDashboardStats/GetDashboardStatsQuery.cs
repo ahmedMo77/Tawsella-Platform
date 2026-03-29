@@ -2,7 +2,5 @@ using MediatR;
 
 namespace Tawsella.Application.Features.Couriers.Queries.GetDashboardStats
 {
-    public class GetDashboardStatsQuery : IRequest<GetDashboardStatsQueryResponse>
-    {
-    }
+    public record GetDashboardStatsQuery() : IRequest<GetDashboardStatsQueryResponse>;
 }

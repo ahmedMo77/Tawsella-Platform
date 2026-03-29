@@ -26,7 +26,7 @@ namespace Tawsella.Application.Features.Orders.Queries.GetOrderApplications
             var customerId = _currentUserService.GetUserId();
             
             var applications = await _orderRepository.GetOrderApplicationsAsync(
-                request.orderId, 
+                request.OrderId, 
                 customerId, 
                 cancellationToken);
 

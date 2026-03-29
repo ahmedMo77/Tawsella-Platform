@@ -8,11 +8,9 @@ using Tawsella.Domain.Enums;
 
 namespace Tawsella.Application.Features.Orders.Queries.GetOrdersHistory
 {
-    public class GetOrdersHistoryQuery:IRequest<GetOrdersHistoryQueryResponse>
-    {
-        public OrderStatus? status { get; set; }
-        public int page {  get; set; }
-        public int pageSize { get; set; }
-
-    }
+    public record GetOrdersHistoryQuery(
+        OrderStatus? Status = null,
+        int Page = 1,
+        int PageSize = 10
+    ) : IRequest<GetOrdersHistoryQueryResponse>;
 }

@@ -5,10 +5,11 @@ using Tawsella.Application.Contracts.Services;
 using Tawsella.Application.Contracts.Persistence;
 using Tawsella.Domain.Entities;
 using Tawsella.Domain.Enums;
+using Tawsella.Application.DTOs;
 
 namespace Tawsella.Application.Features.Reviews.Commands.SubmitReview
 {
-    public class SubmitReviewCommandHandler : IRequestHandler<SubmitReviewCommand, SubmitReviewCommandResponse>
+    public class SubmitReviewCommandHandler : IRequestHandler<SubmitReviewCommand, BaseToReturnDto>
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IReviewRepository _reviewRepository;
@@ -26,17 +27,17 @@ namespace Tawsella.Application.Features.Reviews.Commands.SubmitReview
             _mapper = mapper;
             _currentUserService = currentUserService;
         }
-        public async Task<SubmitReviewCommandResponse> Handle(SubmitReviewCommand request, CancellationToken cancellationToken)
+        public async Task<BaseToReturnDto> Handle(SubmitReviewCommand request, CancellationToken cancellationToken)
         {
             var customerId = _currentUserService.GetUserId();
             
-            var order = await _orderRepository.GetOrderForCustomerAsync(request.orderId, customerId, cancellationToken);
+            var order = await _orderRepository.GetOrderForCustomerAsync(request.OrderId, customerId, cancellationToken);
             if (order == null || order.Status != OrderStatus.Delivered)
-                return new SubmitReviewCommandResponse { Message = "Review only allowed for delivered orders." };
+                return new BaseToReturnDto { Message = "Review only allowed for delivered orders." };
 
-            var review = _mapper.Map<Review>(request.dto);
+            var review = _mapper.Map<Review>(request.Dto);
             review.Id = Guid.NewGuid().ToString();
-            review.OrderId = request.orderId;
+            review.OrderId = request.OrderId;
             review.UserId = customerId;
             review.CourierId = order.CourierId;
 
@@ -44,10 +45,10 @@ namespace Tawsella.Application.Features.Reviews.Commands.SubmitReview
             await _reviewRepository.AddReviewAndUpdateCourierStatsAsync(
                 review, 
                 order.CourierId, 
-                request.dto.Rating, 
+                request.Dto.Rating, 
                 cancellationToken);
 
-            return new SubmitReviewCommandResponse { Success = true, Message = "Review submitted." };
+            return new BaseToReturnDto { Success = true, Message = "Review submitted." };
         }
     }
 }

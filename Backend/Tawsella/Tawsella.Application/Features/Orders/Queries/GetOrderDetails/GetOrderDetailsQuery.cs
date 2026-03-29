@@ -7,8 +7,6 @@ using System.Threading.Tasks;
 
 namespace Tawsella.Application.Features.Orders.Queries.GetOrderDetails
 {
-    public class GetOrderDetailsQuery : IRequest<GetOrderDetailsQueryResponse>
-    {
-       public string orderId { get; set; }
-    }
+    public record GetOrderDetailsQuery(string OrderId) 
+        : IRequest<GetOrderDetailsQueryResponse>;
 }

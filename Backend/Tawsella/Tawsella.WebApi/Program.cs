@@ -119,6 +119,8 @@ namespace Tawsella.WebApi
             builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
             builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
             builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
+            builder.Services.AddScoped<IAdminRepository, AdminRepository>();
+            builder.Services.AddScoped<IWalletRepository, WalletRepository>();
 
             // HTTP Context Accessor for Claims
             builder.Services.AddHttpContextAccessor();

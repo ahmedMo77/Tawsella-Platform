@@ -10,12 +10,12 @@ using Tawsella.Application.Features.Orders.Commands;
 using Tawsella.Application.Features.Orders.Commands.CreateOrder;
 using Tawsella.Application.Features.Orders.Queries.GetOrderApplications;
 using Tawsella.Application.Features.Orders.Queries.GetOrderDetails;
-using Tawsella.Domain.DTOs.CourierDTOs;
-using Tawsella.Domain.DTOs.NotificationDTOs;
-using Tawsella.Domain.DTOs.OrderDTOs;
-using Tawsella.Domain.DTOs.ReviewDTOs;
-using Tawsella.Domain.Entities;
-using Tawsella.Domain.Enums;
+using Tawsella.Application.DTOs.CourierDTOs;
+using Tawsella.Application.DTOs.NotificationDTOs;
+using Tawsella.Application.DTOs.OrderDTOs;
+using Tawsella.Application.DTOs.ReviewDTOs;
+using Tawsella.Application.Entities;
+using Tawsella.Application.Enums;
 
 namespace Tawsella.Application.AutoMapper
 {

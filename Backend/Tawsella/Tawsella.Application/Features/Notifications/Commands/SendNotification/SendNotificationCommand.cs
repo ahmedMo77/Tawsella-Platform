@@ -1,5 +1,5 @@
 using MediatR;
-using Tawsella.Domain.Enums;
+using Tawsella.Application.Enums;
 
 namespace Tawsella.Application.Features.Notifications.Commands.SendNotification
 {

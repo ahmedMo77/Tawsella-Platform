@@ -1,7 +1,7 @@
 using System;
-using Tawsella.Domain.Enums;
+using Tawsella.Application.Enums;
 
-namespace Tawsella.Domain.DTOs.OrderDTOs
+namespace Tawsella.Application.DTOs.OrderDTOs
 {
     /// <summary>
     /// Order available for couriers to apply (Pending, no courier assigned yet).

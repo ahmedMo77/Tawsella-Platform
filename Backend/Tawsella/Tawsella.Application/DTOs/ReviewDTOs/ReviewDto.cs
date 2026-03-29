@@ -1,6 +1,6 @@
 using System;
 
-namespace Tawsella.Domain.DTOs.ReviewDTOs
+namespace Tawsella.Application.DTOs.ReviewDTOs
 {
     public class ReviewDto
     {

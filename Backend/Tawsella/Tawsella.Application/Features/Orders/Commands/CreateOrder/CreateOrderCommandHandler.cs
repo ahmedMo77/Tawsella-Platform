@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using MediatR;
-using Tawsella.Domain.DTOs;
-using Tawsella.Domain.Entities;
-using Tawsella.Domain.DTOs.OrderDTOs;
-using Tawsella.Domain.Enums;
+using Tawsella.Application.DTOs;
+using Tawsella.Application.Entities;
+using Tawsella.Application.DTOs.OrderDTOs;
+using Tawsella.Application.Enums;
 using Tawsella.Application.Contracts.Persistence;
 using Tawsella.Application.Contracts.Services;
 

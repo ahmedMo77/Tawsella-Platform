@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Tawsella.Domain.DTOs
+namespace Tawsella.Application.DTOs
 {
     public class PaginatedResponseDto<T>
     {

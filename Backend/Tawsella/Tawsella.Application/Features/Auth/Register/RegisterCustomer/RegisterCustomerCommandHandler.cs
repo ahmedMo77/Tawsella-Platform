@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Identity;
 using Tawsella.Application.Contracts.Services;
 using Tawsella.Application.Contracts.Persistence;
-using Tawsella.Domain.DTOs;
-using Tawsella.Domain.Entities;
-using Tawsella.Domain.Enums;
+using Tawsella.Application.DTOs;
+using Tawsella.Application.Entities;
+using Tawsella.Application.Enums;
 
 namespace Tawsella.Application.Features.Auth.Register.RegisterCustomer
 {

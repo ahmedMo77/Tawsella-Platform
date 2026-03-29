@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Tawsella.Application.Contracts.Services;
 using Tawsella.Application.DTOs.CustomerDTOs;
-using Tawsella.Domain.DTOs.OrderDTOs;
+using Tawsella.Application.DTOs.OrderDTOs;
 
 namespace Tawsella.Infrastructure.Services
 {
@@ -68,5 +68,6 @@ namespace Tawsella.Infrastructure.Services
         }
 
         private double ToRadians(double degrees) => degrees * Math.PI / 180;
+
     }
 }

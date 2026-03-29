@@ -1,5 +1,5 @@
-using Tawsella.Domain.DTOs;
-using Tawsella.Domain.DTOs.NotificationDTOs;
+using Tawsella.Application.DTOs;
+using Tawsella.Application.DTOs.NotificationDTOs;
 
 namespace Tawsella.Application.Features.Notifications.Queries.GetUserNotifications
 {

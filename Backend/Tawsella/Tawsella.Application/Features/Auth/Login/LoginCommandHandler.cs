@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 using Tawsella.Application.Contracts.Services;
 using Tawsella.Application.Contracts.Persistence;
 using Tawsella.Application.DTOs.AuthDTOS;
-using Tawsella.Domain.Entities;
-using Tawsella.Domain.Enums;
+using Tawsella.Application.Entities;
+using Tawsella.Application.Enums;
 
 namespace Tawsella.Application.Features.Auth.Login
 {

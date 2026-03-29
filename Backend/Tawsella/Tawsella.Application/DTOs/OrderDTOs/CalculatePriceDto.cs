@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Tawsella.Domain.DTOs.OrderDTOs
+namespace Tawsella.Application.DTOs.OrderDTOs
 {
     public class CalculatePriceDto
     {

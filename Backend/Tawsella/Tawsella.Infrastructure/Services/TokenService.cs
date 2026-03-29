@@ -14,7 +14,8 @@ using System.Threading.Tasks;
 using Tawsella.Application.Contracts.Services;
 using Tawsella.Application.DTOs.AuthDTOS;
 using Tawsella.Application.Settings;
-using Tawsella.Domain.Entities;
+using Tawsella.Application.Entities;
+
 
 namespace Tawsella.Infrastructure.Services;
 

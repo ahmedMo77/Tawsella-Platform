@@ -1,10 +1,10 @@
 using MediatR;
 using Tawsella.Application.Contracts.Services;
 using Tawsella.Application.Contracts.Persistence;
-using Tawsella.Domain.DTOs;
-using Tawsella.Domain.DTOs.OrderDTOs;
-using Tawsella.Domain.Entities;
-using Tawsella.Domain.Enums;
+using Tawsella.Application.DTOs;
+using Tawsella.Application.DTOs.OrderDTOs;
+using Tawsella.Application.Entities;
+using Tawsella.Application.Enums;
 
 namespace Tawsella.Application.Features.Couriers.Commands.DeliverOrder
 {

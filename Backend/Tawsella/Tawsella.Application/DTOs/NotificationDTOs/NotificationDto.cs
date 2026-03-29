@@ -1,7 +1,7 @@
 using System;
-using Tawsella.Domain.Enums;
+using Tawsella.Application.Enums;
 
-namespace Tawsella.Domain.DTOs.NotificationDTOs
+namespace Tawsella.Application.DTOs.NotificationDTOs
 {
     public class NotificationDto
     {

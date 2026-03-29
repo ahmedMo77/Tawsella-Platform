@@ -3,8 +3,8 @@ using MediatR;
 using System;
 using Tawsella.Application.Contracts.Services;
 using Tawsella.Application.Contracts.Persistence;
-using Tawsella.Domain.DTOs;
-using Tawsella.Domain.DTOs.OrderDTOs;
+using Tawsella.Application.DTOs;
+using Tawsella.Application.DTOs.OrderDTOs;
 
 namespace Tawsella.Application.Features.Orders.Queries.GetOrdersHistory
 {

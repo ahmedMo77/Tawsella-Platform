@@ -12,7 +12,7 @@ using Tawsella.Application.AutoMapper;
 using Tawsella.Application.Contracts.Services;
 using Tawsella.Application.Contracts.Persistence;
 using Tawsella.Application.Settings;
-using Tawsella.Domain.Entities;
+using Tawsella.Application.Entities;
 using Tawsella.Infrastructure.DbContext;
 using Tawsella.Infrastructure.Repositories;
 using Tawsella.Infrastructure.Services;

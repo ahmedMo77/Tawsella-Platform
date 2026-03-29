@@ -1,6 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
-using Tawsella.Domain.Entities;
+using Tawsella.Application.Entities;
 
 namespace Tawsella.Application.Contracts.Persistence
 {

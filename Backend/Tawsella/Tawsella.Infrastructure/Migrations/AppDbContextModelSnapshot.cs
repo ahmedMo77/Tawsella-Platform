@@ -155,7 +155,7 @@ namespace Tawsella.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Tawsella.Domain.Entities.Admin", b =>
+            modelBuilder.Entity("Tawsella.Application.Entities.Admin", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -168,7 +168,7 @@ namespace Tawsella.Infrastructure.Migrations
                     b.ToTable("Admins");
                 });
 
-            modelBuilder.Entity("Tawsella.Domain.Entities.AppUser", b =>
+            modelBuilder.Entity("Tawsella.Application.Entities.AppUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -243,7 +243,7 @@ namespace Tawsella.Infrastructure.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("Tawsella.Domain.Entities.Courier", b =>
+            modelBuilder.Entity("Tawsella.Application.Entities.Courier", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -266,7 +266,7 @@ namespace Tawsella.Infrastructure.Migrations
                     b.ToTable("Couriers");
                 });
 
-            modelBuilder.Entity("Tawsella.Domain.Entities.Customer", b =>
+            modelBuilder.Entity("Tawsella.Application.Entities.Customer", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -276,7 +276,7 @@ namespace Tawsella.Infrastructure.Migrations
                     b.ToTable("Customers");
                 });
 
-            modelBuilder.Entity("Tawsella.Domain.Entities.Merchant", b =>
+            modelBuilder.Entity("Tawsella.Application.Entities.Merchant", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -299,7 +299,7 @@ namespace Tawsella.Infrastructure.Migrations
                     b.ToTable("Merchant");
                 });
 
-            modelBuilder.Entity("Tawsella.Domain.Entities.Order", b =>
+            modelBuilder.Entity("Tawsella.Application.Entities.Order", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -359,7 +359,7 @@ namespace Tawsella.Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Tawsella.Domain.Entities.AppUser", null)
+                    b.HasOne("Tawsella.Application.Entities.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -368,7 +368,7 @@ namespace Tawsella.Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Tawsella.Domain.Entities.AppUser", null)
+                    b.HasOne("Tawsella.Application.Entities.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -383,7 +383,7 @@ namespace Tawsella.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Tawsella.Domain.Entities.AppUser", null)
+                    b.HasOne("Tawsella.Application.Entities.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -392,27 +392,27 @@ namespace Tawsella.Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Tawsella.Domain.Entities.AppUser", null)
+                    b.HasOne("Tawsella.Application.Entities.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Tawsella.Domain.Entities.Admin", b =>
+            modelBuilder.Entity("Tawsella.Application.Entities.Admin", b =>
                 {
-                    b.HasOne("Tawsella.Domain.Entities.AppUser", "User")
+                    b.HasOne("Tawsella.Application.Entities.AppUser", "User")
                         .WithOne()
-                        .HasForeignKey("Tawsella.Domain.Entities.Admin", "Id")
+                        .HasForeignKey("Tawsella.Application.Entities.Admin", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Tawsella.Domain.Entities.AppUser", b =>
+            modelBuilder.Entity("Tawsella.Application.Entities.AppUser", b =>
                 {
-                    b.OwnsMany("Tawsella.Domain.Entities.RefreshToken", "RefreshTokens", b1 =>
+                    b.OwnsMany("Tawsella.Application.Entities.RefreshToken", "RefreshTokens", b1 =>
                         {
                             b1.Property<string>("AppUserId")
                                 .HasColumnType("nvarchar(450)");
@@ -447,56 +447,56 @@ namespace Tawsella.Infrastructure.Migrations
                     b.Navigation("RefreshTokens");
                 });
 
-            modelBuilder.Entity("Tawsella.Domain.Entities.Courier", b =>
+            modelBuilder.Entity("Tawsella.Application.Entities.Courier", b =>
                 {
-                    b.HasOne("Tawsella.Domain.Entities.AppUser", "User")
+                    b.HasOne("Tawsella.Application.Entities.AppUser", "User")
                         .WithOne()
-                        .HasForeignKey("Tawsella.Domain.Entities.Courier", "Id")
+                        .HasForeignKey("Tawsella.Application.Entities.Courier", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Tawsella.Domain.Entities.Customer", b =>
+            modelBuilder.Entity("Tawsella.Application.Entities.Customer", b =>
                 {
-                    b.HasOne("Tawsella.Domain.Entities.AppUser", "User")
+                    b.HasOne("Tawsella.Application.Entities.AppUser", "User")
                         .WithOne()
-                        .HasForeignKey("Tawsella.Domain.Entities.Customer", "Id")
+                        .HasForeignKey("Tawsella.Application.Entities.Customer", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Tawsella.Domain.Entities.Merchant", b =>
+            modelBuilder.Entity("Tawsella.Application.Entities.Merchant", b =>
                 {
-                    b.HasOne("Tawsella.Domain.Entities.AppUser", "User")
+                    b.HasOne("Tawsella.Application.Entities.AppUser", "User")
                         .WithOne()
-                        .HasForeignKey("Tawsella.Domain.Entities.Merchant", "Id")
+                        .HasForeignKey("Tawsella.Application.Entities.Merchant", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Tawsella.Domain.Entities.Order", b =>
+            modelBuilder.Entity("Tawsella.Application.Entities.Order", b =>
                 {
-                    b.HasOne("Tawsella.Domain.Entities.Courier", "Courier")
+                    b.HasOne("Tawsella.Application.Entities.Courier", "Courier")
                         .WithMany("Orders")
                         .HasForeignKey("CourierId");
 
-                    b.HasOne("Tawsella.Domain.Entities.AppUser", "CreatedByUser")
+                    b.HasOne("Tawsella.Application.Entities.AppUser", "CreatedByUser")
                         .WithMany()
                         .HasForeignKey("CreatedByUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Tawsella.Domain.Entities.Customer", null)
+                    b.HasOne("Tawsella.Application.Entities.Customer", null)
                         .WithMany("Orders")
                         .HasForeignKey("CustomerId");
 
-                    b.HasOne("Tawsella.Domain.Entities.Merchant", null)
+                    b.HasOne("Tawsella.Application.Entities.Merchant", null)
                         .WithMany("Orders")
                         .HasForeignKey("MerchantId");
 
@@ -505,17 +505,17 @@ namespace Tawsella.Infrastructure.Migrations
                     b.Navigation("CreatedByUser");
                 });
 
-            modelBuilder.Entity("Tawsella.Domain.Entities.Courier", b =>
+            modelBuilder.Entity("Tawsella.Application.Entities.Courier", b =>
                 {
                     b.Navigation("Orders");
                 });
 
-            modelBuilder.Entity("Tawsella.Domain.Entities.Customer", b =>
+            modelBuilder.Entity("Tawsella.Application.Entities.Customer", b =>
                 {
                     b.Navigation("Orders");
                 });
 
-            modelBuilder.Entity("Tawsella.Domain.Entities.Merchant", b =>
+            modelBuilder.Entity("Tawsella.Application.Entities.Merchant", b =>
                 {
                     b.Navigation("Orders");
                 });

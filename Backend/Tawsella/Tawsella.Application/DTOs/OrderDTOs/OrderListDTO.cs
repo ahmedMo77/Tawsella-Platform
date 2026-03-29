@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Tawsella.Domain.Enums;
+using Tawsella.Application.Enums;
 
-namespace Tawsella.Domain.DTOs.OrderDTOs
+namespace Tawsella.Application.DTOs.OrderDTOs
 {
     public class OrderListDTO
     {

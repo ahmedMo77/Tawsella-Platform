@@ -3,7 +3,7 @@ using MediatR;
 using System.ComponentModel.DataAnnotations;
 using Tawsella.Application.Contracts.Services;
 using Tawsella.Application.Contracts.Persistence;
-using Tawsella.Domain.DTOs.ReviewDTOs;
+using Tawsella.Application.DTOs.ReviewDTOs;
 
 namespace Tawsella.Application.Features.Reviews.Queries.GetOrderReview
 {

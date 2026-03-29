@@ -1,4 +1,4 @@
-using Tawsella.Domain.Enums;
+using Tawsella.Application.Enums;
 
 namespace Tawsella.Application.DTOs.CustomerDTOs
 {

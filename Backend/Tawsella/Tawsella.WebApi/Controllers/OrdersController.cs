@@ -9,8 +9,8 @@ using Tawsella.Application.Features.Orders.Queries.GetOrderApplications;
 using Tawsella.Application.Features.Orders.Queries.GetOrderDetails;
 using Tawsella.Application.Features.Orders.Queries.GetOrdersHistory;
 using Tawsella.Application.Features.Reviews.Commands.SubmitReview;
-using Tawsella.Domain.DTOs.ReviewDTOs;
-using Tawsella.Domain.Enums;
+using Tawsella.Application.DTOs.ReviewDTOs;
+using Tawsella.Application.Enums;
 
 namespace Tawsella.WebApi.Controllers
 {

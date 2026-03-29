@@ -3,8 +3,8 @@ using MediatR;
 using System;
 using Tawsella.Application.Contracts.Services;
 using Tawsella.Application.Contracts.Persistence;
-using Tawsella.Domain.Entities;
-using Tawsella.Domain.Enums;
+using Tawsella.Application.Entities;
+using Tawsella.Application.Enums;
 
 namespace Tawsella.Application.Features.Reviews.Commands.SubmitReview
 {

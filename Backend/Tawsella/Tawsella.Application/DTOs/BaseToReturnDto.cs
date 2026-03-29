@@ -1,4 +1,4 @@
-namespace Tawsella.Domain.DTOs
+namespace Tawsella.Application.DTOs
 {
     public class BaseToReturnDto
     {

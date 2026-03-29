@@ -1,6 +1,6 @@
 using MediatR;
 using System.ComponentModel.DataAnnotations;
-using Tawsella.Domain.Enums;
+using Tawsella.Application.Enums;
 
 namespace Tawsella.Application.Features.Couriers.Commands.UpdateCourierProfile
 {

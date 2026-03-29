@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Tawsella.Application.DTOs.CourierDTOs;
-using Tawsella.Domain.DTOs.OrderDTOs;
+using Tawsella.Application.DTOs.OrderDTOs;
 
-namespace Tawsella.Domain.DTOs.CourierDTOs
+namespace Tawsella.Application.DTOs.CourierDTOs
 {
     public class CourierHomeDto
     {

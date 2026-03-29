@@ -2,8 +2,8 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Tawsella.Application.Contracts.Persistence;
 using Tawsella.Application.DTOs.CourierDTOs;
-using Tawsella.Domain.DTOs.CourierDTOs;
-using Tawsella.Domain.Enums;
+using Tawsella.Application.DTOs.CourierDTOs;
+using Tawsella.Application.Enums;
 
 namespace Tawsella.Application.Features.Customers.Queries.GetCourierPublicProfile
 {

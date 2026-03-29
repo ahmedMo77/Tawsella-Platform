@@ -1,5 +1,5 @@
 ﻿using Tawsella.Application.DTOs.AuthDTOS;
-using Tawsella.Domain.Entities;
+using Tawsella.Application.Entities;
 
 namespace Tawsella.Application.Contracts.Services
 {

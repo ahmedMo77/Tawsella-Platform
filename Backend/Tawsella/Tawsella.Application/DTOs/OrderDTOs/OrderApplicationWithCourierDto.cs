@@ -1,7 +1,7 @@
 using System;
 using Tawsella.Application.DTOs.CourierDTOs;
 
-namespace Tawsella.Domain.DTOs.OrderDTOs
+namespace Tawsella.Application.DTOs.OrderDTOs
 {
     public class OrderApplicationWithCourierDto
     {

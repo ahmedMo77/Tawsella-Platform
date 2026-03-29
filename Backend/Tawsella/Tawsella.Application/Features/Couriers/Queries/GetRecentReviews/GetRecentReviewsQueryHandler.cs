@@ -2,7 +2,7 @@ using AutoMapper;
 using MediatR;
 using Tawsella.Application.Contracts.Services;
 using Tawsella.Application.Contracts.Persistence;
-using Tawsella.Domain.DTOs.CourierDTOs;
+using Tawsella.Application.DTOs.CourierDTOs;
 
 namespace Tawsella.Application.Features.Couriers.Queries.GetRecentReviews
 {

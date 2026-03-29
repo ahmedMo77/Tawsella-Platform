@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tawsella.Domain.Entities
+namespace Tawsella.Application.Entities
 {
     public class Wallet : BaseEntity
     {

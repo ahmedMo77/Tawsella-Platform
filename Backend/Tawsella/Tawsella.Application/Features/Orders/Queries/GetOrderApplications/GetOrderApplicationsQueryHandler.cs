@@ -2,7 +2,7 @@
 using MediatR;
 using Tawsella.Application.Contracts.Services;
 using Tawsella.Application.Contracts.Persistence;
-using Tawsella.Domain.DTOs.OrderDTOs;
+using Tawsella.Application.DTOs.OrderDTOs;
 
 namespace Tawsella.Application.Features.Orders.Queries.GetOrderApplications
 {

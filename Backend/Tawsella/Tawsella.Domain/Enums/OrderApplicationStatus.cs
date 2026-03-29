@@ -1,4 +1,4 @@
-namespace Tawsella.Domain.Enums
+namespace Tawsella.Application.Enums
 {
     public enum OrderApplicationStatus
     {

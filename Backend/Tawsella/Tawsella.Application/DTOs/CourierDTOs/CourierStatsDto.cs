@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tawsella.Domain.DTOs.CourierDTOs
+namespace Tawsella.Application.DTOs.CourierDTOs
 {
     public class CourierStatsDto
     {

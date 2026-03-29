@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Tawsella.Application.DTOs.CustomerDTOs;
-using Tawsella.Domain.DTOs.OrderDTOs;
+using Tawsella.Application.DTOs.OrderDTOs;
 
 namespace Tawsella.Application.Contracts.Services
 {

@@ -1,15 +1,16 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using MediatR;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Tawsella.Domain.DTOs;
-using Tawsella.Domain.Entities;
+using Tawsella.Application.DTOs;
+using Tawsella.Application.Entities;
 
 namespace Tawsella.Application.Features.Auth.Password.ChangePassword
 {
-    public class ChangePasswordCommandHandler
+    public class ChangePasswordCommandHandler : IRequestHandler<ChangePasswordCommand, BaseToReturnDto>
     {
             private readonly UserManager<AppUser> _userManager;
 

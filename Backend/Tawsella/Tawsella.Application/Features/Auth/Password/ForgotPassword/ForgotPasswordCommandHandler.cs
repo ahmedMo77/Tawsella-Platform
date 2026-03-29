@@ -6,8 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Tawsella.Application.Contracts.Services;
-using Tawsella.Domain.DTOs;
-using Tawsella.Domain.Entities;
+using Tawsella.Application.DTOs;
+using Tawsella.Application.Entities;
 
 namespace Tawsella.Application.Features.Auth.Password.ForgotPassword
 {

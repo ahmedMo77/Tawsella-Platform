@@ -1,4 +1,4 @@
-using Tawsella.Domain.DTOs.OrderDTOs;
+using Tawsella.Application.DTOs.OrderDTOs;
 
 namespace Tawsella.Application.Features.Couriers.Queries.GetActiveOrder
 {

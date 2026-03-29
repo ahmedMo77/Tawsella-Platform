@@ -5,7 +5,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
-using Tawsella.Domain.Enums;
+using Tawsella.Application.Enums;
 
 namespace Tawsella.Application.Features.Orders.Commands.UpdateOrderStatus
 {

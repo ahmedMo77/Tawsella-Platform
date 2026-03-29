@@ -1,7 +1,7 @@
 using System;
-using Tawsella.Domain.Enums;
+using Tawsella.Application.Enums;
 
-namespace Tawsella.Domain.Entities
+namespace Tawsella.Application.Entities
 {
     public class OrderApplication : BaseEntity
     {

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Tawsella.Domain.DTOs.ReviewDTOs;
+using Tawsella.Application.DTOs.ReviewDTOs;
 
 namespace Tawsella.Application.Features.Reviews.Commands.SubmitReview
 {

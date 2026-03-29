@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Tawsella.Application.Entities;
-using Tawsella.Application.Enums;
+using Tawsella.Domain.Enums;
+using Tawsella.Domain.Entities;
 
 namespace Tawsella.Application.Contracts.Persistence
 {

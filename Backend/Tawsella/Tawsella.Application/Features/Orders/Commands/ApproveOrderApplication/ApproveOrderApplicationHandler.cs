@@ -1,14 +1,15 @@
 ﻿using AutoMapper;
 using MediatR;
-using Tawsella.Application.Contracts.Services;
 using Tawsella.Application.Contracts.Persistence;
+using Tawsella.Application.Contracts.Services;
+using Tawsella.Application.DTOs;
+using Tawsella.Domain.Enums;
 using Tawsella.Application.Features.Notifications.Commands.SendNotification;
-using Tawsella.Application.Enums;
 
 namespace Tawsella.Application.Features.Orders.Commands.ApproveOrderApplication
 {
 
-    public class ApproveOrderApplicationHandler : IRequestHandler<ApproveOrderApplicationCommand, ApproveOrderApplicationResponse>
+    public class ApproveOrderApplicationHandler : IRequestHandler<ApproveOrderApplicationCommand, BaseToReturnDto>
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IMapper _mapper;
@@ -27,19 +28,19 @@ namespace Tawsella.Application.Features.Orders.Commands.ApproveOrderApplication
             _currentUserService = currentUserService;
         }
 
-        public async Task<ApproveOrderApplicationResponse> Handle(ApproveOrderApplicationCommand request, CancellationToken cancellationToken)
+        public async Task<BaseToReturnDto> Handle(ApproveOrderApplicationCommand request, CancellationToken cancellationToken)
         {
             var customerId = _currentUserService.GetUserId();
             
             var order = await _orderRepository.GetOrderForCustomerAsync(request.orderId, customerId, cancellationToken);
 
             if (order == null || order.Status != OrderStatus.Pending)
-                return new ApproveOrderApplicationResponse { Success = false, Message = "Order not available for assignment." };
+                return new BaseToReturnDto { Success = false, Message = "Order not available for assignment." };
 
             var app = await _orderRepository.GetOrderApplicationWithCourierAsync(request.applicationId, request.orderId, cancellationToken);
 
             if (app == null || !app.Courier.IsAvailable)
-                return new ApproveOrderApplicationResponse { Success = false, Message = "Courier is no longer available." };
+                return new BaseToReturnDto { Success = false, Message = "Courier is no longer available." };
 
             await _orderRepository.ApproveApplicationAsync(order, app, request.orderId, request.applicationId, cancellationToken);
             await _orderRepository.AddStatusHistoryAsync(request.orderId, OrderStatus.Accepted, $"Courier {app.CourierId} assigned");
@@ -53,7 +54,7 @@ namespace Tawsella.Application.Features.Orders.Commands.ApproveOrderApplication
                 Type = NotificationType.ApplicationApproved
             }, cancellationToken);
 
-            return new ApproveOrderApplicationResponse { Success = true, Message = "Courier assigned successfully." };
+            return new BaseToReturnDto { Success = true, Message = "Courier assigned successfully." };
         }
     }
 }

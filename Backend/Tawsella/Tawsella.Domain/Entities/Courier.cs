@@ -5,9 +5,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Tawsella.Application.Enums;
 
-namespace Tawsella.Application.Entities
+namespace Tawsella.Domain.Entities
 {
     public class Courier : BaseEntity
     {

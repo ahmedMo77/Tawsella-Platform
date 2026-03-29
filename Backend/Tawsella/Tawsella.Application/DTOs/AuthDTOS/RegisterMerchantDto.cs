@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Tawsella.Application.Enums;
+using Tawsella.Domain.Enums;
 
 namespace Tawsella.Application.DTOs.AuthDTOS
 {

@@ -7,8 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Tawsella.Application.Contracts.Persistence;
 using Tawsella.Application.DTOs;
-using Tawsella.Application.Entities;
-using Tawsella.Application.Enums;
+using Tawsella.Domain.Entities;
+using Tawsella.Domain.Enums;
 
 namespace Tawsella.Application.Features.Auth.Register.RegisterCourier
 {
@@ -32,7 +32,7 @@ namespace Tawsella.Application.Features.Auth.Register.RegisterCourier
             var userExists = await _userManager.FindByEmailAsync(request.Email) != null;
             var nationalIdExists = await _repo.GetCourierByNationalIdAsync(request.NationalId, ct);
 
-            if (userExists || nationalIdExists == null)
+            if (userExists || nationalIdExists != null)
                 return new BaseToReturnDto { Message = "Email or National ID already in use" };
 
             var user = new AppUser

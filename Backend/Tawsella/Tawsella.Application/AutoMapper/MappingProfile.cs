@@ -14,8 +14,8 @@ using Tawsella.Application.DTOs.CourierDTOs;
 using Tawsella.Application.DTOs.NotificationDTOs;
 using Tawsella.Application.DTOs.OrderDTOs;
 using Tawsella.Application.DTOs.ReviewDTOs;
-using Tawsella.Application.Entities;
-using Tawsella.Application.Enums;
+using Tawsella.Domain.Entities;
+using Tawsella.Domain.Enums;
 
 namespace Tawsella.Application.AutoMapper
 {

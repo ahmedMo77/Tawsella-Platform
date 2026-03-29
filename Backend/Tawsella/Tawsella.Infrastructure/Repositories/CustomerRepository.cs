@@ -3,8 +3,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Tawsella.Application.Contracts.Persistence;
-using Tawsella.Application.Entities;
-using Tawsella.Application.Enums;
+using Tawsella.Domain.Entities;
+using Tawsella.Domain.Enums;
 using Tawsella.Infrastructure.DbContext;
 
 namespace Tawsella.Infrastructure.Repositories

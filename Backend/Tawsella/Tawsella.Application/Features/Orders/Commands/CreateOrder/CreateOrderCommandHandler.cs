@@ -2,11 +2,11 @@
 using FluentValidation;
 using MediatR;
 using Tawsella.Application.DTOs;
-using Tawsella.Application.Entities;
 using Tawsella.Application.DTOs.OrderDTOs;
-using Tawsella.Application.Enums;
 using Tawsella.Application.Contracts.Persistence;
 using Tawsella.Application.Contracts.Services;
+using Tawsella.Domain.Entities;
+using Tawsella.Domain.Enums;
 
 namespace Tawsella.Application.Features.Orders.Commands.CreateOrder
 {

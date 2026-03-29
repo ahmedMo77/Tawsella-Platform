@@ -1,6 +1,6 @@
 using MediatR;
 using Tawsella.Application.Contracts.Persistence;
-using Tawsella.Application.Entities;
+using Tawsella.Domain.Entities;
 
 namespace Tawsella.Application.Features.Notifications.Commands.SendNotification
 {

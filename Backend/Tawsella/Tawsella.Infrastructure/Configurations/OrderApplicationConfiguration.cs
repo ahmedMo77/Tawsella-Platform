@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Tawsella.Application.Entities;
-using Tawsella.Application.Enums;
+using Tawsella.Domain.Entities;
+using Tawsella.Domain.Enums;
 
 namespace Tawsella.Infrastructure.Configurations
 {

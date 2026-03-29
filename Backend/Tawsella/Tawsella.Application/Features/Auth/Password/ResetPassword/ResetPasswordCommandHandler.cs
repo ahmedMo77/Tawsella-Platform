@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Tawsella.Application.DTOs;
-using Tawsella.Application.Entities;
+using Tawsella.Domain.Entities;
 
 namespace Tawsella.Application.Features.Auth.Password.ResetPassword
 {

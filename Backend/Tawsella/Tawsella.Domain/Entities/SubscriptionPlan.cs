@@ -5,9 +5,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Tawsella.Application.Enums;
+using Tawsella.Domain.Enums;
 
-namespace Tawsella.Application.Entities
+namespace Tawsella.Domain.Entities
 {
     public class SubscriptionPlan
     {

@@ -2,7 +2,8 @@
 using MediatR;
 using Tawsella.Application.Contracts.Services;
 using Tawsella.Application.Contracts.Persistence;
-using Tawsella.Application.Enums;
+using Tawsella.Domain.Enums;
+using Tawsella.Domain.Entities;
 
 namespace Tawsella.Application.Features.Orders.Commands.UpdateOrderStatus
 {

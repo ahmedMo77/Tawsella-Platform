@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Tawsella.Application.DTOs.CourierDTOs;
-using Tawsella.Application.Enums;
+using Tawsella.Domain.Entities;
+using Tawsella.Domain.Enums;
 
 namespace Tawsella.Application.DTOs.CourierDTOs
 {

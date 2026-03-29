@@ -36,7 +36,7 @@ namespace Tawsella.Application.Features.Couriers.Commands.UpdateCourierProfile
             courier.User.FullName = request.FullName ?? courier.User.FullName;
             courier.User.PhoneNumber = request.PhoneNumber ?? courier.User.PhoneNumber;
 
-            if (string.IsNullOrEmpty(request.VehicleType))
+            if (!string.IsNullOrEmpty(request.VehicleType))
                 courier.VehicleType = request.VehicleType;
 
             courier.VehiclePlateNumber = request.VehiclePlateNumber ?? courier.VehiclePlateNumber;

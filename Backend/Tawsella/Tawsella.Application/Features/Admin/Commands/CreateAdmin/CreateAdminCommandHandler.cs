@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 using Tawsella.Application.Contracts.Services;
 using Tawsella.Application.Contracts.Persistence;
 using Tawsella.Application.DTOs;
-using Tawsella.Application.Entities;
-using Tawsella.Application.Enums;
+using Tawsella.Domain.Entities;
+using Tawsella.Domain.Enums;
 
 
 namespace Tawsella.Application.Features.Admin.Commands.CreateAdmin
@@ -58,7 +58,7 @@ namespace Tawsella.Application.Features.Admin.Commands.CreateAdmin
 
             await _userManager.AddToRoleAsync(user, roleName);
 
-            var adminEntity = new Application.Entities.Admin
+            var adminEntity = new Domain.Entities.Admin
             {
                 Id = user.Id,
                 IsSuperAdmin = request.IsSuperAdmin

@@ -3,11 +3,14 @@ using FluentValidation;
 using MediatR;
 using Tawsella.Application.Contracts.Services;
 using Tawsella.Application.Contracts.Persistence;
-using Tawsella.Application.Enums;
+using Tawsella.Domain.Enums;
+using Tawsella.Domain.Entities;
+using Tawsella.Application.DTOs;
+using Org.BouncyCastle.Asn1.Bsi;
 
 namespace Tawsella.Application.Features.Orders.Commands.CancelOrder
 {
-    public class CancelOrderCommandHandler : IRequestHandler<CancelOrderCommand, CancelOrderCommandResponse>
+    public class CancelOrderCommandHandler : IRequestHandler<CancelOrderCommand, BaseToReturnDto>
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IMapper _mapper;
@@ -23,27 +26,27 @@ namespace Tawsella.Application.Features.Orders.Commands.CancelOrder
             _currentUserService = currentUserService;
         }
 
-        public async Task<CancelOrderCommandResponse> Handle(CancelOrderCommand request, CancellationToken cancellationToken)
+        public async Task<BaseToReturnDto> Handle(CancelOrderCommand request, CancellationToken cancellationToken)
         {
             var customerId = _currentUserService.GetUserId();
 
-            if (string.IsNullOrEmpty(request.orderId))
+            if (string.IsNullOrEmpty(request.OrderId))
                 throw new ValidationException("Invalid order ID");
 
-            var order = await _orderRepository.GetOrderWithCourierAsync(request.orderId, customerId, cancellationToken);
+            Order order = await _orderRepository.GetOrderWithCourierAsync(request.OrderId, customerId, cancellationToken);
 
             if (order == null || order.Status != OrderStatus.Pending)
-                return new CancelOrderCommandResponse { Message = "Order cannot be cancelled at this stage." };
+                return new BaseToReturnDto { Message = "Order cannot be cancelled at this stage." };
 
             if (order.Courier != null) order.Courier.IsAvailable = true;
 
             order.Status = OrderStatus.Cancelled;
-            order.CancellationReason = request.reason;
+            order.CancellationReason = request.Reason;
 
-            await _orderRepository.AddStatusHistoryAsync(request.orderId, OrderStatus.Cancelled, $"Cancelled: {request.reason}");
+            await _orderRepository.AddStatusHistoryAsync(request.OrderId, OrderStatus.Cancelled, $"Cancelled: {request.Reason}");
             await _orderRepository.SaveChangesAsync(cancellationToken);
 
-            return new CancelOrderCommandResponse { Success = true, Message = "Order cancelled." };
+            return new BaseToReturnDto { Success = true, Message = "Order cancelled." };
         }
     }
 }

@@ -2,7 +2,7 @@ using MediatR;
 using Tawsella.Application.Contracts.Services;
 using Tawsella.Application.Contracts.Persistence;
 using Tawsella.Application.DTOs.CustomerDTOs;
-using Tawsella.Application.Enums;
+using Tawsella.Domain.Enums;
 
 namespace Tawsella.Application.Features.Customers.Queries.GetCustomerStatistics
 {

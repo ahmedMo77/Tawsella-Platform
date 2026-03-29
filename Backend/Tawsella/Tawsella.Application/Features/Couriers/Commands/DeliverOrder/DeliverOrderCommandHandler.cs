@@ -3,8 +3,8 @@ using Tawsella.Application.Contracts.Services;
 using Tawsella.Application.Contracts.Persistence;
 using Tawsella.Application.DTOs;
 using Tawsella.Application.DTOs.OrderDTOs;
-using Tawsella.Application.Entities;
-using Tawsella.Application.Enums;
+using Tawsella.Domain.Entities;
+using Tawsella.Domain.Enums;
 
 namespace Tawsella.Application.Features.Couriers.Commands.DeliverOrder
 {

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Tawsella.Application.Contracts.Persistence;
 using Tawsella.Application.DTOs.CourierDTOs;
 using Tawsella.Application.DTOs.CourierDTOs;
-using Tawsella.Application.Enums;
+using Tawsella.Domain.Enums;
 
 namespace Tawsella.Application.Features.Customers.Queries.GetCourierPublicProfile
 {

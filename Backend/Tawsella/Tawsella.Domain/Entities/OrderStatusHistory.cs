@@ -4,13 +4,12 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Tawsella.Application.Enums;
+using Tawsella.Domain.Enums;
 
-namespace Tawsella.Application.Entities
+namespace Tawsella.Domain.Entities
 {
     public class OrderStatusHistory : BaseEntity
     {
-
         public string OrderId { get; set; }
         public Order Order { get; set; }
 

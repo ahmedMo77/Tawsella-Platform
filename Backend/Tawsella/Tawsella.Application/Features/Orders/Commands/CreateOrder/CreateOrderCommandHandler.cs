@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using MediatR;
-using Tawsella.Application.Contracts;
-using Tawsella.Application.Interfaces;
 using Tawsella.Domain.DTOs;
 using Tawsella.Domain.Entities;
 using Tawsella.Domain.DTOs.OrderDTOs;
 using Tawsella.Domain.Enums;
+using Tawsella.Application.Contracts.Persistence;
+using Tawsella.Application.Contracts.Services;
 
 namespace Tawsella.Application.Features.Orders.Commands.CreateOrder
 {
@@ -15,20 +15,17 @@ namespace Tawsella.Application.Features.Orders.Commands.CreateOrder
         private readonly IOrderRepository _orderRepository;
         private readonly IMapper _mapper;
         private readonly IPricingService _pricingService;
-        private readonly IOrderService _orderService;
         private readonly ICurrentUserService _currentUserService;
         
         public CreateOrderCommandHandler(
             IOrderRepository orderRepository, 
             IMapper mapper, 
             IPricingService pricingService, 
-            IOrderService orderService,
             ICurrentUserService currentUserService)
         {
             _orderRepository = orderRepository;
             _mapper = mapper;
             _pricingService = pricingService;
-            _orderService = orderService;
             _currentUserService = currentUserService;
         }
         public async Task<CreateOrderCommandResponse> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
@@ -52,7 +49,7 @@ namespace Tawsella.Application.Features.Orders.Commands.CreateOrder
             order.PlatformCommission = priceEstimate.PlatformCommission;
 
             await _orderRepository.AddAsync(order, cancellationToken);
-            await _orderService.AddStatusHistoryAsync(order.Id, OrderStatus.Pending, "Order created");
+            await _orderRepository.AddStatusHistoryAsync(order.Id, OrderStatus.Pending, "Order created");
 
             return new CreateOrderCommandResponse { Success = true, Message = $"Order created. ID: {order.OrderNumber}" };
         }

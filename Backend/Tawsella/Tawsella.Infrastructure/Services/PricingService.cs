@@ -4,8 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tawsella.Application.Contracts.Services;
 using Tawsella.Application.DTOs.CustomerDTOs;
-using Tawsella.Application.Interfaces;
 using Tawsella.Domain.DTOs.OrderDTOs;
 
 namespace Tawsella.Infrastructure.Services

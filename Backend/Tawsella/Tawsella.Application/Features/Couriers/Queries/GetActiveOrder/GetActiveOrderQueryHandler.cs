@@ -1,9 +1,9 @@
 using AutoMapper;
 using MediatR;
-using Tawsella.Application.Contracts;
-using Tawsella.Application.Interfaces;
+using Tawsella.Application.Contracts.Services;
+using Tawsella.Application.Contracts.Persistence;
 using Tawsella.Domain.DTOs.OrderDTOs;
-    
+
 namespace Tawsella.Application.Features.Couriers.Queries.GetActiveOrder
 {
     public class GetActiveOrderQueryHandler 

@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
-using Tawsella.Application.Contracts;
+using Tawsella.Application.Contracts.Persistence;
 using Tawsella.Infrastructure.DbContext;
 
 namespace Tawsella.Infrastructure.Repositories

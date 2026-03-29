@@ -1,7 +1,7 @@
 using AutoMapper;
 using MediatR;
-using Tawsella.Application.Contracts;
-using Tawsella.Application.Interfaces;
+using Tawsella.Application.Contracts.Services;
+using Tawsella.Application.Contracts.Persistence;
 using Tawsella.Domain.DTOs.NotificationDTOs;
 
 namespace Tawsella.Application.Features.Notifications.Queries.GetUserNotifications

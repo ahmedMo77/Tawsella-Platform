@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
-using Tawsella.Application.Contracts;
-using Tawsella.Application.Interfaces;
+using Tawsella.Application.Contracts.Services;
+using Tawsella.Application.Contracts.Persistence;
 using Tawsella.Domain.Enums;
 
 namespace Tawsella.Application.Features.Orders.Commands.UpdateOrderStatus
@@ -10,18 +10,15 @@ namespace Tawsella.Application.Features.Orders.Commands.UpdateOrderStatus
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IMapper _mapper;
-        private readonly IOrderService _orderService;
         private readonly ICurrentUserService _currentUserService;
         
         public UpdateOrderStatusCommandHandler(
             IOrderRepository orderRepository,
             IMapper mapper, 
-            IOrderService orderService,
             ICurrentUserService currentUserService)
         {
             _orderRepository = orderRepository;
             _mapper = mapper;
-            _orderService = orderService;
             _currentUserService = currentUserService;
         }
 
@@ -35,7 +32,7 @@ namespace Tawsella.Application.Features.Orders.Commands.UpdateOrderStatus
             order.Status = request.NewStatus;
             if (request.NewStatus == OrderStatus.Delivered) order.DeliveredAt = DateTime.UtcNow;
 
-            await _orderService.AddStatusHistoryAsync(request.OrderId, request.NewStatus, request.Notes ?? $"Status updated to {request.NewStatus}");
+            await _orderRepository.AddStatusHistoryAsync(request.OrderId, request.NewStatus, request.Notes ?? $"Status updated to {request.NewStatus}");
             await _orderRepository.SaveChangesAsync(cancellationToken);
             return new UpdateOrderStatusResponse { Success = true, Message = "Status updated." };
         }

@@ -1,8 +1,8 @@
 using AutoMapper;
 using MediatR;
 using System.ComponentModel.DataAnnotations;
-using Tawsella.Application.Contracts;
-using Tawsella.Application.Interfaces;
+using Tawsella.Application.Contracts.Services;
+using Tawsella.Application.Contracts.Persistence;
 using Tawsella.Domain.DTOs.ReviewDTOs;
 
 namespace Tawsella.Application.Features.Reviews.Queries.GetOrderReview

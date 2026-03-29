@@ -16,7 +16,7 @@ namespace Tawsella.Domain.Entities
         public int TotalReviews { get; set; }
 
         // Vehicle Details
-        public VehicleType VehicleType { get; set; } 
+        public string VehicleType { get; set; }  // maybe enum in the future (Bike, Car, Van, etc.)
         public string VehiclePlateNumber { get; set; }
         public string? LicenseNumber { get; set; }
         public DateTime? LicenseExpiryDate { get; set; }

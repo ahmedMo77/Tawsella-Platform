@@ -1,7 +1,7 @@
 using AutoMapper;
-using Tawsella.Application.Contracts;
-using Tawsella.Application.Interfaces;
 using MediatR;
+using Tawsella.Application.Contracts.Persistence;
+using Tawsella.Application.Contracts.Services;
 
 namespace Tawsella.Application.Features.Customers.Queries.GetCustomerProfile
 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Tawsella.Application.Contracts;
+using Tawsella.Application.Contracts.Persistence;
 using Tawsella.Domain.Entities;
 using Tawsella.Domain.Enums;
 using Tawsella.Infrastructure.DbContext;
@@ -20,6 +20,13 @@ namespace Tawsella.Infrastructure.Repositories
         {
             return await _context.Couriers
                 .FirstOrDefaultAsync(c => c.Id == courierId, cancellationToken);
+        }
+
+        public async Task<Courier?> GetCourierWithUserAsync(string id, CancellationToken ct)
+        {
+            return await _context.Couriers
+                .Include(c => c.User)
+                .FirstOrDefaultAsync(c => c.Id == id, ct);
         }
 
         public async Task<Order?> GetActiveCourierOrderAsync(string courierId, CancellationToken cancellationToken = default)

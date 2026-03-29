@@ -1,4 +1,4 @@
-using AutoMapper; 
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -9,12 +9,10 @@ using Microsoft.OpenApi.Models;
 using System.Text;
 using Tawsella.Application;
 using Tawsella.Application.AutoMapper;
-using Tawsella.Application.Contracts;
-using Tawsella.Application.Interfaces;
-using Tawsella.Application.Services;
+using Tawsella.Application.Contracts.Services;
+using Tawsella.Application.Contracts.Persistence;
 using Tawsella.Application.Settings;
 using Tawsella.Domain.Entities;
-using Tawsella.Domain.Interfaces;
 using Tawsella.Infrastructure.DbContext;
 using Tawsella.Infrastructure.Repositories;
 using Tawsella.Infrastructure.Services;
@@ -127,11 +125,9 @@ namespace Tawsella.WebApi
 
             // Dependency Injection for Application Services
             builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
-            builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddTransient<IEmailSender, EmailSender>();
             builder.Services.AddScoped<IPricingService, PricingService>();
-            builder.Services.AddScoped<IOrderService, OrderService>();
             // AutoMapper Configuration
             builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 

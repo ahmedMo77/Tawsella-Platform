@@ -1,146 +1,146 @@
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
-using Tawsella.Application.DTOs.AuthDTOS;
-using Tawsella.Application.Interfaces;
+//using Microsoft.AspNetCore.Authorization;
+//using Microsoft.AspNetCore.Mvc;
+//using System.Security.Claims;
+//using Tawsella.Application.DTOs.AuthDTOS;
+//using Tawsella.Application.;
 
-namespace Tawsella.WebApi.Controllers
-{
-    [Route("api/[controller]")]
-    [ApiController]
-    public class AuthController : ControllerBase
-    {
-        private readonly IAuthService _authService;
-        public AuthController(IAuthService authService)
-        {
-            _authService = authService;
-        }
+//namespace Tawsella.WebApi.Controllers
+//{
+//    [Route("api/[controller]")]
+//    [ApiController]
+//    public class AuthController : ControllerBase
+//    {
+//        private readonly IAuthService _authService;
+//        public AuthController(IAuthService authService)
+//        {
+//            _authService = authService;
+//        }
 
-        [HttpPost("admin")]
-        public async Task<IActionResult> CreateAdmin(CreateAdminDto dto)
-        {
-            if(!ModelState.IsValid) return BadRequest(ModelState);
+//        [HttpPost("admin")]
+//        public async Task<IActionResult> CreateAdmin(CreateAdminDto dto)
+//        {
+//            if(!ModelState.IsValid) return BadRequest(ModelState);
 
-            var result = await _authService.CreateAdminAsync(dto);
+//            var result = await _authService.CreateAdminAsync(dto);
 
-            if(!result.Success)
-                return BadRequest(result.Message);
+//            if(!result.Success)
+//                return BadRequest(result.Message);
 
-            return Ok(result);
-        }
+//            return Ok(result);
+//        }
 
-        [HttpPost("customer")]
-        public async Task<IActionResult> RegisterCustomer(RegisterUserDto dto)
-        {
-            if (!ModelState.IsValid) return BadRequest(dto);
+//        [HttpPost("customer")]
+//        public async Task<IActionResult> RegisterCustomer(RegisterUserDto dto)
+//        {
+//            if (!ModelState.IsValid) return BadRequest(dto);
 
-            var result = await _authService.RegisterCustomerAsync(dto);
+//            var result = await _authService.RegisterCustomerAsync(dto);
 
-            if (!result.Success)
-                return BadRequest(result.Message);
+//            if (!result.Success)
+//                return BadRequest(result.Message);
 
-            return Ok(result);
-        }
+//            return Ok(result);
+//        }
 
-        [HttpPost("courier")]
-        public async Task<IActionResult> RegisterCourier(RegisterCourierDto dto)
-        {
-            if (!ModelState.IsValid) return BadRequest(dto);
+//        [HttpPost("courier")]
+//        public async Task<IActionResult> RegisterCourier(RegisterCourierDto dto)
+//        {
+//            if (!ModelState.IsValid) return BadRequest(dto);
 
-            var result = await _authService.RegisterCourierAsync(dto);
+//            var result = await _authService.RegisterCourierAsync(dto);
 
-            if (!result.Success)
-                return BadRequest(result.Message);
+//            if (!result.Success)
+//                return BadRequest(result.Message);
 
-            return Ok(result);
-        }
+//            return Ok(result);
+//        }
 
-        [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginDto dto)
-        {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+//        [HttpPost("login")]
+//        public async Task<IActionResult> Login(LoginDto dto)
+//        {
+//            if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var result = await _authService.LoginAsync(dto);
+//            var result = await _authService.LoginAsync(dto);
 
-            if(!result.Success) 
-                return BadRequest(result.Message);
+//            if(!result.Success) 
+//                return BadRequest(result.Message);
 
-            return Ok(result);
-        }
+//            return Ok(result);
+//        }
 
-        [HttpPost("logout")]
-        public async Task<IActionResult> Logout(string token)
-        {
-            await _authService.LogoutAsync(token);
-            return NoContent();
-        }
+//        [HttpPost("logout")]
+//        public async Task<IActionResult> Logout(string token)
+//        {
+//            await _authService.LogoutAsync(token);
+//            return NoContent();
+//        }
 
 
-        [HttpPost("approve-courier")]
-        public async Task<IActionResult> ApproveCourier(string courierId)
-        {
-            var result = await _authService.ApproveCourierAsync(courierId);
+//        [HttpPost("approve-courier")]
+//        public async Task<IActionResult> ApproveCourier(string courierId)
+//        {
+//            var result = await _authService.ApproveCourierAsync(courierId);
 
-            if (!result.Success)
-                return BadRequest(result.Message);
+//            if (!result.Success)
+//                return BadRequest(result.Message);
 
-            return Ok(result);
-        }
+//            return Ok(result);
+//        }
 
-        [HttpPost("confirm-email")]
-        public async Task<IActionResult> ConfirmEmail(string email, string code)
-        {
-            var dto = new ConfirmEmailDto
-            {
-                email = email,
-                code = code
-            };
+//        [HttpPost("confirm-email")]
+//        public async Task<IActionResult> ConfirmEmail(string email, string code)
+//        {
+//            var dto = new ConfirmEmailDto
+//            {
+//                email = email,
+//                code = code
+//            };
 
-            var result = await _authService.ConfirmEmailAsync(dto);
-            if (result.Success) return Ok(result);
-            return BadRequest(result);
-        }
+//            var result = await _authService.ConfirmEmailAsync(dto);
+//            if (result.Success) return Ok(result);
+//            return BadRequest(result);
+//        }
 
-        [HttpPost("forgot-password")]
-        public async Task<IActionResult> ForgotPassword(string email)
-        {
-            var result = await _authService.ForgotPasswordAsync(email);
+//        [HttpPost("forgot-password")]
+//        public async Task<IActionResult> ForgotPassword(string email)
+//        {
+//            var result = await _authService.ForgotPasswordAsync(email);
 
-            return Ok(result);
-        }
+//            return Ok(result);
+//        }
 
-        [HttpPost("reset-password")]
-        public async Task<IActionResult> ResetPassword(ResetPasswordDto dto)
-        {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+//        [HttpPost("reset-password")]
+//        public async Task<IActionResult> ResetPassword(ResetPasswordDto dto)
+//        {
+//            if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var result = await _authService.ResetPasswordAsync(dto);
+//            var result = await _authService.ResetPasswordAsync(dto);
 
-            if (!result.Success) 
-                return BadRequest(result);
+//            if (!result.Success) 
+//                return BadRequest(result);
 
-            return Ok(result);
-        }
+//            return Ok(result);
+//        }
 
-        [Authorize]
-        [HttpPost("change-password")]
-        public async Task<IActionResult> ChangePassword(string oldPassword, string newPassword)
-        {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+//        [Authorize]
+//        [HttpPost("change-password")]
+//        public async Task<IActionResult> ChangePassword(string oldPassword, string newPassword)
+//        {
+//            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            var dto = new ChangePasswordDto
-            {
-                userId = userId,
-                oldPassword = oldPassword,
-                newPassword = newPassword
-            };
+//            var dto = new ChangePasswordDto
+//            {
+//                userId = userId,
+//                oldPassword = oldPassword,
+//                newPassword = newPassword
+//            };
 
-            var result = await _authService.ChangePasswordAsync(dto);
+//            var result = await _authService.ChangePasswordAsync(dto);
 
-            if (!result.Success) 
-                return BadRequest(result);
+//            if (!result.Success) 
+//                return BadRequest(result);
 
-            return Ok(result);
-        }
-    }
-}
+//            return Ok(result);
+//        }
+//    }
+//}

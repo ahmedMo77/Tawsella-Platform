@@ -16,8 +16,8 @@ namespace Tawsella.Application.Features.Couriers.Commands.UpdateCourierProfile
                 .When(x => x.PhoneNumber != null);
 
             RuleFor(x => x.VehicleType)
-                .IsInEnum().WithMessage("Invalid vehicle type.")
-                .When(x => x.VehicleType.HasValue);
+                .MaximumLength(50).WithMessage("Vehicle type must not exceed 50 characters.")
+                .When(x => x.VehicleType != null);
 
             RuleFor(x => x.VehiclePlateNumber)
                 .MaximumLength(20).WithMessage("Vehicle plate number must not exceed 20 characters.")

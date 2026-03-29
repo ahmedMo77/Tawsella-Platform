@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Tawsella.Application.Contracts;
+using Tawsella.Application.Contracts.Persistence;
 using Tawsella.Domain.Entities;
 using Tawsella.Domain.Enums;
 using Tawsella.Infrastructure.DbContext;
@@ -24,6 +24,18 @@ namespace Tawsella.Infrastructure.Repositories
                 .Include(o => o.User)
                 .Where(o => o.Id == orderId && (o.UserId == userId || o.CourierId == userId))
                 .FirstOrDefaultAsync(cancellationToken);
+        }
+
+        public async Task AddStatusHistoryAsync(string orderId, OrderStatus status, string notes)
+        {
+            await _context.OrderStatusHistories.AddAsync(new OrderStatusHistory
+            {
+                Id = Guid.NewGuid().ToString(),
+                OrderId = orderId,
+                Status = status,
+                Notes = notes,
+                CreatedAt = DateTime.UtcNow
+            });
         }
 
         public async Task<(List<Order> orders, int totalCount)> GetOrdersHistoryAsync(

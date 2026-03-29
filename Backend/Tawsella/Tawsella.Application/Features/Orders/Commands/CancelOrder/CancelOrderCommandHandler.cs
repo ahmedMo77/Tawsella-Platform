@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using MediatR;
-using Tawsella.Application.Contracts;
-using Tawsella.Application.Interfaces;
+using Tawsella.Application.Contracts.Services;
+using Tawsella.Application.Contracts.Persistence;
 using Tawsella.Domain.Enums;
 
 namespace Tawsella.Application.Features.Orders.Commands.CancelOrder
@@ -11,18 +11,15 @@ namespace Tawsella.Application.Features.Orders.Commands.CancelOrder
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IMapper _mapper;
-        private readonly IOrderService _orderService;
         private readonly ICurrentUserService _currentUserService;
         
         public CancelOrderCommandHandler(
             IOrderRepository orderRepository,
             IMapper mapper, 
-            IOrderService orderService,
             ICurrentUserService currentUserService)
         {
             _orderRepository = orderRepository;
             _mapper = mapper;
-            _orderService = orderService;
             _currentUserService = currentUserService;
         }
 
@@ -43,7 +40,7 @@ namespace Tawsella.Application.Features.Orders.Commands.CancelOrder
             order.Status = OrderStatus.Cancelled;
             order.CancellationReason = request.reason;
 
-            await _orderService.AddStatusHistoryAsync(request.orderId, OrderStatus.Cancelled, $"Cancelled: {request.reason}");
+            await _orderRepository.AddStatusHistoryAsync(request.orderId, OrderStatus.Cancelled, $"Cancelled: {request.reason}");
             await _orderRepository.SaveChangesAsync(cancellationToken);
 
             return new CancelOrderCommandResponse { Success = true, Message = "Order cancelled." };

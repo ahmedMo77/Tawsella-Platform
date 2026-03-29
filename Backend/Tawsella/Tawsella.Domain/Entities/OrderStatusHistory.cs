@@ -8,7 +8,7 @@ using Tawsella.Domain.Enums;
 
 namespace Tawsella.Domain.Entities
 {
-    public class OrderStatusHistory:BaseEntity
+    public class OrderStatusHistory : BaseEntity
     {
 
         public string OrderId { get; set; }

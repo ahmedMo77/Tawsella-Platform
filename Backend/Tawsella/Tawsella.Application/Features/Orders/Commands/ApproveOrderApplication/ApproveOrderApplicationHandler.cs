@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using MediatR;
-using Tawsella.Application.Contracts;
+using Tawsella.Application.Contracts.Services;
+using Tawsella.Application.Contracts.Persistence;
 using Tawsella.Application.Features.Notifications.Commands.SendNotification;
-using Tawsella.Application.Interfaces;
 using Tawsella.Domain.Enums;
 
 namespace Tawsella.Application.Features.Orders.Commands.ApproveOrderApplication
@@ -13,20 +13,17 @@ namespace Tawsella.Application.Features.Orders.Commands.ApproveOrderApplication
         private readonly IOrderRepository _orderRepository;
         private readonly IMapper _mapper;
         private readonly IMediator _mediator;
-        private readonly IOrderService _orderService;
         private readonly ICurrentUserService _currentUserService;
         
         public ApproveOrderApplicationHandler(
             IOrderRepository orderRepository,
             IMapper mapper, 
             IMediator mediator, 
-            IOrderService orderService,
             ICurrentUserService currentUserService)
         {
             _orderRepository = orderRepository;
             _mapper = mapper;
             _mediator = mediator;
-            _orderService = orderService;
             _currentUserService = currentUserService;
         }
 
@@ -45,7 +42,7 @@ namespace Tawsella.Application.Features.Orders.Commands.ApproveOrderApplication
                 return new ApproveOrderApplicationResponse { Success = false, Message = "Courier is no longer available." };
 
             await _orderRepository.ApproveApplicationAsync(order, app, request.orderId, request.applicationId, cancellationToken);
-            await _orderService.AddStatusHistoryAsync(request.orderId, OrderStatus.Accepted, $"Courier {app.CourierId} assigned");
+            await _orderRepository.AddStatusHistoryAsync(request.orderId, OrderStatus.Accepted, $"Courier {app.CourierId} assigned");
             
             // Send notification via MediatR
             await _mediator.Send(new SendNotificationCommand

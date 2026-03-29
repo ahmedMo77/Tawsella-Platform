@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
-using Tawsella.Application.Interfaces;
+using Tawsella.Application.Contracts.Services;
 
 namespace Tawsella.Infrastructure.Services
 {

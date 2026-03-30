@@ -16,6 +16,9 @@ using Tawsella.Application.DTOs.OrderDTOs;
 using Tawsella.Application.DTOs.ReviewDTOs;
 using Tawsella.Domain.Entities;
 using Tawsella.Domain.Enums;
+using Tawsella.Application.Features.Admin.Commands.CreateAdmin;
+using Tawsella.Application.DTOs.AuthDTOS;
+using Tawsella.Application.Features.Auth.Register.RegisterCourier;
 
 namespace Tawsella.Application.AutoMapper
 {
@@ -65,6 +68,16 @@ namespace Tawsella.Application.AutoMapper
 
             CreateMap<CreateOrderCommand, CalculatePriceDto>();
             CreateMap<Order, CreateOrderCommand>().ReverseMap();
+
+            // Creat Admin Dto and Command
+            CreateMap<CreateAdminCommand, CreateAdminDto>().ReverseMap();
+            CreateMap<CreateAdminEmailDto, CreateAdminCommand>().ReverseMap();
+
+            // Register Courier Dto and Command
+            CreateMap<RegisterCourierCommand, RegisterCourierDto>().ReverseMap();
+            CreateMap<RegisterCourierCommand, Courier>()
+                .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateTime.UtcNow))
+                .ForMember(dest => dest.IsApproved, opt => opt.MapFrom(src => false));
         }
     }
 }

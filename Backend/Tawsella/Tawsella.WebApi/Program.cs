@@ -128,7 +128,7 @@ namespace Tawsella.WebApi
             // Dependency Injection for Application Services
             builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
             builder.Services.AddScoped<ITokenService, TokenService>();
-            builder.Services.AddTransient<IEmailSender, EmailSender>();
+            builder.Services.AddTransient<IEmailService, EmailService>();
             builder.Services.AddScoped<IPricingService, PricingService>();
             // AutoMapper Configuration
             builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);

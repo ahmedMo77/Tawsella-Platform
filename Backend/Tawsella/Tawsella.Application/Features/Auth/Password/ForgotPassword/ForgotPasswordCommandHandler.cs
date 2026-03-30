@@ -15,9 +15,9 @@ namespace Tawsella.Application.Features.Auth.Password.ForgotPassword
     public class ForgotPasswordCommandHandler : IRequestHandler<ForgotPasswordCommand, BaseToReturnDto>
     {
         private readonly UserManager<AppUser> _userManager;
-        private readonly IEmailSender _emailSender;
+        private readonly IEmailService _emailSender;
 
-        public ForgotPasswordCommandHandler(UserManager<AppUser> userManager, IEmailSender emailSender)
+        public ForgotPasswordCommandHandler(UserManager<AppUser> userManager, IEmailService emailSender)
         {
             _userManager = userManager;
             _emailSender = emailSender;

@@ -13,13 +13,13 @@ namespace Tawsella.Application.Features.Auth.Register.RegisterCustomer
         private readonly ICustomerRepository _repo;
         private readonly UserManager<AppUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly IEmailSender _emailService;
+        private readonly IEmailService _emailService;
 
         public RegisterCustomerCommandHandler(
             ICustomerRepository repo,
             UserManager<AppUser> userManager,
             RoleManager<IdentityRole> roleManager,
-            IEmailSender emailService) // ضفنا الإيميل سيرفيس هنا
+            IEmailService emailService) // ضفنا الإيميل سيرفيس هنا
         {
             _repo = repo;
             _userManager = userManager;

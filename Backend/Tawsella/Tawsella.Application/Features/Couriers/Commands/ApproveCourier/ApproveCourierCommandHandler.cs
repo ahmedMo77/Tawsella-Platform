@@ -16,12 +16,12 @@ namespace Tawsella.Application.Features.Couriers.Commands.ApproveCourier
     {
         private readonly ICourierRepository _courierRepo;
         private readonly IWalletRepository _walletRepo;
-        private readonly IEmailSender _emailService;
+        private readonly IEmailService _emailService;
 
         public ApproveCourierCommandHandler(
             ICourierRepository CourierRepo,
             IWalletRepository walletRepo,
-            IEmailSender emailService)
+            IEmailService emailService)
         {
             _courierRepo = CourierRepo;
             _walletRepo = walletRepo;

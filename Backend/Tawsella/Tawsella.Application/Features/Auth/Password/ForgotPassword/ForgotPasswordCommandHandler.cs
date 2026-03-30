@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Tawsella.Application.Contracts.Services;
 using Tawsella.Application.DTOs;
+using Tawsella.Application.DTOs.AuthDTOS;
 using Tawsella.Domain.Entities;
 using Tawsella.Domain.Enums;
 
@@ -14,26 +15,16 @@ namespace Tawsella.Application.Features.Auth.Password.ForgotPassword
 {
     public class ForgotPasswordCommandHandler : IRequestHandler<ForgotPasswordCommand, BaseToReturnDto>
     {
-        private readonly UserManager<AppUser> _userManager;
-        private readonly IEmailService _emailSender;
+        private readonly IAuthService _authService;
 
-        public ForgotPasswordCommandHandler(UserManager<AppUser> userManager, IEmailService emailSender)
+        public ForgotPasswordCommandHandler(IAuthService authService)
         {
-            _userManager = userManager;
-            _emailSender = emailSender;
+            _authService = authService;
         }
 
         public async Task<BaseToReturnDto> Handle(ForgotPasswordCommand request, CancellationToken ct)
         {
-            var user = await _userManager.FindByEmailAsync(request.Email);
-            if (user == null)
-                return new BaseToReturnDto { Success = true, Message = "If the email exists, a code has been sent." };
-
-            var code = await _userManager.GeneratePasswordResetTokenAsync(user);
-
-            await _emailSender.SendEmailAsync(user.Email, "Reset Password Code", $"Your code is: {code}");
-
-            return new BaseToReturnDto { Success = true, Message = "Reset code sent to your email." };
+            return await _authService.ForgotPasswordAsync(request.Email, ct);
         }
     }
 }

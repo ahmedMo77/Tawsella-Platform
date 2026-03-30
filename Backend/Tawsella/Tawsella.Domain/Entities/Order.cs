@@ -13,53 +13,37 @@ namespace Tawsella.Domain.Entities
     {
         public string OrderNumber { get; set; }
 
-        public string UserId { get; set; }
-        public AppUser User { get; set; }
+        // 1. Parties (customer and captain)
+        public string CustomerId { get; set; }
+        public Customer Customer { get; set; }
 
-        // Courier
-        public string? CourierId { get; set; } // The assigned courier, nullable until assigned
+        public string? CourierId { get; set; }
         public Courier Courier { get; set; }
 
-        // Pickup Details
-        public string PickupAddress { get; set; }
-        public decimal PickupLatitude { get; set; }
-        public decimal PickupLongitude { get; set; }
-        public string PickupContactName { get; set; }
-        public string PickupContactPhone { get; set; }
+        // 2. /Locations (pickup and dropoff)
+        public OrderContact Pickup { get; set; } = new();
+        public OrderContact Dropoff { get; set; } = new();
 
-        // Dropoff Details
-        public string DropoffAddress { get; set; }
-        public decimal DropoffLatitude { get; set; }
-        public decimal DropoffLongitude { get; set; }
-        public string DropoffContactName { get; set; }
-        public string DropoffContactPhone { get; set; }
+        // 3. Package details and finances (تخص الأوردر نفسه)
+        public OrderPackage Package { get; set; } = new();
+        public OrderFinances Money { get; set; } = new();
 
-        // Package Details
-        public string PackageSize { get; set; }
-        public decimal? PackageWeight { get; set; }
-        public string PackageNotes { get; set; }
-        public decimal EstimatedPrice { get; set; }
-        public decimal? FinalPrice { get; set; }
-        public decimal? CourierEarnings { get; set; }
-        public decimal? PlatformCommission { get; set; }
-
-        // Status & Timing
-        public OrderStatus Status { get; set; }
+        // 4. Status and timestamps
+        public OrderStatus Status { get; set; } = OrderStatus.Pending;
         public DateTime? AcceptedAt { get; set; }
         public DateTime? PickedUpAt { get; set; }
         public DateTime? DeliveredAt { get; set; }
         public DateTime? CancelledAt { get; set; }
-        public string CancellationReason { get; set; }
+        public string? CancellationReason { get; set; }
 
-
-        // Payment => maybe integrate with a Payment entity in future for more details
+        // 5. Payment details
         public PaymentMethod PaymentMethod { get; set; }
         public PaymentStatus PaymentStatus { get; set; }
         public DateTime? PaidAt { get; set; }
 
-        // Navigation
+        // 6. References to related entities 
         public Review Review { get; set; }
-        public ICollection<OrderStatusHistory> StatusHistory { get; set; }
+        public ICollection<OrderStatusHistory> StatusHistory { get; set; } = new List<OrderStatusHistory>();
     }
 }
     

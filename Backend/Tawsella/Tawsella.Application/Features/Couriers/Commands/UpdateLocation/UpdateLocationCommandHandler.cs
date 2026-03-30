@@ -25,8 +25,8 @@ namespace Tawsella.Application.Features.Couriers.Commands.UpdateLocation
 
             if (courier != null)
             {
-                courier.CurrentLatitude = request.Latitude;
-                courier.CurrentLongitude = request.Longitude;
+                courier.CurrentLocation.Latitude = request.Latitude;
+                courier.CurrentLocation.Longitude = request.Longitude;
                 courier.LastLocationUpdate = DateTime.UtcNow;
                 await _courierRepository.UpdateAsync(courier, cancellationToken);
             }

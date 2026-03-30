@@ -9,6 +9,7 @@ namespace Tawsella.Application.DTOs.AuthDTOS
 {
     public class AuthResultDto
     {
+        public string Id { get; set; }
         public string Message { get; set; }
         public bool Success { get; set; }
         public bool IsAuth { get; set; }

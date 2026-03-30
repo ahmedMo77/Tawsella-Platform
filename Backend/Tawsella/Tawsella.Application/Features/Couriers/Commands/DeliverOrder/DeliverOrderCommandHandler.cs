@@ -51,18 +51,18 @@ namespace Tawsella.Application.Features.Couriers.Commands.DeliverOrder
 
             var priceDetails = _pricingService.CalculateOrderPrice(new CalculatePriceDto
             {
-                PickupLatitude = order.PickupLatitude,
-                PickupLongitude = order.PickupLongitude,
-                DropoffLatitude = order.DropoffLatitude,
-                DropoffLongitude = order.DropoffLongitude,
-                PackageSize = order.PackageSize
+                PickupLatitude = order.Pickup.Location.Latitude,
+                PickupLongitude = order.Pickup.Location.Longitude,
+                DropoffLatitude = order.Dropoff.Location.Latitude,
+                DropoffLongitude = order.Dropoff.Location.Longitude,
+                PackageSize = order.Package.Size.ToString()
             });
 
             order.Status = OrderStatus.Delivered;
             order.DeliveredAt = DateTime.UtcNow;
-            order.FinalPrice = priceDetails.EstimatedPrice;
-            order.CourierEarnings = priceDetails.CourierEarnings;
-            order.PlatformCommission = priceDetails.PlatformCommission;
+            order.Money.FinalPrice = priceDetails.EstimatedPrice;
+            order.Money.CourierEarnings = priceDetails.CourierEarnings;
+            order.Money.PlatformCommission = priceDetails.PlatformCommission;
             order.MarkUpdated();
 
             WalletTransaction? transaction = null;

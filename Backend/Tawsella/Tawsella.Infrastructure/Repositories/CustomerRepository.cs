@@ -26,11 +26,11 @@ namespace Tawsella.Infrastructure.Repositories
             CancellationToken cancellationToken = default)
         {
             var totalOrders = await _context.Orders
-                .CountAsync(o => o.UserId == customerId, cancellationToken);
+                .CountAsync(o => o.CustomerId == customerId, cancellationToken);
 
             var totalSpent = await _context.Orders
-                .Where(o => o.UserId == customerId && o.Status == OrderStatus.Delivered)
-                .SumAsync(o => o.FinalPrice ?? o.EstimatedPrice, cancellationToken);
+                .Where(o => o.CustomerId == customerId && o.Status == OrderStatus.Delivered)
+                .SumAsync(o => o.Money.FinalPrice ?? o.Money.EstimatedPrice, cancellationToken);
 
             return (totalOrders, totalSpent);
         }

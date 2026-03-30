@@ -13,7 +13,7 @@ namespace Tawsella.Application.Features.Couriers.Commands.UpdateCourierProfile
         [MaxLength(20)]
         public string PhoneNumber { get; set; }
 
-        public string? VehicleType { get; set; }
+        public VehicleType? VehicleType { get; set; }
 
         [MaxLength(20)]
         public string VehiclePlateNumber { get; set; }

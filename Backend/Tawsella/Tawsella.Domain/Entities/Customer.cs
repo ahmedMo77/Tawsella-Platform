@@ -11,16 +11,15 @@ namespace Tawsella.Domain.Entities
 {
     public class Customer : BaseEntity
     {
-        public string DefaultPickupAddress { get; set; }
-        public decimal? DefaultPickupLatitude { get; set; }
-        public decimal? DefaultPickupLongitude { get; set; }
-        public string DefaultPickupLabel { get; set; }  // Home, Work, Gym
+        public AppUser User { get; set; }
+
+        public Location DefaultPickupLocation { get; set; } = new();
+        public string DefaultPickupLabel { get; set; }
 
         public int CompletedOrders { get; set; }
         public PaymentMethod PreferredPaymentMethod { get; set; }
 
-        public AppUser User { get; set; }
-        public ICollection<Order> Orders { get; set; }
-        public ICollection<Review> Reviews { get; set; }
+        public ICollection<Order> Orders { get; set; } = new List<Order>();
+        public ICollection<Review> Reviews { get; set; } = new List<Review>();
     }
 }

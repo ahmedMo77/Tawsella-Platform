@@ -21,8 +21,8 @@ namespace Tawsella.Infrastructure.Repositories
         {
             return await _context.Orders
                 .Include(o => o.Courier)
-                .Include(o => o.User)
-                .Where(o => o.Id == orderId && (o.UserId == userId || o.CourierId == userId))
+                .Include(o => o.Customer)
+                .Where(o => o.Id == orderId && (o.CustomerId == userId || o.CourierId == userId))
                 .FirstOrDefaultAsync(cancellationToken);
         }
 
@@ -46,7 +46,7 @@ namespace Tawsella.Infrastructure.Repositories
             CancellationToken cancellationToken = default)
         {
             var query = _context.Orders
-                .Where(o => o.UserId == userId || o.CourierId == userId);
+                .Where(o => o.CustomerId == userId || o.CourierId == userId);
 
             if (status.HasValue)
             {
@@ -57,7 +57,7 @@ namespace Tawsella.Infrastructure.Repositories
 
             var orders = await query
                 .Include(o => o.Courier)
-                .Include(o => o.User)
+                .Include(o => o.Customer)
                 .OrderByDescending(o => o.CreatedAt)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
@@ -73,7 +73,7 @@ namespace Tawsella.Infrastructure.Repositories
         {
             return await _context.OrderApplications
                 .Include(oa => oa.Courier)
-                .Where(oa => oa.OrderId == orderId && oa.Order.UserId == customerId)
+                .Where(oa => oa.OrderId == orderId && oa.Order.CustomerId == customerId)
                 .OrderBy(oa => oa.AppliedAt)
                 .ToListAsync(cancellationToken);
         }
@@ -81,7 +81,7 @@ namespace Tawsella.Infrastructure.Repositories
         public async Task<Order?> GetOrderForCourierAsync(string orderId, string courierId, CancellationToken cancellationToken = default)
         {
             return await _context.Orders
-                .Include(o => o.User)
+                .Include(o => o.Courier)
                 .FirstOrDefaultAsync(o => o.Id == orderId && o.CourierId == courierId, cancellationToken);
         }
 
@@ -89,7 +89,7 @@ namespace Tawsella.Infrastructure.Repositories
         {
             return await _context.Orders
                 .Include(o => o.Courier)
-                .FirstOrDefaultAsync(o => o.Id == orderId && o.UserId == customerId, cancellationToken);
+                .FirstOrDefaultAsync(o => o.Id == orderId && o.CustomerId == customerId, cancellationToken);
         }
 
         public async Task<bool> CustomerExistsAsync(string customerId, CancellationToken cancellationToken = default)
@@ -138,7 +138,7 @@ namespace Tawsella.Infrastructure.Repositories
         {
             return await _context.Orders
                 .Include(o => o.Courier)
-                .FirstOrDefaultAsync(o => o.Id == orderId && o.UserId == customerId, cancellationToken);
+                .FirstOrDefaultAsync(o => o.Id == orderId && o.CustomerId == customerId, cancellationToken);
         }
 
         public async Task<Order?> GetOrderForDeliveryAsync(string orderId, string courierId, CancellationToken cancellationToken = default)

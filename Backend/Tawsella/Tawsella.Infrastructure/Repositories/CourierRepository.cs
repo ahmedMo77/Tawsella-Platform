@@ -32,7 +32,7 @@ namespace Tawsella.Infrastructure.Repositories
         public async Task<Order?> GetActiveCourierOrderAsync(string courierId, CancellationToken cancellationToken = default)
         {
             return await _context.Orders
-                .Include(o => o.User)
+                .Include(o => o.Courier)
                 .Where(o => o.CourierId == courierId &&
                            (o.Status == OrderStatus.Accepted ||
                             o.Status == OrderStatus.PickedUp))
@@ -56,7 +56,7 @@ namespace Tawsella.Infrastructure.Repositories
 
             // Available orders: Pending status, not assigned to any courier
             var query = _context.Orders
-                .Include(o => o.User)
+                .Include(o => o.Courier)
                 .Where(o => o.Status == OrderStatus.Pending && o.CourierId == null);
 
             var totalCount = await query.CountAsync(cancellationToken);
@@ -85,7 +85,7 @@ namespace Tawsella.Infrastructure.Repositories
 
             var totalEarnings = await _context.Orders
                 .Where(o => o.CourierId == courierId && o.Status == OrderStatus.Delivered)
-                .SumAsync(o => o.CourierEarnings ?? 0, cancellationToken);
+                .SumAsync(o => o.Money.CourierEarnings ?? 0, cancellationToken);
 
             return (totalDeliveries, totalEarnings, courier.AverageRating);
         }

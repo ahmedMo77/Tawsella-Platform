@@ -43,7 +43,7 @@ namespace Tawsella.Application.Features.Couriers.Queries.GetAvailableOrders
 
             // Filter by distance using pricing service
             var courier = await _courierRepository.GetByIdAsync(courierId, cancellationToken);
-            if (courier == null || !courier.IsOnline || courier.CurrentLatitude == null)
+            if (courier == null || !courier.IsOnline || courier.CurrentLocation == null)
             {
                 return new GetAvailableOrdersQueryResponse
                 {
@@ -54,10 +54,10 @@ namespace Tawsella.Application.Features.Couriers.Queries.GetAvailableOrders
             var nearbyOrders = orders.Where(order =>
             {
                 var distance = _pricingService.CalculateDistance(
-                    courier.CurrentLatitude.Value,
-                    courier.CurrentLongitude.Value,
-                    order.PickupLatitude,
-                    order.PickupLongitude
+                    courier.CurrentLocation.Latitude,
+                    courier.CurrentLocation.Longitude,
+                    order.Pickup.Location.Latitude,
+                    order.Pickup.Location.Longitude
                 );
                 return distance <= request.RadiusInKm;
             }).ToList();

@@ -1,16 +1,17 @@
+using MailKit.Net.Smtp;
 using MailKit.Security;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MimeKit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using MailKit.Net.Smtp;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using Tawsella.Application.Settings;
 using Tawsella.Application.Contracts.Services;
 using Tawsella.Application.DTOs.AuthDTOS;
+using Tawsella.Application.Settings;
+using Tawsella.Domain.Entities;
 
 namespace Tawsella.Infrastructure.Services
 {
@@ -65,6 +66,20 @@ namespace Tawsella.Infrastructure.Services
             }
         }
 
+        public async Task SendVerificationCodeAsync(string email, string code, CancellationToken ct)
+        {
+            string body = $@"
+                <h2 style='color: #2c3e50;'>Verify Your Email</h2>
+                <p>Thank you for signing up! Please use the following code to complete your registration:</p>
+                <div style='background: #f4f4f4; padding: 20px; font-size: 32px; font-weight: bold; text-align: center; letter-spacing: 10px; color: #2c3e50; border: 1px dashed #2c3e50;'>
+                    {code}
+                </div>
+                <p style='color: #7f8c8d; font-size: 14px; margin-top: 20px;'>This code will expire in 15 minutes.</p>";
+
+
+            await SendEmailAsync(email, "Confirm Your Email", body);
+        }
+
         public async Task SendAdminInvitationEmail(CreateAdminEmailDto createAdminEmail, CancellationToken ct)
         {
             var subject = "Welcome to Tawsella Team!";
@@ -79,6 +94,14 @@ namespace Tawsella.Infrastructure.Services
         <p>Please change your password after your first login.</p>";
 
             await SendEmailAsync(createAdminEmail.Email, subject, body);
+        }
+
+        public async Task SendApprovedEmailAsync(string email, CancellationToken ct)
+        {
+            var body = $@"
+                <p>Congratulations! Your account has been approved and is now active.</p>
+                <p>You can now log in and start receiving orders.</p>";
+            await SendEmailAsync(email, "Account Approved", body);
         }
     }
 }

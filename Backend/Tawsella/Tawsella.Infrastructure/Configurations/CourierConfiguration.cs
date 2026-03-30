@@ -18,10 +18,10 @@ namespace Tawsella.Infrastructure.Configurations
             entity.HasKey(c => c.Id);
 
             entity.Property(c => c.NationalId).HasMaxLength(16);
-            entity.Property(c => c.VehiclePlateNumber).HasMaxLength(20);
-            entity.Property(c => c.LicenseNumber).HasMaxLength(20);
-            entity.Property(c => c.CurrentLatitude).HasColumnType("decimal(10,8)");
-            entity.Property(c => c.CurrentLongitude).HasColumnType("decimal(11,8)");
+            entity.Property(c => c.Vehicle.PlateNumber).HasMaxLength(20);
+            entity.Property(c => c.Vehicle.LicenseNumber).HasMaxLength(20);
+            entity.Property(c => c.CurrentLocation.Latitude).HasColumnType("decimal(10,8)");
+            entity.Property(c => c.CurrentLocation.Longitude).HasColumnType("decimal(11,8)");
 
 
             // Relationships
@@ -50,8 +50,8 @@ namespace Tawsella.Infrastructure.Configurations
             {
                 c.IsOnline,
                 c.IsAvailable,
-                c.CurrentLatitude,
-                c.CurrentLongitude
+                c.CurrentLocation.Latitude,
+                c.CurrentLocation.Longitude
             });
         }
     }

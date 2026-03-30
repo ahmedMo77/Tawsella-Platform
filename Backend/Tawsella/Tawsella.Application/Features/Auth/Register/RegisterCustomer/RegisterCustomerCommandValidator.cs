@@ -14,7 +14,11 @@ namespace Tawsella.Application.Features.Auth.Register.RegisterCustomer
             RuleFor(x => x.FullName).NotEmpty().MaximumLength(100);
             RuleFor(x => x.Email).NotEmpty().EmailAddress();
             RuleFor(x => x.Password).NotEmpty().MinimumLength(6);
-            RuleFor(x => x.PhoneNumber).NotEmpty().Matches(@"^\+?\d{11}$").WithMessage("Phone number must be 11 digits, and can start with +");
+
+            RuleFor(x => x.PhoneNumber)
+                .NotEmpty()
+                .Matches(@"^01[0125]\d{8}$")
+                .WithMessage("Please enter a valid Egyptian phone number.");
         }
     }
 }

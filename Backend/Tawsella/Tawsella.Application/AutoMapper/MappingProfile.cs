@@ -10,7 +10,6 @@ using Tawsella.Application.Features.Orders.Commands;
 using Tawsella.Application.Features.Orders.Commands.CreateOrder;
 using Tawsella.Application.Features.Orders.Queries.GetOrderApplications;
 using Tawsella.Application.Features.Orders.Queries.GetOrderDetails;
-using Tawsella.Application.DTOs.CourierDTOs;
 using Tawsella.Application.DTOs.NotificationDTOs;
 using Tawsella.Application.DTOs.OrderDTOs;
 using Tawsella.Application.DTOs.ReviewDTOs;
@@ -19,6 +18,11 @@ using Tawsella.Domain.Enums;
 using Tawsella.Application.Features.Admin.Commands.CreateAdmin;
 using Tawsella.Application.DTOs.AuthDTOS;
 using Tawsella.Application.Features.Auth.Register.RegisterCourier;
+using Tawsella.Application.Features.Auth.Login;
+using Tawsella.Application.Features.Auth.Register.RegisterCustomer;
+using Tawsella.Application.Features.Auth.Password.ChangePassword;
+using Tawsella.Application.Features.Auth.Password.ResetPassword;
+using Tawsella.Application.Features.Auth.ConfirmEmail;
 
 namespace Tawsella.Application.AutoMapper
 {
@@ -78,6 +82,24 @@ namespace Tawsella.Application.AutoMapper
             CreateMap<RegisterCourierCommand, Courier>()
                 .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateTime.UtcNow))
                 .ForMember(dest => dest.IsApproved, opt => opt.MapFrom(src => false));
+
+            // Register Customer Dto and Command
+            CreateMap<RegisterCustomerCommand, RegisterUserDto>().ReverseMap();
+            CreateMap<RegisterCustomerCommand, Customer>()
+                .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateTime.UtcNow));
+
+            // Login
+            CreateMap<LoginCommand, LoginDto>().ReverseMap();
+
+            // Password
+                // ChangePassword
+            CreateMap<ChangePasswordCommand, ChangePasswordDto>().ReverseMap();
+                // ResetPassword
+            CreateMap<ResetPasswordCommand, ResetPasswordDto>().ReverseMap();
+
+            // Confirm Email
+            CreateMap<ConfirmEmailCommand, ConfirmEmailDto>().ReverseMap();
+
         }
     }
 }

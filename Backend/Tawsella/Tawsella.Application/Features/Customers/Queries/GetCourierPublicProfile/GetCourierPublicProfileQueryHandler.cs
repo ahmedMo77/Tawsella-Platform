@@ -2,7 +2,6 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Tawsella.Application.Contracts.Persistence;
 using Tawsella.Application.DTOs.CourierDTOs;
-using Tawsella.Application.DTOs.CourierDTOs;
 using Tawsella.Domain.Enums;
 
 namespace Tawsella.Application.Features.Customers.Queries.GetCourierPublicProfile
@@ -50,7 +49,7 @@ namespace Tawsella.Application.Features.Customers.Queries.GetCourierPublicProfil
                 {
                     Id = courier.Id,
                     FullName = courier.User?.FullName ?? "",
-                    VehicleType = courier.VehicleType,
+                    VehicleType = courier.Vehicle.Type,
                     AverageRating = averageRating,
                     TotalReviews = reviews.Count,
                     CompletedDeliveries = totalDeliveries,

@@ -22,65 +22,65 @@ namespace Tawsella.Infrastructure.Configurations
                 .HasMaxLength(50);
 
             // Pickup details
-            entity.Property(o => o.PickupAddress)
+            entity.Property(o => o.Pickup.Location.AddressName)
                 .IsRequired()
                 .HasMaxLength(500);
 
-            entity.Property(o => o.PickupLatitude)
+            entity.Property(o => o.Pickup.Location.Latitude)
                 .IsRequired()
                 .HasColumnType("decimal(10,8)");
 
-            entity.Property(o => o.PickupLongitude)
+            entity.Property(o => o.Pickup.Location.Longitude)
                 .IsRequired()
                 .HasColumnType("decimal(11,8)");
 
-            entity.Property(o => o.PickupContactName)
+            entity.Property(o => o.Pickup.Name)
                 .HasMaxLength(200);
 
-            entity.Property(o => o.PickupContactPhone)
+            entity.Property(o => o.Pickup.Phone)
                 .HasMaxLength(20);
 
             // Dropoff details
-            entity.Property(o => o.DropoffAddress)
+            entity.Property(o => o.Dropoff.Location.AddressName)
                 .IsRequired()
                 .HasMaxLength(500);
 
-            entity.Property(o => o.DropoffLatitude)
+            entity.Property(o => o.Dropoff.Location.Latitude)
                 .IsRequired()
                 .HasColumnType("decimal(10,8)");
 
-            entity.Property(o => o.DropoffLongitude)
+            entity.Property(o => o.Dropoff.Location.Longitude)
                 .IsRequired()
                 .HasColumnType("decimal(11,8)");
 
-            entity.Property(o => o.DropoffContactName)
+            entity.Property(o => o.Dropoff.Name)
                 .HasMaxLength(200);
 
-            entity.Property(o => o.DropoffContactPhone)
+            entity.Property(o => o.Dropoff.Phone)
                 .HasMaxLength(20);
 
             // Package details
-            entity.Property(o => o.PackageSize)
+            entity.Property(o => o.Package.Size)
                 .HasMaxLength(100);
 
-            entity.Property(o => o.PackageWeight)
+            entity.Property(o => o.Package.Weight)
                 .HasColumnType("decimal(8,2)");
 
-            entity.Property(o => o.PackageNotes)
+            entity.Property(o => o.Package.Notes)
                 .HasMaxLength(1000);
 
             // Pricing
-            entity.Property(o => o.EstimatedPrice)
+            entity.Property(o => o.Money.EstimatedPrice)
                 .IsRequired()
                 .HasColumnType("decimal(10,2)");
 
-            entity.Property(o => o.FinalPrice)
+            entity.Property(o => o.Money.FinalPrice)
                 .HasColumnType("decimal(10,2)");
 
-            entity.Property(o => o.CourierEarnings)
+            entity.Property(o => o.Money.CourierEarnings)
                 .HasColumnType("decimal(10,2)");
 
-            entity.Property(o => o.PlatformCommission)
+            entity.Property(o => o.Money.PlatformCommission)
                 .HasColumnType("decimal(10,2)");
 
             // Status
@@ -115,8 +115,8 @@ namespace Tawsella.Infrastructure.Configurations
             entity.HasIndex(o => o.OrderNumber).IsUnique();
             entity.HasIndex(o => o.Status);
             entity.HasIndex(o => o.CreatedAt);
-            entity.HasIndex(o => new { o.UserId });
-            entity.HasIndex(o => new { o.UserId, o.Status });
+            entity.HasIndex(o => new { o.CustomerId });
+            entity.HasIndex(o => new { o.CustomerId, o.Status });
             entity.HasIndex(o => new { o.CourierId, o.Status });
         }
     }

@@ -18,20 +18,11 @@ namespace Tawsella.Infrastructure.Configurations
 
             entity.HasKey(c => c.Id);
 
-            entity.Property(c => c.DefaultPickupAddress).HasMaxLength(200);
+            entity.Property(c => c.DefaultPickupLocation.AddressName).HasMaxLength(200);
             entity.Property(c => c.DefaultPickupLabel).HasMaxLength(50);
-            entity.Property(c => c.DefaultPickupLatitude).HasColumnType("decimal(10,8)");
-            entity.Property(c => c.DefaultPickupLongitude).HasColumnType("decimal(11,8)");
+            entity.Property(c => c.DefaultPickupLocation.Latitude).HasColumnType("decimal(10,8)");
+            entity.Property(c => c.DefaultPickupLocation.Longitude).HasColumnType("decimal(11,8)");
 
-
-            //entity.Property(c => c.TotalOrdersCount)
-            //    .HasDefaultValue(0);
-
-            //entity.Property(c => c.CompletedOrdersCount)
-            //    .HasDefaultValue(0);
-
-            //entity.Property(c => c.CancelledOrdersCount)
-            //    .HasDefaultValue(0);
 
             entity.HasOne(c => c.User)
                 .WithOne()
@@ -40,7 +31,7 @@ namespace Tawsella.Infrastructure.Configurations
 
             entity.HasMany(c => c.Orders)
                 .WithOne()
-                .HasForeignKey(o => o.UserId);
+                .HasForeignKey(o => o.CustomerId);
 
             entity.HasMany(c => c.Reviews)
                 .WithOne()

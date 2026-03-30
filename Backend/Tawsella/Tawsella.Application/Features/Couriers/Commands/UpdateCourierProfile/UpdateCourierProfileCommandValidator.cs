@@ -1,4 +1,5 @@
 using FluentValidation;
+using Tawsella.Domain.Enums;
 
 namespace Tawsella.Application.Features.Couriers.Commands.UpdateCourierProfile
 {
@@ -16,7 +17,7 @@ namespace Tawsella.Application.Features.Couriers.Commands.UpdateCourierProfile
                 .When(x => x.PhoneNumber != null);
 
             RuleFor(x => x.VehicleType)
-                .MaximumLength(50).WithMessage("Vehicle type must not exceed 50 characters.")
+                .IsInEnum().WithMessage("Vehicle type is not valid.")
                 .When(x => x.VehicleType != null);
 
             RuleFor(x => x.VehiclePlateNumber)

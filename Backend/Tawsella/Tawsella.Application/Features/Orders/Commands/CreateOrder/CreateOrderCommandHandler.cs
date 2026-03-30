@@ -42,11 +42,11 @@ namespace Tawsella.Application.Features.Orders.Commands.CreateOrder
             var order = _mapper.Map<Order>(request);
             order.Id = Guid.NewGuid().ToString();
             order.OrderNumber = $"TW-{DateTime.UtcNow:yyyyMMdd}-{Guid.NewGuid().ToString()[..5].ToUpper()}";
-            order.UserId = customerId;
+            order.CustomerId = customerId;
             order.Status = OrderStatus.Pending;
-            order.EstimatedPrice = priceEstimate.EstimatedPrice;
-            order.CourierEarnings = priceEstimate.CourierEarnings;
-            order.PlatformCommission = priceEstimate.PlatformCommission;
+            order.Money.EstimatedPrice = priceEstimate.EstimatedPrice;
+            order.Money.CourierEarnings = priceEstimate.CourierEarnings;
+            order.Money.PlatformCommission = priceEstimate.PlatformCommission;
 
             await _orderRepository.AddAsync(order, cancellationToken);
             await _orderRepository.AddStatusHistoryAsync(order.Id, OrderStatus.Pending, "Order created");

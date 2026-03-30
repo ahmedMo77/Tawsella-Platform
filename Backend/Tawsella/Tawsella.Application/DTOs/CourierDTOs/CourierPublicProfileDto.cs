@@ -12,7 +12,7 @@ namespace Tawsella.Application.DTOs.CourierDTOs
     {
         public string Id { get; set; }
         public string FullName { get; set; }
-        public string VehicleType { get; set; }
+        public VehicleType VehicleType { get; set; }
         public double AverageRating { get; set; }
         public int TotalReviews { get; set; }
         public int CompletedDeliveries { get; set; }

@@ -1,6 +1,7 @@
 using MediatR;
-using Tawsella.Application.Contracts.Services;
 using Tawsella.Application.Contracts.Persistence;
+using Tawsella.Application.Contracts.Services;
+using Tawsella.Domain.Enums;
 
 namespace Tawsella.Application.Features.Couriers.Commands.UpdateCourierProfile
 {
@@ -36,10 +37,10 @@ namespace Tawsella.Application.Features.Couriers.Commands.UpdateCourierProfile
             courier.User.FullName = request.FullName ?? courier.User.FullName;
             courier.User.PhoneNumber = request.PhoneNumber ?? courier.User.PhoneNumber;
 
-            if (!string.IsNullOrEmpty(request.VehicleType))
-                courier.VehicleType = request.VehicleType;
+            if (request.VehicleType.HasValue)
+                courier.Vehicle.Type = request.VehicleType.Value;
 
-            courier.VehiclePlateNumber = request.VehiclePlateNumber ?? courier.VehiclePlateNumber;
+            courier.Vehicle.PlateNumber = request.VehiclePlateNumber ?? courier.Vehicle.PlateNumber;
             courier.MarkUpdated();
 
             await _courierRepository.UpdateAsync(courier, cancellationToken);

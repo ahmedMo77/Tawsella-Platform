@@ -9,7 +9,6 @@ using Tawsella.Application.DTOs;
 namespace Tawsella.Application.Features.Auth.Password.ChangePassword
 {
     public record ChangePasswordCommand(
-        string UserId, 
         string OldPassword, 
         string NewPassword
         ) : IRequest<BaseToReturnDto>;

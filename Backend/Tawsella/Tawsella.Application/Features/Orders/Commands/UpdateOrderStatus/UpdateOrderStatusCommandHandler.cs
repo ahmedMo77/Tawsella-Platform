@@ -33,8 +33,7 @@ namespace Tawsella.Application.Features.Orders.Commands.UpdateOrderStatus
             order.Status = request.NewStatus;
             if (request.NewStatus == OrderStatus.Delivered) order.DeliveredAt = DateTime.UtcNow;
 
-            await _orderRepository.AddStatusHistoryAsync(request.OrderId, request.NewStatus, request.Notes ?? $"Status updated to {request.NewStatus}");
-            await _orderRepository.SaveChangesAsync(cancellationToken);
+            await _orderRepository.AddStatusHistoryAsync(request.OrderId, request.NewStatus, request.Notes ?? $"Status updated to {request.NewStatus}", cancellationToken);
             return new UpdateOrderStatusResponse { Success = true, Message = "Status updated." };
         }
     }

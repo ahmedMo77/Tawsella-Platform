@@ -11,8 +11,6 @@ namespace Tawsella.Application.Features.Auth.Password.ChangePassword
     {
         public ChangePasswordCommandValidator()
         {
-            RuleFor(x => x.UserId)
-                .NotEmpty().WithMessage("User ID is required.");
             RuleFor(x => x.OldPassword)
                 .NotEmpty().WithMessage("Old password is required.");
             RuleFor(x => x.NewPassword)

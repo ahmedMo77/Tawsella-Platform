@@ -96,7 +96,8 @@ namespace Tawsella.Infrastructure.Services
             {
                 FullName = registerDto.FullName,
                 UserName = registerDto.Email.Split('@')[0],
-                Email = registerDto.Email
+                Email = registerDto.Email,
+                PhoneNumber = registerDto.PhoneNumber
             };
 
             var result = await _userManager.CreateAsync(user, registerDto.Password);

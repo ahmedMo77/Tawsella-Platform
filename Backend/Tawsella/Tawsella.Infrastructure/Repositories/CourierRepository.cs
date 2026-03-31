@@ -19,6 +19,8 @@ namespace Tawsella.Infrastructure.Repositories
         public async Task<Courier?> GetCourierWithProfileAsync(string courierId, CancellationToken cancellationToken = default)
         {
             return await _context.Couriers
+                .Include(c => c.User)
+                .Include(c => c.Wallet)
                 .FirstOrDefaultAsync(c => c.Id == courierId, cancellationToken);
         }
 

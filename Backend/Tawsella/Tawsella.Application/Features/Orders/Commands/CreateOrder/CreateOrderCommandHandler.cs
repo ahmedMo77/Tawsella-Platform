@@ -49,7 +49,7 @@ namespace Tawsella.Application.Features.Orders.Commands.CreateOrder
             order.Money.PlatformCommission = priceEstimate.PlatformCommission;
 
             await _orderRepository.AddAsync(order, cancellationToken);
-            await _orderRepository.AddStatusHistoryAsync(order.Id, OrderStatus.Pending, "Order created");
+            await _orderRepository.AddStatusHistoryAsync(order.Id, OrderStatus.Pending, "Order created", cancellationToken);
 
             return new CreateOrderCommandResponse { Success = true, Message = $"Order created. ID: {order.OrderNumber}" };
         }

@@ -11,7 +11,7 @@ namespace Tawsella.Application.Contracts.Persistence
     /// </summary>
     public interface IOrderRepository : IAsyncRepository<Order>
     {
-        Task AddStatusHistoryAsync(string orderId, OrderStatus status, string notes);
+        Task AddStatusHistoryAsync(string orderId, OrderStatus status, string notes, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Get order with full details for a specific user (customer or courier).

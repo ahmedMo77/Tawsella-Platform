@@ -2,6 +2,7 @@ using AutoMapper;
 using MediatR;
 using Tawsella.Application.Contracts.Services;
 using Tawsella.Application.Contracts.Persistence;
+using Tawsella.Application.DTOs.CourierDTOs;
 
 namespace Tawsella.Application.Features.Couriers.Queries.GetCourierProfile
 {
@@ -30,12 +31,9 @@ namespace Tawsella.Application.Features.Couriers.Queries.GetCourierProfile
             
             var courier = await _courierRepository.GetCourierWithProfileAsync(courierId, cancellationToken);
 
-            var profile = _mapper.Map<Tawsella.Application.DTOs.CourierDTOs.CourierProfileDto>(courier);
+            var profile = _mapper.Map<GetCourierProfileQueryResponse>(courier);
 
-            return new GetCourierProfileQueryResponse
-            {
-                Profile = profile
-            };
+            return profile;
         }
     }
 }

@@ -23,7 +23,6 @@ namespace Tawsella.Application.Features.Auth.Login
         public LoginCommandHandler(
             IAuthService authService,
             IMapper mapper,
-            ITokenService tokenService,
             ICourierRepository courierRepo)
         {
             _authService = authService;

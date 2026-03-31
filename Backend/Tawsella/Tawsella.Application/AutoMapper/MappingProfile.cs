@@ -1,28 +1,31 @@
 ﻿using AutoMapper;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tawsella.Application.DTOs.AuthDTOS;
 using Tawsella.Application.DTOs.CourierDTOs;
 using Tawsella.Application.DTOs.CustomerDTOs;
+using Tawsella.Application.DTOs.NotificationDTOs;
+using Tawsella.Application.DTOs.OrderDTOs;
+using Tawsella.Application.DTOs.ReviewDTOs;
+using Tawsella.Application.Features.Admin.Commands.CreateAdmin;
+using Tawsella.Application.Features.Auth.ConfirmEmail;
+using Tawsella.Application.Features.Auth.Login;
+using Tawsella.Application.Features.Auth.Password.ChangePassword;
+using Tawsella.Application.Features.Auth.Password.ResetPassword;
+using Tawsella.Application.Features.Auth.Register.RegisterCourier;
+using Tawsella.Application.Features.Auth.Register.RegisterCustomer;
+using Tawsella.Application.Features.Couriers.Queries.GetCourierProfile;
+using Tawsella.Application.Features.Customers.Commands.UpdateCustomerProfile;
 using Tawsella.Application.Features.Orders.Commands;
 using Tawsella.Application.Features.Orders.Commands.CreateOrder;
 using Tawsella.Application.Features.Orders.Queries.GetOrderApplications;
 using Tawsella.Application.Features.Orders.Queries.GetOrderDetails;
-using Tawsella.Application.DTOs.NotificationDTOs;
-using Tawsella.Application.DTOs.OrderDTOs;
-using Tawsella.Application.DTOs.ReviewDTOs;
 using Tawsella.Domain.Entities;
 using Tawsella.Domain.Enums;
-using Tawsella.Application.Features.Admin.Commands.CreateAdmin;
-using Tawsella.Application.DTOs.AuthDTOS;
-using Tawsella.Application.Features.Auth.Register.RegisterCourier;
-using Tawsella.Application.Features.Auth.Login;
-using Tawsella.Application.Features.Auth.Register.RegisterCustomer;
-using Tawsella.Application.Features.Auth.Password.ChangePassword;
-using Tawsella.Application.Features.Auth.Password.ResetPassword;
-using Tawsella.Application.Features.Auth.ConfirmEmail;
 
 namespace Tawsella.Application.AutoMapper
 {
@@ -65,6 +68,7 @@ namespace Tawsella.Application.AutoMapper
             CreateMap<Review, CourierReviewItemDto>();
 
             // 6. Customer Profile
+            CreateMap<UpdateCustomerProfileCommand, Customer>();
             CreateMap<Customer, CustomerProfileDto>()
                 .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.User.FullName))
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.User.Email))
@@ -100,6 +104,14 @@ namespace Tawsella.Application.AutoMapper
             // Confirm Email
             CreateMap<ConfirmEmailCommand, ConfirmEmailDto>().ReverseMap();
 
+            CreateMap<Courier, GetCourierProfileQueryResponse>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.VehicleType, opt => opt.MapFrom(src => src.Vehicle.Type))
+                .ForMember(dest => dest.VehiclePlateNumber, opt => opt.MapFrom(src => src.Vehicle.PlateNumber))
+                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.User.FullName))
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.User.Email))
+                .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.User.PhoneNumber))
+                .ForMember(dest => dest.WalletBalance, opt => opt.MapFrom(src => src.Wallet != null ? src.Wallet.Balance : 0));
         }
     }
 }

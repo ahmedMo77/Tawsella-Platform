@@ -26,7 +26,7 @@ namespace Tawsella.Infrastructure.Repositories
                 .FirstOrDefaultAsync(cancellationToken);
         }
 
-        public async Task AddStatusHistoryAsync(string orderId, OrderStatus status, string notes)
+        public async Task AddStatusHistoryAsync(string orderId, OrderStatus status, string notes, CancellationToken ct = default)
         {
             await _context.OrderStatusHistories.AddAsync(new OrderStatusHistory
             {
@@ -36,6 +36,7 @@ namespace Tawsella.Infrastructure.Repositories
                 Notes = notes,
                 CreatedAt = DateTime.UtcNow
             });
+            await _context.SaveChangesAsync(ct);
         }
 
         public async Task<(List<Order> orders, int totalCount)> GetOrdersHistoryAsync(
@@ -73,6 +74,7 @@ namespace Tawsella.Infrastructure.Repositories
         {
             return await _context.OrderApplications
                 .Include(oa => oa.Courier)
+                .Include(oa => oa.Order)
                 .Where(oa => oa.OrderId == orderId && oa.Order.CustomerId == customerId)
                 .OrderBy(oa => oa.AppliedAt)
                 .ToListAsync(cancellationToken);
@@ -157,6 +159,7 @@ namespace Tawsella.Infrastructure.Repositories
 
             await _context.OrderStatusHistories.AddAsync(new OrderStatusHistory
             {
+                Id = Guid.NewGuid().ToString(),
                 OrderId = order.Id,
                 Status = OrderStatus.Delivered,
                 CreatedAt = DateTime.UtcNow

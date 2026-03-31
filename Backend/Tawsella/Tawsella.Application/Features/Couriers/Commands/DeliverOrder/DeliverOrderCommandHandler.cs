@@ -9,7 +9,7 @@ using Tawsella.Domain.Enums;
 namespace Tawsella.Application.Features.Couriers.Commands.DeliverOrder
 {
     public class DeliverOrderCommandHandler 
-        : IRequestHandler<DeliverOrderCommand, DeliverOrderCommandResponse>
+        : IRequestHandler<DeliverOrderCommand, BaseToReturnDto>
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IPricingService _pricingService;
@@ -25,7 +25,7 @@ namespace Tawsella.Application.Features.Couriers.Commands.DeliverOrder
             _currentUserService = currentUserService;
         }
 
-        public async Task<DeliverOrderCommandResponse> Handle(
+        public async Task<BaseToReturnDto> Handle(
             DeliverOrderCommand request, 
             CancellationToken cancellationToken)
         {
@@ -35,7 +35,7 @@ namespace Tawsella.Application.Features.Couriers.Commands.DeliverOrder
 
             if (order == null)
             {
-                return new DeliverOrderCommandResponse
+                return new BaseToReturnDto
                 {
                     Message = "Order not found or not assigned to you."
                 };
@@ -43,7 +43,7 @@ namespace Tawsella.Application.Features.Couriers.Commands.DeliverOrder
 
             if (order.Status != OrderStatus.PickedUp)
             {
-                return new DeliverOrderCommandResponse
+                return new BaseToReturnDto
                 {
                     Message = "Order not picked up yet"
                 };
@@ -89,7 +89,7 @@ namespace Tawsella.Application.Features.Couriers.Commands.DeliverOrder
             order.Courier.IsAvailable = true;
             await _orderRepository.CompleteDeliveryAsync(order, transaction, cancellationToken);
 
-            return new DeliverOrderCommandResponse
+            return new BaseToReturnDto
             {
                 Success = true,
                 Message = "Delivered & Wallet Updated"

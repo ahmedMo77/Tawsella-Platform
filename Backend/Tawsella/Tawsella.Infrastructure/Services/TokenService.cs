@@ -90,6 +90,7 @@ public class TokenService : ITokenService
 
         return new AuthResultDto
         {
+            Id = user.Id,
             IsAuth = true,
             Success = true,
             Message = "Login successful",
@@ -130,6 +131,7 @@ public class TokenService : ITokenService
 
         return new AuthResultDto
         {
+            Id = user.Id,
             IsAuth = true,
             Success = true,
             Message = "Token refreshed successfully",

@@ -1,12 +1,13 @@
 using MediatR;
-using Tawsella.Application.Contracts.Services;
 using Tawsella.Application.Contracts.Persistence;
+using Tawsella.Application.Contracts.Services;
+using Tawsella.Application.DTOs;
 using Tawsella.Domain.Enums;
 
 namespace Tawsella.Application.Features.Couriers.Commands.PickupOrder
 {
     public class PickupOrderCommandHandler 
-        : IRequestHandler<PickupOrderCommand, PickupOrderCommandResponse>
+        : IRequestHandler<PickupOrderCommand, BaseToReturnDto>
     {
         private readonly IOrderRepository _orderRepository;
         private readonly ICurrentUserService _currentUserService;
@@ -19,7 +20,7 @@ namespace Tawsella.Application.Features.Couriers.Commands.PickupOrder
             _currentUserService = currentUserService;
         }
 
-        public async Task<PickupOrderCommandResponse> Handle(
+        public async Task<BaseToReturnDto> Handle(
             PickupOrderCommand request, 
             CancellationToken cancellationToken)
         {
@@ -27,9 +28,9 @@ namespace Tawsella.Application.Features.Couriers.Commands.PickupOrder
             
             var order = await _orderRepository.GetOrderForCourierAsync(request.OrderId, courierId, cancellationToken);
 
-            if (order == null || order.CourierId != courierId)
+            if (order == null)
             {
-                return new PickupOrderCommandResponse
+                return new BaseToReturnDto
                 {
                     Success = false,
                     Message = "Order not found or not assigned to you."
@@ -38,7 +39,7 @@ namespace Tawsella.Application.Features.Couriers.Commands.PickupOrder
 
             if (order.Status != OrderStatus.Accepted)
             {
-                return new PickupOrderCommandResponse
+                return new BaseToReturnDto
                 {
                     Success = false,
                     Message = "Order must be in 'Accepted' status to pickup."
@@ -50,7 +51,7 @@ namespace Tawsella.Application.Features.Couriers.Commands.PickupOrder
 
             await _orderRepository.UpdateAsync(order, cancellationToken);
 
-            return new PickupOrderCommandResponse
+            return new BaseToReturnDto
             {
                 Success = true,
                 Message = "Order picked up successfully!"

@@ -43,7 +43,7 @@ namespace Tawsella.Application.Features.Orders.Commands.ApproveOrderApplication
                 return new BaseToReturnDto { Success = false, Message = "Courier is no longer available." };
 
             await _orderRepository.ApproveApplicationAsync(order, app, request.OrderId, request.ApplicationId, cancellationToken);
-            await _orderRepository.AddStatusHistoryAsync(request.OrderId, OrderStatus.Accepted, $"Courier {app.CourierId} assigned");
+            await _orderRepository.AddStatusHistoryAsync(request.OrderId, OrderStatus.Accepted, $"Courier {app.CourierId} assigned", cancellationToken);
             
             // Send notification via MediatR
             await _mediator.Send(new SendNotificationCommand

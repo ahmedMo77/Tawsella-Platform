@@ -42,9 +42,8 @@ namespace Tawsella.Application.Features.Orders.Commands.CancelOrder
             await _orderRepository.AddStatusHistoryAsync(
                 request.OrderId,
                 OrderStatus.Cancelled,
-                $"Cancelled: {request.Reason}");
-
-            await _orderRepository.SaveChangesAsync(cancellationToken);
+                $"Cancelled: {request.Reason}",
+                cancellationToken);
 
             return new BaseToReturnDto { Success = true, Message = "Order cancelled." };
         }

@@ -15,10 +15,10 @@ namespace Tawsella.Domain.Entities
         public string OrderId { get; set; }
         public Order Order { get; set; }
 
-        public string UserId { get; set; }  // Reviewer => Maybe Customer or Merchant  اللي هيعمل الريفيو
-        public AppUser User { get; set; }
+        public string CustomerId { get; set; }  
+        public Customer Customer { get; set; }
 
-        public string CourierId { get; set; } // Reviewee اللي هيتعمله ريفيو
+        public string CourierId { get; set; } 
         public Courier Courier { get; set; }
     }
 }

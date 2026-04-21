@@ -1,4 +1,4 @@
-﻿using MediatR;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -59,6 +59,8 @@ namespace Tawsella.Application.Features.Orders.Commands.CreateOrder
 
         [MaxLength(500)]
         public string PackageNotes { get; set; }
+
+        public bool IsFragile { get; set; }
 
         // Payment
         [Required]

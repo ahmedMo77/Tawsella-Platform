@@ -113,7 +113,7 @@ namespace Tawsella.Infrastructure.Services
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
             await _emailService.SendVerificationCodeAsync(user.Email, code, ct);
-            return new AuthResultDto { Success = true, Message = "Registration successful. Please check your email to confirm your account." };
+            return new AuthResultDto { Success = true, Message = "Registration successful. Please check your email to confirm your account.",Id=user.Id };
         }
 
         public async Task<AuthResultDto> LoginAsync(LoginDto loginDto, CancellationToken ct)

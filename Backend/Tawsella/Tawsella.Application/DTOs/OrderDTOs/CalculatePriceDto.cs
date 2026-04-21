@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace Tawsella.Application.DTOs.OrderDTOs
 {
@@ -10,5 +10,6 @@ namespace Tawsella.Application.DTOs.OrderDTOs
         public decimal DropoffLongitude { get; set; }
         public string PackageSize { get; set; }  // Small, Medium, Large
         public decimal? PackageWeight { get; set; }
+        public bool IsFragile { get; set; }
     }
 }

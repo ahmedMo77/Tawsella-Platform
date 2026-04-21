@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
@@ -21,67 +21,49 @@ namespace Tawsella.Infrastructure.Configurations
                 .IsRequired()
                 .HasMaxLength(50);
 
-            // Pickup details
-            entity.Property(o => o.Pickup.Location.AddressName)
-                .IsRequired()
-                .HasMaxLength(500);
+            // Pickup (OrderContact owns a Location)
+            entity.OwnsOne(o => o.Pickup, pickup =>
+            {
+                pickup.Property(p => p.Name).HasMaxLength(200);
+                pickup.Property(p => p.Phone).HasMaxLength(20);
 
-            entity.Property(o => o.Pickup.Location.Latitude)
-                .IsRequired()
-                .HasColumnType("decimal(10,8)");
+                pickup.OwnsOne(p => p.Location, location =>
+                {
+                    location.Property(l => l.AddressName).IsRequired().HasMaxLength(500);
+                    location.Property(l => l.Latitude).IsRequired().HasColumnType("decimal(10,8)");
+                    location.Property(l => l.Longitude).IsRequired().HasColumnType("decimal(11,8)");
+                });
+            });
 
-            entity.Property(o => o.Pickup.Location.Longitude)
-                .IsRequired()
-                .HasColumnType("decimal(11,8)");
+            // Dropoff (OrderContact owns a Location)
+            entity.OwnsOne(o => o.Dropoff, dropoff =>
+            {
+                dropoff.Property(p => p.Name).HasMaxLength(200);
+                dropoff.Property(p => p.Phone).HasMaxLength(20);
 
-            entity.Property(o => o.Pickup.Name)
-                .HasMaxLength(200);
-
-            entity.Property(o => o.Pickup.Phone)
-                .HasMaxLength(20);
-
-            // Dropoff details
-            entity.Property(o => o.Dropoff.Location.AddressName)
-                .IsRequired()
-                .HasMaxLength(500);
-
-            entity.Property(o => o.Dropoff.Location.Latitude)
-                .IsRequired()
-                .HasColumnType("decimal(10,8)");
-
-            entity.Property(o => o.Dropoff.Location.Longitude)
-                .IsRequired()
-                .HasColumnType("decimal(11,8)");
-
-            entity.Property(o => o.Dropoff.Name)
-                .HasMaxLength(200);
-
-            entity.Property(o => o.Dropoff.Phone)
-                .HasMaxLength(20);
+                dropoff.OwnsOne(p => p.Location, location =>
+                {
+                    location.Property(l => l.AddressName).IsRequired().HasMaxLength(500);
+                    location.Property(l => l.Latitude).IsRequired().HasColumnType("decimal(10,8)");
+                    location.Property(l => l.Longitude).IsRequired().HasColumnType("decimal(11,8)");
+                });
+            });
 
             // Package details
-            entity.Property(o => o.Package.Size)
-                .HasMaxLength(100);
+            entity.OwnsOne(o => o.Package, package =>
+            {
+                package.Property(p => p.Weight).HasColumnType("decimal(8,2)");
+                package.Property(p => p.Notes).HasMaxLength(1000);
+            });
 
-            entity.Property(o => o.Package.Weight)
-                .HasColumnType("decimal(8,2)");
-
-            entity.Property(o => o.Package.Notes)
-                .HasMaxLength(1000);
-
-            // Pricing
-            entity.Property(o => o.Money.EstimatedPrice)
-                .IsRequired()
-                .HasColumnType("decimal(10,2)");
-
-            entity.Property(o => o.Money.FinalPrice)
-                .HasColumnType("decimal(10,2)");
-
-            entity.Property(o => o.Money.CourierEarnings)
-                .HasColumnType("decimal(10,2)");
-
-            entity.Property(o => o.Money.PlatformCommission)
-                .HasColumnType("decimal(10,2)");
+            // Finances
+            entity.OwnsOne(o => o.Money, money =>
+            {
+                money.Property(m => m.EstimatedPrice).IsRequired().HasColumnType("decimal(10,2)");
+                money.Property(m => m.FinalPrice).HasColumnType("decimal(10,2)");
+                money.Property(m => m.CourierEarnings).HasColumnType("decimal(10,2)");
+                money.Property(m => m.PlatformCommission).HasColumnType("decimal(10,2)");
+            });
 
             // Status
             entity.Property(o => o.Status)
@@ -109,7 +91,7 @@ namespace Tawsella.Infrastructure.Configurations
             entity.HasOne(o => o.Review)
                 .WithOne(r => r.Order)
                 .HasForeignKey<Review>(r => r.OrderId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             // Indexes
             entity.HasIndex(o => o.OrderNumber).IsUnique();

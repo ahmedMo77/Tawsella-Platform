@@ -8,6 +8,8 @@ namespace Tawsella.Application.Contracts.Persistence
     {
         Task<Customer?> GetCustomerProfileAsync(string customerId, CancellationToken cancellationToken = default);
 
+        Task<bool> CustomerExistsAsync(string customerId, CancellationToken cancellationToken = default);
+
         Task<(int totalOrders, decimal totalSpent)> GetCustomerStatisticsAsync(string customerId, CancellationToken cancellationToken = default);
     }
 }

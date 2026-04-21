@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
@@ -18,11 +18,20 @@ namespace Tawsella.Infrastructure.Configurations
             entity.HasKey(c => c.Id);
 
             entity.Property(c => c.NationalId).HasMaxLength(16);
-            entity.Property(c => c.Vehicle.PlateNumber).HasMaxLength(20);
-            entity.Property(c => c.Vehicle.LicenseNumber).HasMaxLength(20);
-            entity.Property(c => c.CurrentLocation.Latitude).HasColumnType("decimal(10,8)");
-            entity.Property(c => c.CurrentLocation.Longitude).HasColumnType("decimal(11,8)");
 
+            // Owned types
+            entity.OwnsOne(c => c.CurrentLocation, location =>
+            {
+                location.Property(l => l.AddressName).HasMaxLength(200);
+                location.Property(l => l.Latitude).HasColumnType("decimal(10,8)");
+                location.Property(l => l.Longitude).HasColumnType("decimal(11,8)");
+            });
+
+            entity.OwnsOne(c => c.Vehicle, vehicle =>
+            {
+                vehicle.Property(v => v.PlateNumber).HasMaxLength(20);
+                vehicle.Property(v => v.LicenseNumber).HasMaxLength(50);
+            });
 
             // Relationships
             entity.HasOne(c => c.User)
@@ -46,13 +55,7 @@ namespace Tawsella.Infrastructure.Configurations
                         .OnDelete(DeleteBehavior.Restrict);
 
             entity.HasIndex(c => c.NationalId).IsUnique();
-            entity.HasIndex(c => new
-            {
-                c.IsOnline,
-                c.IsAvailable,
-                c.CurrentLocation.Latitude,
-                c.CurrentLocation.Longitude
-            });
+         
         }
     }
 }

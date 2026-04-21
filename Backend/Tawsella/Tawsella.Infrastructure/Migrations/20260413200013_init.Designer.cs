@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Tawsella.Infrastructure.DbContext;
 
@@ -11,9 +12,11 @@ using Tawsella.Infrastructure.DbContext;
 namespace Tawsella.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260413200013_init")]
+    partial class init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -326,13 +329,14 @@ namespace Tawsella.Infrastructure.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int?>("CompletedOrders")
+                    b.Property<int>("CompletedOrders")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("DefaultPickupLabel")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -342,7 +346,7 @@ namespace Tawsella.Infrastructure.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("PreferredPaymentMethod")
+                    b.Property<int>("PreferredPaymentMethod")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -428,9 +432,6 @@ namespace Tawsella.Infrastructure.Migrations
 
                     b.Property<DateTime?>("DeliveredAt")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("InvoiceId")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -1042,7 +1043,8 @@ namespace Tawsella.Infrastructure.Migrations
                                 .HasForeignKey("CustomerId");
                         });
 
-                    b.Navigation("DefaultPickupLocation");
+                    b.Navigation("DefaultPickupLocation")
+                        .IsRequired();
 
                     b.Navigation("User");
                 });
@@ -1200,9 +1202,6 @@ namespace Tawsella.Infrastructure.Migrations
                         {
                             b1.Property<string>("OrderId")
                                 .HasColumnType("nvarchar(450)");
-
-                            b1.Property<bool>("IsFragile")
-                                .HasColumnType("bit");
 
                             b1.Property<string>("Notes")
                                 .HasMaxLength(1000)

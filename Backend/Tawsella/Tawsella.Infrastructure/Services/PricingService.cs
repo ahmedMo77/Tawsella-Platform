@@ -27,19 +27,33 @@ namespace Tawsella.Infrastructure.Services
                 "small" => 1.0m,
                 "medium" => 1.3m,
                 "large" => 1.6m,
+                "xl" => 2.0m,
+                "extra-large" => 2.0m,
                 _ => 1.0m
             };
 
-            var hour = DateTime.UtcNow.Hour;
+            TimeZoneInfo cairoZone;
+            try
+            {
+                cairoZone = TimeZoneInfo.FindSystemTimeZoneById("Africa/Cairo");
+            }
+            catch (TimeZoneNotFoundException)
+            {
+                cairoZone = TimeZoneInfo.FindSystemTimeZoneById("Egypt Standard Time");
+            }
+            
+            var cairoTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, cairoZone);
+            var hour = cairoTime.Hour;
+
             decimal timeMultiplier = (hour >= 12 && hour <= 14) || (hour >= 18 && hour <= 21) ? 1.2m : 1.0m;
 
-            decimal totalPrice = (basePrice + distanceFee) * sizeMultiplier * timeMultiplier;
+            decimal fragileMultiplier = dto.IsFragile ? 1.1m : 1.0m;
 
-            // Calculate total
-            decimal courierEarnings = totalPrice * 0.85m; // 85% to courier
-            decimal platformCommission = totalPrice * 0.15m; // 15% platform
+            decimal totalPrice = (basePrice + distanceFee) * sizeMultiplier * timeMultiplier * fragileMultiplier;
 
-            // Estimate delivery time (30 km/h average speed)
+            decimal courierEarnings = totalPrice * 0.85m;   
+            decimal platformCommission = totalPrice * 0.15m; 
+
             var timeInMinutes = (int)Math.Ceiling((distance / 30.0) * 60);
 
             return new PriceEstimateDto

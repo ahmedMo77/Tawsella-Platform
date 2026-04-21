@@ -20,7 +20,7 @@ namespace Tawsella.Infrastructure.Repositories
             CancellationToken cancellationToken = default)
         {
             return await _context.Reviews
-                .Where(r => r.OrderId == orderId && r.UserId == customerId)
+                .Where(r => r.OrderId == orderId && r.CustomerId == customerId)
                 .FirstOrDefaultAsync(cancellationToken);
         }
 

@@ -51,11 +51,7 @@ namespace Tawsella.Application.Contracts.Persistence
         /// </summary>
         Task<Order?> GetOrderForCustomerAsync(string orderId, string customerId, CancellationToken cancellationToken = default);
 
-        /// <summary>
-        /// Check if customer exists.
-        /// Used by: CreateOrderCommand
-        /// </summary>
-        Task<bool> CustomerExistsAsync(string customerId, CancellationToken cancellationToken = default);
+
 
         /// <summary>
         /// Check if a courier has already applied for an order.
@@ -103,5 +99,7 @@ namespace Tawsella.Application.Contracts.Persistence
         /// Save changes to the repository context.
         /// </summary>
         Task SaveChangesAsync(CancellationToken cancellationToken = default);
+
+        Task UpdatePaymentStatusAsync(string orderId, PaymentStatus paymentStatus, string notes, CancellationToken cancellationToken = default);
     }
 }

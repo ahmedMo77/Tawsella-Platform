@@ -38,7 +38,7 @@ namespace Tawsella.Application.Features.Reviews.Commands.SubmitReview
             var review = _mapper.Map<Review>(request.Dto);
             review.Id = Guid.NewGuid().ToString();
             review.OrderId = request.OrderId;
-            review.UserId = customerId;
+            review.CustomerId = customerId;
             review.CourierId = order.CourierId;
 
             // Use repository method that handles both review creation and courier stats update atomically

@@ -17,12 +17,16 @@ namespace Tawsella.Infrastructure.Configurations
             entity.ToTable("Customers");
 
             entity.HasKey(c => c.Id);
-
-            entity.Property(c => c.DefaultPickupLocation.AddressName).HasMaxLength(200);
+            
             entity.Property(c => c.DefaultPickupLabel).HasMaxLength(50);
-            entity.Property(c => c.DefaultPickupLocation.Latitude).HasColumnType("decimal(10,8)");
-            entity.Property(c => c.DefaultPickupLocation.Longitude).HasColumnType("decimal(11,8)");
 
+            entity.OwnsOne(c => c.DefaultPickupLocation, location =>
+            {
+             
+                location.Property(l => l.AddressName).HasMaxLength(200);
+                location.Property(l => l.Latitude).HasColumnType("decimal(10,8)");
+                location.Property(l => l.Longitude).HasColumnType("decimal(11,8)");
+            });
 
             entity.HasOne(c => c.User)
                 .WithOne()
@@ -30,12 +34,12 @@ namespace Tawsella.Infrastructure.Configurations
                 .OnDelete(DeleteBehavior.Cascade);
 
             entity.HasMany(c => c.Orders)
-                .WithOne()
+                .WithOne(o=>o.Customer)
                 .HasForeignKey(o => o.CustomerId);
 
             entity.HasMany(c => c.Reviews)
-                .WithOne()
-                .HasForeignKey(r => r.UserId);
+                .WithOne(r=>r.Customer)
+                .HasForeignKey(r => r.CustomerId);
         }
     }
 }

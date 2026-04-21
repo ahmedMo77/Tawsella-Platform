@@ -1,4 +1,5 @@
-﻿using System.Text;
+using System.Net.Http.Headers;
+using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,7 @@ using Tawsella.Application.Contracts.Services;
 using Tawsella.Application.Settings;
 using Tawsella.Domain.Entities;
 using Tawsella.Infrastructure.DbContext;
+using Tawsella.Infrastructure.Models;
 using Tawsella.Infrastructure.Repositories;
 using Tawsella.Infrastructure.Services;
 
@@ -76,6 +78,14 @@ namespace Tawsella.Infrastructure
             services.AddTransient<IEmailService, EmailService>();
             services.AddScoped<IPricingService, PricingService>();
 
+            services.Configure<FawaterkSettings>(configuration.GetSection(FawaterkSettings.SectionName));
+            services.AddHttpClient<IPaymentService, FawaterkPaymentService>((sp, client) =>
+            {
+                var settings = configuration.GetSection(FawaterkSettings.SectionName).Get<FawaterkSettings>();
+                client.BaseAddress = new Uri(settings!.BaseUrl);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", settings.ApiKey);
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            });
 
             return services;
         }

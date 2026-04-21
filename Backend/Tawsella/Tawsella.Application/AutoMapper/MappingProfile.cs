@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Metrics;
@@ -75,7 +75,21 @@ namespace Tawsella.Application.AutoMapper
                 .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.User.PhoneNumber));
 
             CreateMap<CreateOrderCommand, CalculatePriceDto>();
-            CreateMap<Order, CreateOrderCommand>().ReverseMap();
+            CreateMap<Order, CreateOrderCommand>().ReverseMap()
+                .ForPath(dest => dest.Pickup.Name, opt => opt.MapFrom(src => src.PickupContactName))
+                .ForPath(dest => dest.Pickup.Phone, opt => opt.MapFrom(src => src.PickupContactPhone))
+                .ForPath(dest => dest.Pickup.Location.AddressName, opt => opt.MapFrom(src => src.PickupAddress))
+                .ForPath(dest => dest.Pickup.Location.Latitude, opt => opt.MapFrom(src => src.PickupLatitude))
+                .ForPath(dest => dest.Pickup.Location.Longitude, opt => opt.MapFrom(src => src.PickupLongitude))
+                .ForPath(dest => dest.Dropoff.Name, opt => opt.MapFrom(src => src.DropoffContactName))
+                .ForPath(dest => dest.Dropoff.Phone, opt => opt.MapFrom(src => src.DropoffContactPhone))
+                .ForPath(dest => dest.Dropoff.Location.AddressName, opt => opt.MapFrom(src => src.DropoffAddress))
+                .ForPath(dest => dest.Dropoff.Location.Latitude, opt => opt.MapFrom(src => src.DropoffLatitude))
+                .ForPath(dest => dest.Dropoff.Location.Longitude, opt => opt.MapFrom(src => src.DropoffLongitude))
+                .ForPath(dest => dest.Package.Size, opt => opt.MapFrom(src => src.PackageSize))
+                .ForPath(dest => dest.Package.Weight, opt => opt.MapFrom(src => src.PackageWeight))
+                .ForPath(dest => dest.Package.Notes, opt => opt.MapFrom(src => src.PackageNotes))
+                .ForPath(dest => dest.Package.IsFragile, opt => opt.MapFrom(src => src.IsFragile));
 
             // Creat Admin Dto and Command
             CreateMap<CreateAdminCommand, CreateAdminDto>().ReverseMap();

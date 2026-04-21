@@ -35,9 +35,7 @@ namespace Tawsella.Domain.Entities
         // 6. Financials & Records
         public string? WalletId { get; set; }
         public Wallet Wallet { get; set; }
-
-        // العلاقات الجماعية
-        public ICollection<Order> Orders { get; set; } = new List<Order>();
-        public ICollection<Review> ReviewsReceived { get; set; } = new List<Review>();
+        public ICollection<Order> Orders { get; set; } 
+        public ICollection<Review> ReviewsReceived { get; set; }
     }
 }

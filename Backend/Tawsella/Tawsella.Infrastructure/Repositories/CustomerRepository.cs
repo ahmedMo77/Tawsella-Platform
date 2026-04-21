@@ -18,7 +18,13 @@ namespace Tawsella.Infrastructure.Repositories
         public async Task<Customer?> GetCustomerProfileAsync(string customerId, CancellationToken cancellationToken = default)
         {
             return await _context.Customers
+                .Include(c => c.User)
                 .FirstOrDefaultAsync(c => c.Id == customerId, cancellationToken);
+        }
+
+        public async Task<bool> CustomerExistsAsync(string customerId, CancellationToken cancellationToken = default)
+        {
+            return await _context.Customers.AnyAsync(c => c.Id == customerId, cancellationToken);
         }
 
         public async Task<(int totalOrders, decimal totalSpent)> GetCustomerStatisticsAsync(

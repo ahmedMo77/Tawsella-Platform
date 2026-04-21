@@ -13,13 +13,13 @@ namespace Tawsella.Domain.Entities
     {
         public AppUser User { get; set; }
 
-        public Location DefaultPickupLocation { get; set; } = new();
-        public string DefaultPickupLabel { get; set; }
+        public Location? DefaultPickupLocation { get; set; } = new();
+        public string ?DefaultPickupLabel { get; set; }
 
-        public int CompletedOrders { get; set; }
-        public PaymentMethod PreferredPaymentMethod { get; set; }
+        public int? CompletedOrders { get; set; }
+        public PaymentMethod? PreferredPaymentMethod { get; set; }
 
-        public ICollection<Order> Orders { get; set; } = new List<Order>();
-        public ICollection<Review> Reviews { get; set; } = new List<Review>();
+        public ICollection<Order>? Orders { get; set; } 
+        public ICollection<Review>? Reviews { get; set; } 
     }
 }

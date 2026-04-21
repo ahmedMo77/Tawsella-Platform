@@ -1,9 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+
 using Tawsella.Application.Contracts.Persistence;
 using Tawsella.Domain.Entities;
 using Tawsella.Domain.Enums;
@@ -94,10 +90,7 @@ namespace Tawsella.Infrastructure.Repositories
                 .FirstOrDefaultAsync(o => o.Id == orderId && o.CustomerId == customerId, cancellationToken);
         }
 
-        public async Task<bool> CustomerExistsAsync(string customerId, CancellationToken cancellationToken = default)
-        {
-            return await _context.Customers.AnyAsync(c => c.Id == customerId, cancellationToken);
-        }
+
 
         public async Task<bool> HasCourierAppliedAsync(string orderId, string courierId, CancellationToken cancellationToken = default)
         {
@@ -171,6 +164,43 @@ namespace Tawsella.Infrastructure.Repositories
         public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             await _context.SaveChangesAsync(cancellationToken);
+        }
+
+        public async Task UpdatePaymentStatusAsync(string orderId, PaymentStatus paymentStatus, string notes, CancellationToken cancellationToken = default)
+        {
+            var strategy = _context.Database.CreateExecutionStrategy();
+
+            await strategy.ExecuteAsync(async () =>
+            {
+                await using var transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
+                try
+                {
+                    var order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderId, cancellationToken);
+                    if (order == null) return;
+
+                    order.PaymentStatus = paymentStatus;
+
+                    if (paymentStatus == PaymentStatus.Completed)
+                        order.PaidAt = DateTime.UtcNow;
+
+                    await _context.OrderStatusHistories.AddAsync(new OrderStatusHistory
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        OrderId = orderId,
+                        Status = order.Status,
+                        Notes = notes,
+                        CreatedAt = DateTime.UtcNow
+                    }, cancellationToken);
+
+                    await _context.SaveChangesAsync(cancellationToken);
+                    await transaction.CommitAsync(cancellationToken);
+                }
+                catch
+                {
+                    await transaction.RollbackAsync(cancellationToken);
+                    throw;
+                }
+            });
         }
     }
 }

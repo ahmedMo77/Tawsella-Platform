@@ -1,10 +1,3 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Tawsella.Domain.Enums;
 
 namespace Tawsella.Domain.Entities
@@ -24,7 +17,7 @@ namespace Tawsella.Domain.Entities
         public OrderContact Pickup { get; set; } = new();
         public OrderContact Dropoff { get; set; } = new();
 
-        // 3. Package details and finances (تخص الأوردر نفسه)
+        // 3. Package details and finances 
         public OrderPackage Package { get; set; } = new();
         public OrderFinances Money { get; set; } = new();
 
@@ -40,10 +33,9 @@ namespace Tawsella.Domain.Entities
         public PaymentMethod PaymentMethod { get; set; }
         public PaymentStatus PaymentStatus { get; set; }
         public DateTime? PaidAt { get; set; }
-
-        // 6. References to related entities 
+        public string? InvoiceId { get; set; }
         public Review Review { get; set; }
-        public ICollection<OrderStatusHistory> StatusHistory { get; set; } = new List<OrderStatusHistory>();
+        public ICollection<OrderStatusHistory> StatusHistory { get; set; }
     }
 }
     

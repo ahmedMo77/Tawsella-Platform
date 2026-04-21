@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +14,6 @@ namespace Tawsella.Domain.Entities
         public PackageSize Size { get; set; }
         public decimal? Weight { get; set; }
         public string? Notes { get; set; }
+        public bool IsFragile { get; set; }
     }
 }

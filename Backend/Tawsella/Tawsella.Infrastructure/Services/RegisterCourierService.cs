@@ -1,12 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Tawsella.Application.Contracts.Persistence;
 using Tawsella.Application.Contracts.Services;
 using Tawsella.Application.DTOs.AuthDTOS;
@@ -16,15 +9,20 @@ using Tawsella.Infrastructure.DbContext;
 
 namespace Tawsella.Infrastructure.Services
 {
-    public class RegisterCourierService : IRegisterCourierServcie
+    public class RegisterCourierService : IRegisterCourierService
     {
-        private readonly UserManager<AppUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly ICourierRepository _courierRepo;
+        private readonly UserManager<AppUser> _userManager;
         private readonly AppDbContext _dbContext;
         private readonly IMapper _mapper;
-        private readonly IAsyncRepository<Courier> _courierRepo;
 
-        public RegisterCourierService(UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager, SignInManager<AppUser> signInManager, ITokenService tokenService, IEmailService emailService, AppDbContext dbContext, IAsyncRepository<Customer> customerRepo, ILogger<AuthService> logger, IMapper mapper, IAsyncRepository<Courier> courierRepo)
+        public RegisterCourierService(
+            RoleManager<IdentityRole> roleManager,
+            UserManager<AppUser> userManager,
+            ICourierRepository courierRepo,
+            AppDbContext dbContext,
+            IMapper mapper)
         {
             _userManager = userManager;
             _roleManager = roleManager;

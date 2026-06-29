@@ -2,15 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
 using System.Data;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 using Tawsella.Application.Contracts.Services;
 using Tawsella.Application.DTOs.AuthDTOS;
 using Tawsella.Application.Settings;
@@ -24,7 +20,9 @@ public class TokenService : ITokenService
     private readonly JwtSettings _jwtSettings;
     private readonly UserManager<AppUser> _userManager;
 
-    public TokenService(UserManager<AppUser> userManager, IOptions<JwtSettings> jwtOptions)
+    public TokenService(
+        UserManager<AppUser> userManager,
+        IOptions<JwtSettings> jwtOptions)
     {
         _userManager = userManager;
         _jwtSettings = jwtOptions.Value;

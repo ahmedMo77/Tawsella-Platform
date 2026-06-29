@@ -7,8 +7,8 @@ using Tawsella.Application.DTOs.AuthDTOS;
 
 namespace Tawsella.Application.Contracts.Services
 {
-    public interface IRegisterCourierServcie
+    public interface ICreateAdminService
     {
-        Task<CreateCourierResponseDto> RegisterCourierAsync(RegisterCourierDto registerDto, CancellationToken ct);
+        Task<CreateAdminResponseDto> CreateAdminAsync(CreateAdminDto dto, CancellationToken ct);
     }
 }

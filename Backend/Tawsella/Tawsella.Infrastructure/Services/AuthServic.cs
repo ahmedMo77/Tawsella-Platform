@@ -1,13 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+using System.Diagnostics.Metrics;
 using Tawsella.Application.Contracts.Persistence;
 using Tawsella.Application.Contracts.Services;
 using Tawsella.Application.DTOs;
@@ -25,68 +19,82 @@ namespace Tawsella.Infrastructure.Services
         private readonly SignInManager<AppUser> _signInManager;
         private readonly ITokenService _tokenService;
         private readonly IEmailService _emailService;
-        private readonly AppDbContext _dbContext;
-        private readonly IAsyncRepository<Customer> _customerRepo;
-        private readonly ILogger<AuthService> _logger;
-        private readonly IMapper _mapper;
-        private readonly IAsyncRepository<Courier> _courierRepo;
+        private readonly ICourierRepository _courierRepo;
 
-        public AuthService(UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager, SignInManager<AppUser> signInManager, ITokenService tokenService, IEmailService emailService, AppDbContext dbContext, IAsyncRepository<Customer> customerRepo, ILogger<AuthService> logger, IMapper mapper, IAsyncRepository<Courier> courierRepo)
+
+        public AuthService(
+            UserManager<AppUser> userManager, 
+            RoleManager<IdentityRole> roleManager, 
+            SignInManager<AppUser> signInManager, 
+            ITokenService tokenService, 
+            IEmailService emailService, 
+            ICourierRepository courierRepo)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _signInManager = signInManager;
             _tokenService = tokenService;
-            _emailService = emailService;
-            _dbContext = dbContext;
-            _customerRepo = customerRepo;
-            _logger = logger;
-            _mapper = mapper;
             _courierRepo = courierRepo;
-        }
-
-        public async Task<CreateAdminResponseDto> CreateAdminUserAsync(CreateAdminDto admin, CancellationToken ct)
-        {
-            if (await _userManager.FindByEmailAsync(admin.Email) != null)
-                return new CreateAdminResponseDto { Success = false, Message = "Email already in use" };
-
-            var user = new AppUser
-            {
-                Id = Guid.NewGuid().ToString(),
-                FullName = admin.FullName,
-                UserName = admin.Email.Split('@')[0],
-                Email = admin.Email,
-                EmailConfirmed = true
-            };
-
-            var tempPassword = GenerateTempPassword();
-
-            var result = await _userManager.CreateAsync(user, tempPassword);
-            if (!result.Succeeded)
-                return new CreateAdminResponseDto { Success = false, Message = string.Join(", ", result.Errors.Select(e => e.Description)) };
-
-            var roleName = admin.IsSuperAdmin ? Roles.SuperAdmin.ToString() : Roles.Admin.ToString();
-
-            if (!await _roleManager.RoleExistsAsync(roleName))
-                await _roleManager.CreateAsync(new IdentityRole(roleName));
-
-            await _userManager.AddToRoleAsync(user, roleName);
-
-            return new CreateAdminResponseDto { Success = true, Message = "Admin user created successfully", Id = user.Id, Password = tempPassword };
+            _emailService = emailService;
         }
 
         public async Task<AuthResultDto> LoginAsync(LoginDto loginDto, CancellationToken ct)
         {
             var user = await _userManager.FindByEmailAsync(loginDto.Email);
+
             if (user == null)
-                return new AuthResultDto { Success = false, Message = "Invalid email or password" };
+            {
+                return new AuthResultDto
+                {
+                    Success = false,
+                    Message = "Invalid email or password."
+                };
+            }
 
             if (!await _userManager.IsEmailConfirmedAsync(user))
-                return new AuthResultDto { Success = false, Message = "Please confirm your email first." };
+            {
+                return new AuthResultDto
+                {
+                    Success = false,
+                    Message = "Please confirm your email first."
+                };
+            }
 
-            var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
-            if (!result.Succeeded)
-                return new AuthResultDto { Success = false, Message = "Invalid email or password" };
+            var passwordResult = await _signInManager.CheckPasswordSignInAsync(
+                user, loginDto.Password,
+                lockoutOnFailure: false);
+
+            if (!passwordResult.Succeeded)
+            {
+                return new AuthResultDto
+                {
+                    Success = false,
+                    Message = "Invalid email or password."
+                };
+            }
+
+            if (await _userManager.IsInRoleAsync(user, Roles.Courier.ToString()))
+            {
+                var courier = await _courierRepo.GetByIdAsync(user.Id, ct);
+
+                if (courier == null)
+                {
+                    return new AuthResultDto
+                    {
+                        Success = false,
+                        Message = "Courier account is invalid."
+                    };
+                }
+
+                if (!courier.IsApproved)
+                {
+                    return new AuthResultDto
+                    {
+                        Success = false,
+                        Message = "Your account is still under review."
+                    };
+                }
+            }
 
             return await _tokenService.GenerateTokensPairAsync(user);
         }
@@ -145,6 +153,5 @@ namespace Tawsella.Infrastructure.Services
             return new BaseToReturnDto { Success = true, Message = "Email confirmed successfully." };
         }
 
-        private string GenerateTempPassword() => $"Tawsella@{Guid.NewGuid():N}".Substring(0, 12);
     }
 }

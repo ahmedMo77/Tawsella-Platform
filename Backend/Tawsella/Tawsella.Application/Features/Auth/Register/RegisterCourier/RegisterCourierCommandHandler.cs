@@ -10,10 +10,10 @@ namespace Tawsella.Application.Features.Auth.Register.RegisterCourier
     public class RegisterCourierCommandHandler : IRequestHandler<RegisterCourierCommand, BaseToReturnDto>
     {
         private readonly ICourierRepository _courierRepo;
-        private readonly IRegisterCourierServcie _courierService;
+        private readonly IRegisterCourierService _courierService;
         private readonly IMapper _mapper;
 
-        public RegisterCourierCommandHandler(ICourierRepository repo, IMapper mapper, IRegisterCourierServcie courierService)
+        public RegisterCourierCommandHandler(ICourierRepository repo, IMapper mapper, IRegisterCourierService courierService)
         {
             _mapper = mapper;
             _courierRepo = repo;

@@ -1,15 +1,20 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Tawsella.Application.Contracts.Persistence;
 using Tawsella.Application.Contracts.Services;
 using Tawsella.Application.DTOs;
 using Tawsella.Application.DTOs.AuthDTOS;
 using Tawsella.Domain.Entities;
 using Tawsella.Domain.Enums;
+using Tawsella.Infrastructure.DbContext;
 
 namespace Tawsella.Infrastructure.Services
 {
@@ -20,14 +25,24 @@ namespace Tawsella.Infrastructure.Services
         private readonly SignInManager<AppUser> _signInManager;
         private readonly ITokenService _tokenService;
         private readonly IEmailService _emailService;
+        private readonly AppDbContext _dbContext;
+        private readonly IAsyncRepository<Customer> _customerRepo;
+        private readonly ILogger<AuthService> _logger;
+        private readonly IMapper _mapper;
+        private readonly IAsyncRepository<Courier> _courierRepo;
 
-        public AuthService(UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager, SignInManager<AppUser> signInManager, ITokenService tokenService, IEmailService emailService)
+        public AuthService(UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager, SignInManager<AppUser> signInManager, ITokenService tokenService, IEmailService emailService, AppDbContext dbContext, IAsyncRepository<Customer> customerRepo, ILogger<AuthService> logger, IMapper mapper, IAsyncRepository<Courier> courierRepo)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _signInManager = signInManager;
             _tokenService = tokenService;
             _emailService = emailService;
+            _dbContext = dbContext;
+            _customerRepo = customerRepo;
+            _logger = logger;
+            _mapper = mapper;
+            _courierRepo = courierRepo;
         }
 
         public async Task<CreateAdminResponseDto> CreateAdminUserAsync(CreateAdminDto admin, CancellationToken ct)
@@ -58,62 +73,6 @@ namespace Tawsella.Infrastructure.Services
             await _userManager.AddToRoleAsync(user, roleName);
 
             return new CreateAdminResponseDto { Success = true, Message = "Admin user created successfully", Id = user.Id, Password = tempPassword };
-        }
-
-        public async Task<CreateCourierResponseDto> RegisterCourierAsync(RegisterCourierDto registerDto, CancellationToken ct)
-        {
-            if (await _userManager.FindByEmailAsync(registerDto.Email) != null)
-                return new CreateCourierResponseDto { Success = false, Message = "Email already in use" };
-
-            var user = new AppUser
-            {
-                FullName = registerDto.FullName,
-                UserName = registerDto.Email.Split('@')[0],
-                Email = registerDto.Email,
-                PhoneNumber = registerDto.PhoneNumber
-            };
-
-            var result = await _userManager.CreateAsync(user, registerDto.Password);
-            if (!result.Succeeded)
-                return new CreateCourierResponseDto { Success = false, Message = string.Join(", ", result.Errors.Select(e => e.Description)) };
-
-            var role = Roles.Courier.ToString();
-
-            if (!await _roleManager.RoleExistsAsync(role))
-                await _roleManager.CreateAsync(new IdentityRole(role));
-
-            await _userManager.AddToRoleAsync(user, role);
-
-            return new CreateCourierResponseDto { Success = true, Id = user.Id };
-        }
-
-        public async Task<AuthResultDto> RegisterCustomerAsync(RegisterUserDto registerDto, CancellationToken ct)
-        {
-            if (await _userManager.FindByEmailAsync(registerDto.Email) != null)
-                return new AuthResultDto { Message = "Email already in use" };
-
-            var user = new AppUser
-            {
-                FullName = registerDto.FullName,
-                UserName = registerDto.Email.Split('@')[0],
-                Email = registerDto.Email,
-                PhoneNumber = registerDto.PhoneNumber
-            };
-
-            var result = await _userManager.CreateAsync(user, registerDto.Password);
-            if (!result.Succeeded)
-                return new AuthResultDto { Message = string.Join(", ", result.Errors.Select(e => e.Description)) };
-
-            var roleName = Roles.Customer.ToString();
-            if (!await _roleManager.RoleExistsAsync(roleName))
-                await _roleManager.CreateAsync(new IdentityRole(roleName));
-
-            await _userManager.AddToRoleAsync(user, roleName);
-
-            var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-
-            await _emailService.SendVerificationCodeAsync(user.Email, code, ct);
-            return new AuthResultDto { Success = true, Message = "Registration successful. Please check your email to confirm your account.",Id=user.Id };
         }
 
         public async Task<AuthResultDto> LoginAsync(LoginDto loginDto, CancellationToken ct)

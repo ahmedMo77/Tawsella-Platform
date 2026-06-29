@@ -12,8 +12,6 @@ namespace Tawsella.Application.Contracts.Services
     public interface IAuthService
     {
         Task<CreateAdminResponseDto> CreateAdminUserAsync(CreateAdminDto dto, CancellationToken ct);
-        Task<CreateCourierResponseDto> RegisterCourierAsync(RegisterCourierDto registerDto, CancellationToken ct);
-        Task<AuthResultDto> RegisterCustomerAsync(RegisterUserDto registerDto, CancellationToken ct);
         Task<AuthResultDto> LoginAsync(LoginDto loginDto, CancellationToken ct);
 
         Task<BaseToReturnDto> ChangePasswordAsync(ChangePasswordDto dto, CancellationToken ct);
